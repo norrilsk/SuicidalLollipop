@@ -1,4 +1,4 @@
-#include "GLheader.hpp"
+#include "GLfunc.hpp"
 #include "Error.hpp"
 
 double Gl :: WinW; //Собственно объявляем переменные

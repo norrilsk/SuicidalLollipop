@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "GLheader.hpp"
+#include "GLfunc.hpp"
 #include "Error.hpp"
 using namespace std;
 
