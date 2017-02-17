@@ -86,7 +86,7 @@ void Gl :: MainLoop()
 void Gl :: Quit()
 {
 	SDL_Quit();
-	exit(0);
+	throw(Error(QUIT));
 }
 
 void Gl :: keydown(SDL_Scancode code)
@@ -114,6 +114,9 @@ void DealWithErrror(Error err)
 	{
 	case SDL:
 		cout << SDL_GetError() << endl; //Выводим сообщение об ошибке
+		break;
+	case QUIT:
+		cout <<"Sucsessful finish"<<endl;
 		break;
 	default:
 		break;
