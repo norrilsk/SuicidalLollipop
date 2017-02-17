@@ -1,7 +1,7 @@
 #ifndef _GLheader
 	#define _GLheader
-	#ifdef WIN32
-	#include <windows.h>
+	#ifdef _WIN32
+	#include <Windows.h>
 	#endif
 	#include <GL/gl.h>
 	#include <GL/glu.h>
