@@ -3,72 +3,72 @@
 #include "Error.hpp"
 using namespace std;
 
-Error::Error(ErrorType error)
+Error :: Error(ErrorType error)
 {
 	type = error;
 }
 
-Error::Error()
+Error :: Error()
 {
 	type = NONE;
 }
 
-void Gl::init(int *argc, char **argv)
+void Gl :: init(int *argc, char **argv)
 {
-	SDL_DisplayMode DisMode; //параметры экрана
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)//начальная инициализация SDL
+	SDL_DisplayMode DisMode; //РїР°СЂР°РјРµС‚СЂС‹ СЌРєСЂР°РЅР°
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)//РЅР°С‡Р°Р»СЊРЅР°СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ SDL
 	{
 		throw(Error(SDL));
 	}
-	SDL_GetDesktopDisplayMode(0, &DisMode); //получаем парраметры экрана
-	WinW = DisMode.w; //получаем размеры экрана
+	SDL_GetDesktopDisplayMode(0 , &DisMode); //РїРѕР»СѓС‡Р°РµРј РїР°СЂСЂР°РјРµС‚СЂС‹ СЌРєСЂР°РЅР°
+	WinW = DisMode.w; //РїРѕР»СѓС‡Р°РµРј СЂР°Р·РјРµСЂС‹ СЌРєСЂР°РЅР°
 	WinH = DisMode.h;
-	if ((!WinW) || (!WinH))
+	if((!WinW) || (!WinH))
 	{
-		WinW = 1280; //если не удалось ставим HD
+		WinW = 	1280; //РµСЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ СЃС‚Р°РІРёРј HD
 		WinH = 720;
 	}
-	if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
+	if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //СЃРѕР·РґР°Р»Рё РґРІРѕР№РЅРѕРѕР№ Р±СѓС„РµСЂ
 		throw(Error(SDL));
-	if (SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //ставим глубину цвета
+	if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //СЃС‚Р°РІРёРј РіР»СѓР±РёРЅСѓ С†РІРµС‚Р°
 		throw(Error(SDL));
-	if (SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //ставим глубину цвета
+	if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //СЃС‚Р°РІРёРј РіР»СѓР±РёРЅСѓ С†РІРµС‚Р°
 		throw(Error(SDL));
-	if (SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //ставим глубину цвета
+	if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //СЃС‚Р°РІРёРј РіР»СѓР±РёРЅСѓ С†РІРµС‚Р°
 		throw(Error(SDL));
 	atexit(SDL_Quit);
 }
 
-void Gl::start()
+void Gl :: start()
 {
-	window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WinW, WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//создание окна
-	if (window == NULL)
+	window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WinW, WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//СЃРѕР·РґР°РЅРёРµ РѕРєРЅР°
+	if(window == NULL)
 		throw(Error(SDL));
-	if (SDL_GL_CreateContext(window) == NULL) //Создали котекст OpenGl 
+	if(SDL_GL_CreateContext(window) == NULL) //РЎРѕР·РґР°Р»Рё РєРѕС‚РµРєСЃС‚ OpenGl 
 		throw(Error(SDL));
-	glClearColor(0.0, 0.0, 1.0, 1.0);//цвет по дефолту
-	glClearDepth(1.0); //глубина по дефолту
-	glDepthFunc(GL_LESS); //функция для определения глубу
-	glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
-	glMatrixMode(GL_PROJECTION); //указывает что мы быдем работь с матрицей проекций
-	glLoadIdentity(); //Использует указанную матрицу
-	gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
-	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
-	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
-	if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
+	glClearColor(0.0, 0.0, 1.0, 1.0);//С†РІРµС‚ РїРѕ РґРµС„РѕР»С‚Сѓ
+	glClearDepth(1.0); //РіР»СѓР±РёРЅР° РїРѕ РґРµС„РѕР»С‚Сѓ
+	glDepthFunc(GL_LESS); //С„СѓРЅРєС†РёСЏ РґР»СЏ РѕРїСЂРµРґРµР»РµРЅРёСЏ РіР»СѓР±Сѓ
+	glEnable(GL_DEPTH_TEST); //СЂР°Р·СЂРµС€Р°РµРј С‚РµСЃС‚ РіР»СѓР±РёРЅС‹
+	glMatrixMode(GL_PROJECTION); //СѓРєР°Р·С‹РІР°РµС‚ С‡С‚Рѕ РјС‹ Р±С‹РґРµРј СЂР°Р±РѕС‚СЊ СЃ РјР°С‚СЂРёС†РµР№ РїСЂРѕРµРєС†РёР№
+		glLoadIdentity(); //РСЃРїРѕР»СЊР·СѓРµС‚ СѓРєР°Р·Р°РЅРЅСѓСЋ РјР°С‚СЂРёС†Сѓ
+		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0); // СѓРіРѕР» РѕР±Р·РѕСЂР° РїРѕ y, x/y, РїР»РёР¶Р°Р№С€Р°СЏ Рё РґР°Р»СЊРЅСЏСЏ РїР»РѕСЃРєРѕСЃС‚Рё РѕС‚СЃРµС‡РµРЅРёСЏ
+	glMatrixMode(GL_MODELVIEW); // РїРµСЂРµС…РѕРґРёРј РІ СЂРµР¶РёРј СЂР°Р±РѕС‚С‹ СЃ 3d
+	SDL_ShowCursor(SDL_DISABLE); //РѕС‚РєР»СЋС‡Р°РµРј РєСѓСЂСЃРѕСЂ
+	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
 		throw(Error(SDL));
-	MainLoop(); //запускаем главный цикл
+	MainLoop(); //Р·Р°РїСѓСЃРєР°РµРј РіР»Р°РІРЅС‹Р№ С†РёРєР»
 }
 
-void Gl::MainLoop()
+void Gl :: MainLoop()
 {
-	while (true)
+	while(true)
 	{
 		display();
 		SDL_Event event;
-		while (SDL_PollEvent(&event))
+		while(SDL_PollEvent(&event))
 		{
-			switch (event.type)
+			switch(event.type)
 			{
 			case SDL_QUIT:
 				Quit();
@@ -83,15 +83,15 @@ void Gl::MainLoop()
 	}
 }
 
-void Gl::Quit()
+void Gl :: Quit()
 {
 	SDL_Quit();
 	exit(0);
 }
 
-void Gl::keydown(SDL_Scancode code)
+void Gl :: keydown(SDL_Scancode code)
 {
-	switch (code)
+	switch(code)
 	{
 	case SDL_SCANCODE_ESCAPE:
 		Quit();
@@ -101,10 +101,10 @@ void Gl::keydown(SDL_Scancode code)
 	}
 }
 
-void Gl::display()
+void Gl :: display() 
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //очищаем экран и буфер глубины
-	glFlush(); //Отрисовываем
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //РѕС‡РёС‰Р°РµРј СЌРєСЂР°РЅ Рё Р±СѓС„РµСЂ РіР»СѓР±РёРЅС‹
+	glFlush(); //РћС‚СЂРёСЃРѕРІС‹РІР°РµРј
 	SDL_GL_SwapWindow(window);
 }
 
@@ -113,7 +113,7 @@ void DealWithErrror(ErrorType err)
 	switch (err)
 	{
 	case SDL:
-		cout << SDL_GetError() << endl; //Выводим сообщение об ошибке
+		cout << SDL_GetError() << endl; //Р’С‹РІРѕРґРёРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ
 		break;
 	default:
 		break;
@@ -124,8 +124,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		Gl::init(&argc, argv);
-		Gl::start();
+		Gl :: init(&argc, argv);
+		Gl :: start();
 	}
 	catch (ErrorType err)
 	{
