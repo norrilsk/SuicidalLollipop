@@ -85,7 +85,6 @@ void Gl :: MainLoop()
 
 void Gl :: Quit()
 {
-	SDL_Quit();
 	throw(Error(QUIT));
 }
 
