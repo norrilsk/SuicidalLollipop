@@ -108,9 +108,9 @@ void Gl :: display()
 	SDL_GL_SwapWindow(window);
 }
 
-void DealWithErrror(ErrorType err)
+void DealWithErrror(Error err)
 {
-	switch (err)
+	switch (err.getType())
 	{
 	case SDL:
 		cout << SDL_GetError() << endl; //Выводим сообщение об ошибке
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 		Gl :: init(&argc, argv);
 		Gl :: start();
 	}
-	catch (ErrorType err)
+	catch (Error err)
 	{
 		DealWithErrror(err);
 	}
