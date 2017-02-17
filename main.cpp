@@ -86,7 +86,7 @@ void Gl :: MainLoop()
 void Gl :: Quit()
 {
 	SDL_Quit();
-	exit(0);
+	throw(Error(QUIT));
 }
 
 void Gl :: keydown(SDL_Scancode code)
@@ -108,12 +108,15 @@ void Gl :: display()
 	SDL_GL_SwapWindow(window);
 }
 
-void DealWithErrror(ErrorType err)
+void DealWithErrror(Error err)
 {
-	switch (err)
+	switch (err.getType())
 	{
 	case SDL:
 		cout << SDL_GetError() << endl; //Выводим сообщение об ошибке
+		break;
+	case QUIT:
+		cout <<"Sucsessful finish"<<endl;
 		break;
 	default:
 		break;
@@ -127,7 +130,7 @@ int main(int argc, char **argv)
 		Gl :: init(&argc, argv);
 		Gl :: start();
 	}
-	catch (ErrorType err)
+	catch (Error err)
 	{
 		DealWithErrror(err);
 	}

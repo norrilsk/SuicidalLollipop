@@ -2,7 +2,8 @@ enum ErrorType
 {
 	NONE,
 	SDL,
-	OTHER
+	OTHER,
+	QUIT
 };
 
 class Error
