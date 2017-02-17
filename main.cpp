@@ -36,6 +36,7 @@ void Gl :: init(int *argc, char **argv)
 		throw(Error(SDL));
 	if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //ставим глубину цвета
 		throw(Error(SDL));
+	atexit(SDL_Quit);
 }
 
 void Gl :: start()
@@ -54,6 +55,8 @@ void Gl :: start()
 		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
 	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
 	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
+	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
+		throw(Error(SDL));
 	MainLoop(); //запускаем главный цикл
 }
 
@@ -68,15 +71,22 @@ void Gl :: MainLoop()
 			switch(event.type)
 			{
 			case SDL_QUIT:
-				throw(Error(NONE));
+				Quit();
 				break;
 			case SDL_KEYDOWN:
-				cout << "key down :" << event.key.keysym.sym << endl; 
 				keydown(event.key.keysym.scancode);
+				break;
+			default:
 				break;
 			}
 		}
 	}
+}
+
+void Gl :: Quit()
+{
+	SDL_Quit();
+	exit(0);
 }
 
 void Gl :: keydown(SDL_Scancode code)
@@ -84,7 +94,7 @@ void Gl :: keydown(SDL_Scancode code)
 	switch(code)
 	{
 	case SDL_SCANCODE_ESCAPE:
-		SDL_Quit();
+		Quit();
 		break;
 	default:
 		break;
@@ -108,7 +118,6 @@ void DealWithErrror(ErrorType err)
 	default:
 		break;
 	}
-	exit(0);
 }
 
 int main(int argc, char **argv)

@@ -16,5 +16,6 @@
 		void keydown(SDL_Scancode code);//обработка нажатия кнопки
 		void display(); //фуннкция - отрисовщик окна
 		void reshape(); //функция срабатывающая при изменении размера окна
+		void Quit(); //закрыть и выйти
 	}
 #endif
