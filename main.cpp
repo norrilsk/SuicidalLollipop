@@ -3,72 +3,72 @@
 #include "Error.hpp"
 using namespace std;
 
-Error :: Error(ErrorType error)
+Error::Error(ErrorType error)
 {
 	type = error;
 }
 
-Error :: Error()
+Error::Error()
 {
 	type = NONE;
 }
 
-void Gl :: init(int *argc, char **argv)
+void Gl::init(int *argc, char **argv)
 {
-	SDL_DisplayMode DisMode; //–ø–∞—Ä–∞–º–µ—Ç—Ä—ã —ç–∫—Ä–∞–Ω–∞
-	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)//–Ω–∞—á–∞–ª—å–Ω–∞—è –∏–Ω–∏—Ü–∏–∞–ª–∏–∑–∞—Ü–∏—è SDL
+	SDL_DisplayMode DisMode; //Ô‡‡ÏÂÚ˚ ˝Í‡Ì‡
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)//Ì‡˜‡Î¸Ì‡ˇ ËÌËˆË‡ÎËÁ‡ˆËˇ SDL
 	{
 		throw(Error(SDL));
 	}
-	SDL_GetDesktopDisplayMode(0 , &DisMode); //–ø–æ–ª—É—á–∞–µ–º –ø–∞—Ä—Ä–∞–º–µ—Ç—Ä—ã —ç–∫—Ä–∞–Ω–∞
-	WinW = DisMode.w; //–ø–æ–ª—É—á–∞–µ–º —Ä–∞–∑–º–µ—Ä—ã —ç–∫—Ä–∞–Ω–∞
+	SDL_GetDesktopDisplayMode(0, &DisMode); //ÔÓÎÛ˜‡ÂÏ Ô‡‡ÏÂÚ˚ ˝Í‡Ì‡
+	WinW = DisMode.w; //ÔÓÎÛ˜‡ÂÏ ‡ÁÏÂ˚ ˝Í‡Ì‡
 	WinH = DisMode.h;
-	if((!WinW) || (!WinH))
+	if ((!WinW) || (!WinH))
 	{
-		WinW = 	1280; //–µ—Å–ª–∏ –Ω–µ —É–¥–∞–ª–æ—Å—å —Å—Ç–∞–≤–∏–º HD
+		WinW = 1280; //ÂÒÎË ÌÂ Û‰‡ÎÓÒ¸ ÒÚ‡‚ËÏ HD
 		WinH = 720;
 	}
-	if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //—Å–æ–∑–¥–∞–ª–∏ –¥–≤–æ–π–Ω–æ–æ–π –±—É—Ñ–µ—Ä
+	if (SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //ÒÓÁ‰‡ÎË ‰‚ÓÈÌÓÓÈ ·ÛÙÂ
 		throw(Error(SDL));
-	if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //—Å—Ç–∞–≤–∏–º –≥–ª—É–±–∏–Ω—É —Ü–≤–µ—Ç–∞
+	if (SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //ÒÚ‡‚ËÏ „ÎÛ·ËÌÛ ˆ‚ÂÚ‡
 		throw(Error(SDL));
-	if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //—Å—Ç–∞–≤–∏–º –≥–ª—É–±–∏–Ω—É —Ü–≤–µ—Ç–∞
+	if (SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //ÒÚ‡‚ËÏ „ÎÛ·ËÌÛ ˆ‚ÂÚ‡
 		throw(Error(SDL));
-	if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //—Å—Ç–∞–≤–∏–º –≥–ª—É–±–∏–Ω—É —Ü–≤–µ—Ç–∞
+	if (SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //ÒÚ‡‚ËÏ „ÎÛ·ËÌÛ ˆ‚ÂÚ‡
 		throw(Error(SDL));
 	atexit(SDL_Quit);
 }
 
-void Gl :: start()
+void Gl::start()
 {
-	window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WinW, WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//—Å–æ–∑–¥–∞–Ω–∏–µ –æ–∫–Ω–∞
-	if(window == NULL)
+	window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WinW, WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//ÒÓÁ‰‡ÌËÂ ÓÍÌ‡
+	if (window == NULL)
 		throw(Error(SDL));
-	if(SDL_GL_CreateContext(window) == NULL) //–°–æ–∑–¥–∞–ª–∏ –∫–æ—Ç–µ–∫—Å—Ç OpenGl 
+	if (SDL_GL_CreateContext(window) == NULL) //—ÓÁ‰‡ÎË ÍÓÚÂÍÒÚ OpenGl 
 		throw(Error(SDL));
-	glClearColor(0.0, 0.0, 1.0, 1.0);//—Ü–≤–µ—Ç –ø–æ –¥–µ—Ñ–æ–ª—Ç—É
-	glClearDepth(1.0); //–≥–ª—É–±–∏–Ω–∞ –ø–æ –¥–µ—Ñ–æ–ª—Ç—É
-	glDepthFunc(GL_LESS); //—Ñ—É–Ω–∫—Ü–∏—è –¥–ª—è –æ–ø—Ä–µ–¥–µ–ª–µ–Ω–∏—è –≥–ª—É–±—É
-	glEnable(GL_DEPTH_TEST); //—Ä–∞–∑—Ä–µ—à–∞–µ–º —Ç–µ—Å—Ç –≥–ª—É–±–∏–Ω—ã
-	glMatrixMode(GL_PROJECTION); //—É–∫–∞–∑—ã–≤–∞–µ—Ç —á—Ç–æ –º—ã –±—ã–¥–µ–º —Ä–∞–±–æ—Ç—å —Å –º–∞—Ç—Ä–∏—Ü–µ–π –ø—Ä–æ–µ–∫—Ü–∏–π
-		glLoadIdentity(); //–ò—Å–ø–æ–ª—å–∑—É–µ—Ç —É–∫–∞–∑–∞–Ω–Ω—É—é –º–∞—Ç—Ä–∏—Ü—É
-		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0); // —É–≥–æ–ª –æ–±–∑–æ—Ä–∞ –ø–æ y, x/y, –ø–ª–∏–∂–∞–π—à–∞—è –∏ –¥–∞–ª—å–Ω—è—è –ø–ª–æ—Å–∫–æ—Å—Ç–∏ –æ—Ç—Å–µ—á–µ–Ω–∏—è
-	glMatrixMode(GL_MODELVIEW); // –ø–µ—Ä–µ—Ö–æ–¥–∏–º –≤ —Ä–µ–∂–∏–º —Ä–∞–±–æ—Ç—ã —Å 3d
-	SDL_ShowCursor(SDL_DISABLE); //–æ—Ç–∫–ª—é—á–∞–µ–º –∫—É—Ä—Å–æ—Ä
-	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
+	glClearColor(0.0, 0.0, 1.0, 1.0);//ˆ‚ÂÚ ÔÓ ‰ÂÙÓÎÚÛ
+	glClearDepth(1.0); //„ÎÛ·ËÌ‡ ÔÓ ‰ÂÙÓÎÚÛ
+	glDepthFunc(GL_LESS); //ÙÛÌÍˆËˇ ‰Îˇ ÓÔÂ‰ÂÎÂÌËˇ „ÎÛ·Û
+	glEnable(GL_DEPTH_TEST); //‡ÁÂ¯‡ÂÏ ÚÂÒÚ „ÎÛ·ËÌ˚
+	glMatrixMode(GL_PROJECTION); //ÛÍ‡Á˚‚‡ÂÚ ˜ÚÓ Ï˚ ·˚‰ÂÏ ‡·ÓÚ¸ Ò Ï‡ÚËˆÂÈ ÔÓÂÍˆËÈ
+	glLoadIdentity(); //»ÒÔÓÎ¸ÁÛÂÚ ÛÍ‡Á‡ÌÌÛ˛ Ï‡ÚËˆÛ
+	gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0); // Û„ÓÎ Ó·ÁÓ‡ ÔÓ y, x/y, ÔÎËÊ‡È¯‡ˇ Ë ‰‡Î¸Ìˇˇ ÔÎÓÒÍÓÒÚË ÓÚÒÂ˜ÂÌËˇ
+	glMatrixMode(GL_MODELVIEW); // ÔÂÂıÓ‰ËÏ ‚ ÂÊËÏ ‡·ÓÚ˚ Ò 3d
+	SDL_ShowCursor(SDL_DISABLE); //ÓÚÍÎ˛˜‡ÂÏ ÍÛÒÓ
+	if (SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
 		throw(Error(SDL));
-	MainLoop(); //–∑–∞–ø—É—Å–∫–∞–µ–º –≥–ª–∞–≤–Ω—ã–π —Ü–∏–∫–ª
+	MainLoop(); //Á‡ÔÛÒÍ‡ÂÏ „Î‡‚Ì˚È ˆËÍÎ
 }
 
-void Gl :: MainLoop()
+void Gl::MainLoop()
 {
-	while(true)
+	while (true)
 	{
 		display();
 		SDL_Event event;
-		while(SDL_PollEvent(&event))
+		while (SDL_PollEvent(&event))
 		{
-			switch(event.type)
+			switch (event.type)
 			{
 			case SDL_QUIT:
 				Quit();
@@ -83,15 +83,15 @@ void Gl :: MainLoop()
 	}
 }
 
-void Gl :: Quit()
+void Gl::Quit()
 {
 	SDL_Quit();
 	exit(0);
 }
 
-void Gl :: keydown(SDL_Scancode code)
+void Gl::keydown(SDL_Scancode code)
 {
-	switch(code)
+	switch (code)
 	{
 	case SDL_SCANCODE_ESCAPE:
 		Quit();
@@ -101,10 +101,10 @@ void Gl :: keydown(SDL_Scancode code)
 	}
 }
 
-void Gl :: display() 
+void Gl::display()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //–æ—á–∏—â–∞–µ–º —ç–∫—Ä–∞–Ω –∏ –±—É—Ñ–µ—Ä –≥–ª—É–±–∏–Ω—ã
-	glFlush(); //–û—Ç—Ä–∏—Å–æ–≤—ã–≤–∞–µ–º
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Ó˜Ë˘‡ÂÏ ˝Í‡Ì Ë ·ÛÙÂ „ÎÛ·ËÌ˚
+	glFlush(); //ŒÚËÒÓ‚˚‚‡ÂÏ
 	SDL_GL_SwapWindow(window);
 }
 
@@ -113,7 +113,7 @@ void DealWithErrror(ErrorType err)
 	switch (err)
 	{
 	case SDL:
-		cout << SDL_GetError() << endl; //–í—ã–≤–æ–¥–∏–º —Å–æ–æ–±—â–µ–Ω–∏–µ –æ–± –æ—à–∏–±–∫–µ
+		cout << SDL_GetError() << endl; //¬˚‚Ó‰ËÏ ÒÓÓ·˘ÂÌËÂ Ó· Ó¯Ë·ÍÂ
 		break;
 	default:
 		break;
@@ -124,8 +124,8 @@ int main(int argc, char **argv)
 {
 	try
 	{
-		Gl :: init(&argc, argv);
-		Gl :: start();
+		Gl::init(&argc, argv);
+		Gl::start();
 	}
 	catch (ErrorType err)
 	{

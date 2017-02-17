@@ -8,8 +8,8 @@ enum ErrorType
 class Error
 {
 	ErrorType type;
-	public:
+public:
 	Error(ErrorType er);
 	Error();
-	ErrorType getType() {return type;}
-}; 
+	ErrorType getType() { return type; }
+};
