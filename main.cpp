@@ -1,41 +1,126 @@
 #include <iostream>
 #include "GLheader.hpp"
+#include "Error.hpp"
 using namespace std;
+
+Error :: Error(ErrorType error)
+{
+	type = error;
+}
+
+Error :: Error()
+{
+	type = NONE;
+}
 
 void Gl :: init(int *argc, char **argv)
 {
-	glutInit(argc, argv); //начальная инициализация glut
-	WinW = glutGet(GLUT_SCREEN_WIDTH); //получаем размеры экрана
-	WinH = glutGet(GLUT_SCREEN_HEIGHT);
+	SDL_DisplayMode DisMode; //параметры экрана
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)//начальная инициализация SDL
+	{
+		throw(Error(SDL));
+	}
+	SDL_GetDesktopDisplayMode(0 , &DisMode); //получаем парраметры экрана
+	WinW = DisMode.w; //получаем размеры экрана
+	WinH = DisMode.h;
 	if((!WinW) || (!WinH))
 	{
 		WinW = 	1280; //если не удалось ставим HD
 		WinH = 720;
 	}
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE| GLUT_DEPTH |GLUT_ALPHA); //добавляем в наше окно режим RGBA, 2 бувера (отрисовки) (нужны когда есть анимация), буфер глубеныб альфа-канал
-	glutInitWindowSize(WinW, WinH); //задаем начальные размеры окна
+	if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
+		throw(Error(SDL));
+	if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //ставим глубину цвета
+		throw(Error(SDL));
+	if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //ставим глубину цвета
+		throw(Error(SDL));
+	if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //ставим глубину цвета
+		throw(Error(SDL));
 }
 
 void Gl :: start()
 {
-	glutCreateWindow("Window"); //открываем окно которое зовут Window
-	glutFullScreen(); //переключаем в Full Screen
+	window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WinW, WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//создание окна
+	if(window == NULL)
+		throw(Error(SDL));
+	if(SDL_GL_CreateContext(window) == NULL) //Создали котекст OpenGl 
+		throw(Error(SDL));
 	glClearColor(0.0, 0.0, 1.0, 1.0);//цвет по дефолту
+	glClearDepth(1.0); //глубина по дефолту
+	glDepthFunc(GL_LESS); //функция для определения глубу
 	glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
-	glutSetCursor(GLUT_CURSOR_NONE); //прячем курсор
-	glutDisplayFunc(Gl :: display); //Говорим какая ф-я у нас будет отвечать за отрисовку 
-	glutMainLoop(); //запускаем главный цикл
+	glMatrixMode(GL_PROJECTION); //указывает что мы быдем работь с матрицей проекций
+		glLoadIdentity(); //Использует указанную матрицу
+		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
+	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
+	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
+	MainLoop(); //запускаем главный цикл
+}
+
+void Gl :: MainLoop()
+{
+	while(true)
+	{
+		display();
+		SDL_Event event;
+		while(SDL_PollEvent(&event))
+		{
+			switch(event.type)
+			{
+			case SDL_QUIT:
+				throw(Error(NONE));
+				break;
+			case SDL_KEYDOWN:
+				cout << "key down :" << event.key.keysym.sym << endl; 
+				keydown(event.key.keysym.scancode);
+				break;
+			}
+		}
+	}
+}
+
+void Gl :: keydown(SDL_Scancode code)
+{
+	switch(code)
+	{
+	case SDL_SCANCODE_ESCAPE:
+		SDL_Quit();
+		break;
+	default:
+		break;
+	}
 }
 
 void Gl :: display() 
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //очищаем экран и буфер глубины
-	glutSwapBuffers(); // меняем буферы (наш ушел на видеокарту а к нам вернулся другой)
+	glFlush(); //Отрисовываем
+	SDL_GL_SwapWindow(window);
+}
+
+void DealWithErrror(ErrorType err)
+{
+	switch (err)
+	{
+	case SDL:
+		cout << SDL_GetError() << endl; //Выводим сообщение об ошибке
+		break;
+	default:
+		break;
+	}
+	exit(0);
 }
 
 int main(int argc, char **argv)
 {
-	Gl :: init(&argc, argv);
-	Gl :: start();
+	try
+	{
+		Gl :: init(&argc, argv);
+		Gl :: start();
+	}
+	catch (ErrorType err)
+	{
+		DealWithErrror(err);
+	}
 	return 0;
 }
