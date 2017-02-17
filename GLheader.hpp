@@ -1,18 +1,14 @@
-
-#ifdef _WIN32
-#include<windows.h>
-#endif
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <SDL2/SDL.h>
-
 #ifndef _GLheader
 	#define _GLheader
+	#include <GL/gl.h>
+	#include <GL/glu.h>
+	#include <SDL2/SDL.h>
+
 	namespace Gl
 	{
-		double WinW; //Ширина окна
-		double WinH; //Высота окна
-		SDL_Window *window; 
+		extern double WinW; //Ширина окна. Здесь мы говорим что только собираемся обЪявить эти переменные
+		extern double WinH; //Высота окна
+		extern SDL_Window *window; 
 		void init(int *argc, char **argv); //Инициализация всего что нужно для старта glut
 		void MainLoop(); //Главный цикл
 		void start(); //собственно запуск окна 
