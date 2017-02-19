@@ -1,5 +1,7 @@
 #include "GLfunc.hpp"
 #include "Error.hpp"
+#include "Camera.hpp"
+#include "Mouse.hpp"
 
 double Gl :: WinW; //Собственно объявляем переменные
 double Gl :: WinH;
@@ -82,7 +84,6 @@ void Gl :: init(int *argc, char **argv)
 		throw(Error(SDL));
 	if(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16) < 0)//ставим размер буфера глубины
 		throw(Error(SDL));
-	SetCursorPos(320, 240); // устанавливает позицию курсора
 	atexit(SDL_Quit);
 }
 
@@ -103,6 +104,7 @@ void Gl :: start()
 		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 1, 1000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
 	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
 	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
+	SDL_WarpMouseInWindow(Gl :: window,320, 240); // устанавливает позицию курсора
 	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
 		throw(Error(SDL));
 	MainLoop(); //запускаем главный цикл
@@ -110,7 +112,6 @@ void Gl :: start()
 
 void Gl :: MainLoop()
 {
-	LPPOINT mousexy = LPPOINT();
 	while(true)
 	{
 		//a += 1.0;

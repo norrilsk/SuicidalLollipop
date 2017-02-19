@@ -7,8 +7,9 @@
 	#include <GL/glu.h>
 	#include <SDL2/SDL.h>
 	#include <stdlib.h>
-    #include"Camera.hpp"
-    #include "Mouse.hpp"
+	#include "Error.hpp"
+	#include "Camera.hpp"
+	#include "Mouse.hpp"
 
 	namespace Gl
 	{
