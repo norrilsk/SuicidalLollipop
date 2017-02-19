@@ -1,4 +1,4 @@
-#ifndef _CAMERA
+п»ї#ifndef _CAMERA
 #define _CAMERA
 #include <cmath>
 #ifdef _WIN32
@@ -11,19 +11,19 @@
 class Camera
 {
 private:
-	double x, y, z; //координаты камеры
-	double angleX, angleY; // положение камеры в пространстве (углы) DEGREES (ГРАДУСЫ)!!!
-	double height;//рост камеры;
-	double PlayerSpeed;// Скорость игрока
+	double x, y, z; //РєРѕРѕСЂРґРёРЅР°С‚С‹ РєР°РјРµСЂС‹
+	double angleX, angleY; // РїРѕР»РѕР¶РµРЅРёРµ РєР°РјРµСЂС‹ РІ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ (СѓРіР»С‹) DEGREES (Р“Р РђР”РЈРЎР«)!!!
+	double height;//СЂРѕСЃС‚ РєР°РјРµСЂС‹;
+	double PlayerSpeed;// РЎРєРѕСЂРѕСЃС‚СЊ РёРіСЂРѕРєР°
 public:
-	void Look(); // функция установки позиции камеры
-	void MoveForward(); // движение вперед
-	void MoveBackward(); // движение назад
-	void MoveRight(); // движение вправо
-	void MoveLeft(); // движение влево 
-	void ChangePlayerSpeed(double speed);// изменяет скорость игрока
-	void RotaterRightLeft(double angleX1);// Вращает камеру вправо/влево input:угол в ГРАДУСАХ!!
-	void RotateHighDown(double angleY1);// Вращает камеру вверх/вниз input: угол в ГРАДУСАХ
+	void Look(); // С„СѓРЅРєС†РёСЏ СѓСЃС‚Р°РЅРѕРІРєРё РїРѕР·РёС†РёРё РєР°РјРµСЂС‹
+	void MoveForward(); // РґРІРёР¶РµРЅРёРµ РІРїРµСЂРµРґ
+	void MoveBackward(); // РґРІРёР¶РµРЅРёРµ РЅР°Р·Р°Рґ
+	void MoveRight(); // РґРІРёР¶РµРЅРёРµ РІРїСЂР°РІРѕ
+	void MoveLeft(); // РґРІРёР¶РµРЅРёРµ РІР»РµРІРѕ 
+	void ChangePlayerSpeed(double speed);// РёР·РјРµРЅСЏРµС‚ СЃРєРѕСЂРѕСЃС‚СЊ РёРіСЂРѕРєР°
+	void RotaterRightLeft(double angleX1);// Р’СЂР°С‰Р°РµС‚ РєР°РјРµСЂСѓ РІРїСЂР°РІРѕ/РІР»РµРІРѕ input:СѓРіРѕР» РІ Р“Р РђР”РЈРЎРђРҐ!!
+	void RotateHighDown(double angleY1);// Р’СЂР°С‰Р°РµС‚ РєР°РјРµСЂСѓ РІРІРµСЂС…/РІРЅРёР· input: СѓРіРѕР» РІ Р“Р РђР”РЈРЎРђРҐ
 	Camera();
 	Camera(double x, double y, double z, double height, double PlayerSpeed, double AngleX, double AngleY); // x,y,z,height, PlayerSpeed angleX,AngleY
 	~Camera();
