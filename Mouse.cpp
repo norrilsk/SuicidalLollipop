@@ -1,4 +1,4 @@
-#include "Mouse.hpp"
+п»ї#include "Mouse.hpp"
 #include "GLfunc.hpp"
 
 
@@ -12,7 +12,7 @@ Mouse::Mouse(int x, int y, int Sens)
 		y = 240;
 	}
 	
-	SetCursorPos(x, y); // устанавливает позицию курсора
+	SetCursorPos(x, y); // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РїРѕР·РёС†РёСЋ РєСѓСЂСЃРѕСЂР°
 }
 Mouse::Mouse()
 {
@@ -24,9 +24,9 @@ Mouse::Mouse()
 
 void Mouse::MouseMotion(int x, int y)
 {
-	Gl::Cam.RotaterRightLeft((X - x) / Sensity); // вращает камеру по Х
-	Gl::Cam.RotateHighDown((Y - y) / Sensity); // вращает камеру по У
-	SetCursorPos(X, Y); // устанавливает позицию курсора
+	Gl::Cam.RotaterRightLeft((X - x) / Sensity); // РІСЂР°С‰Р°РµС‚ РєР°РјРµСЂСѓ РїРѕ РҐ
+	Gl::Cam.RotateHighDown((Y - y) / Sensity); // РІСЂР°С‰Р°РµС‚ РєР°РјРµСЂСѓ РїРѕ РЈ
+	SetCursorPos(X, Y); // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РїРѕР·РёС†РёСЋ РєСѓСЂСЃРѕСЂР°
 	return;
 }
 void Mouse::ChangeSensity(int sense)

@@ -1,15 +1,15 @@
-#ifndef _MOUSE
+п»ї#ifndef _MOUSE
 #define _MOUSE
 #include "Camera.hpp"
 //#include "GLfunc.hpp"
 class Mouse
 {
 private:
-	int X, Y, Sensity; // Координаты положения мыши, чувствительность
+	int X, Y, Sensity; // РљРѕРѕСЂРґРёРЅР°С‚С‹ РїРѕР»РѕР¶РµРЅРёСЏ РјС‹С€Рё, С‡СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ
 
 public:
-	void MouseMotion(int x, int y); // движение мыши, передавать абсолютную координату
-	void ChangeSensity(int Sens); // Изменить чувствительность
+	void MouseMotion(int x, int y); // РґРІРёР¶РµРЅРёРµ РјС‹С€Рё, РїРµСЂРµРґР°РІР°С‚СЊ Р°Р±СЃРѕР»СЋС‚РЅСѓСЋ РєРѕРѕСЂРґРёРЅР°С‚Сѓ
+	void ChangeSensity(int Sens); // РР·РјРµРЅРёС‚СЊ С‡СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ
 	Mouse(int x, int y, int Sens);
 	Mouse();
 	

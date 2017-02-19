@@ -1,4 +1,4 @@
-#ifndef _Error
+﻿#ifndef _Error
 	#define _Error
 	enum ErrorType
 	{
