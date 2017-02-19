@@ -1,4 +1,5 @@
 # SuicidalLollipop
 Some little and boring sweets.
 
-Very boring :(
+В этой ветке будут жить основы проекта
+по крайней мере в начале

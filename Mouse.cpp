@@ -12,21 +12,21 @@ Mouse::Mouse(int x, int y, int Sens)
 		y = 240;
 	}
 	
-	SetCursorPos(x, y); // устанавливает позицию курсора
+	SDL_WarpMouseInWindow(Gl :: window, x, y); // устанавливает позицию курсора
 }
 Mouse::Mouse()
 {
 	X = 320;
 	Y = 240;
 	Sensity = 20;
-	SetCursorPos(X, Y);
+	SDL_WarpMouseInWindow(Gl :: window,320, 240); // устанавливает позицию курсора(X, Y);
 }
 
 void Mouse::MouseMotion(int x, int y)
 {
 	Gl::Cam.RotaterRightLeft((X - x) / Sensity); // вращает камеру по Х
 	Gl::Cam.RotateHighDown((Y - y) / Sensity); // вращает камеру по У
-	SetCursorPos(X, Y); // устанавливает позицию курсора
+	SDL_WarpMouseInWindow(Gl :: window,320, 240); // устанавливает позицию курсора(X, Y); // устанавливает позицию курсора
 	return;
 }
 void Mouse::ChangeSensity(int sense)
