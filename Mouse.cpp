@@ -1,7 +1,6 @@
 ﻿#include "Mouse.hpp"
 #include "GLfunc.hpp"
 
-
 Mouse::Mouse(int x, int y, int Sens)
 {
 	X = x;
@@ -24,8 +23,8 @@ Mouse::Mouse()
 
 void Mouse::MouseMotion(int x, int y)
 {
-	Gl::Cam.RotaterRightLeft((X - x) / Sensity); // вращает камеру по Х
-	Gl::Cam.RotateHighDown((Y - y) / Sensity); // вращает камеру по У
+	Gl::camera.RotaterRightLeft((X - x) / Sensity); // вращает камеру по Х
+	Gl::camera.RotateHighDown((Y - y) / Sensity); // вращает камеру по У
 	SDL_WarpMouseInWindow(Gl :: window,320, 240); // устанавливает позицию курсора(X, Y); // устанавливает позицию курсора
 	return;
 }

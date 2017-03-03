@@ -1,16 +1,13 @@
 #include "GLfunc.hpp"
-#include "Error.hpp"
-#include "Camera.hpp"
-#include "Mouse.hpp"
-
 double Gl :: WinW; //Собственно объявляем переменные
 double Gl :: WinH;
 SDL_Window* Gl :: window; 
 float Gl :: a, Gl :: b,  Gl ::c;
-Camera Gl :: Cam; // инициализация камеры
-Mouse Gl::mouse = Mouse();
+Camera Gl :: camera = Camera(); // инициализация камеры
+Mouse Gl :: mouse = Mouse();
+double Gl :: FPS = 60;
 
-void Gl ::drawCube(float xrf, float yrf, float zrf){
+void Gl::drawCube(float xrf, float yrf, float zrf){
 	glTranslatef(0.0f, 0.0f, -7.0f);	// Сдвинуть вглубь экрана
 
 	glRotatef(xrf, 1.0f, 0.0f, 0.0f);	// Вращение куба по X, Y, Z
@@ -117,6 +114,7 @@ void Gl :: MainLoop()
 		//a += 1.0;
 		//b += 1.0;
 		//c += 1.5;
+		unsigned int t0 = SDL_GetTicks(); //текущее время SDL в милисекундах
 		display();
 		SDL_Event event;
 		while(SDL_PollEvent(&event))
@@ -136,6 +134,8 @@ void Gl :: MainLoop()
 				break;
 			}
 		}
+		FPS = 1000.0/double(SDL_GetTicks() - t0);
+		std :: cout << FPS << std :: endl;
 	}
 }
 
@@ -152,16 +152,16 @@ void Gl :: keydown(SDL_Scancode code)
 		Quit();
 		break;
 	case SDL_SCANCODE_A:
-		Gl::Cam.MoveLeft();
+		Gl::camera.MoveLeft();
 		break;
 	case SDL_SCANCODE_W:
-		Gl::Cam.MoveForward();
+		Gl::camera.MoveForward();
 		break;
 	case SDL_SCANCODE_S:
-		Gl::Cam.MoveBackward();
+		Gl::camera.MoveBackward();
 		break;
 	case SDL_SCANCODE_D:
-		Gl::Cam.MoveRight();
+		Gl::camera.MoveRight();
 		break;
 	default:
 		break;
@@ -172,7 +172,8 @@ void Gl :: display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //очищаем экран и буфер глубины
 	glLoadIdentity();
-	Gl::Cam.Look();
+	camera.SetFPS(FPS);
+	camera.Look();
 	drawCube(a, b, c);
 	glFlush(); //Отрисовываем
 	SDL_GL_SwapWindow(window);

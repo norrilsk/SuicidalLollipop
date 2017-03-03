@@ -7,6 +7,7 @@
 	#include <GL/glu.h>
 	#include <SDL2/SDL.h>
 	#include <stdlib.h>
+	#include <iostream> //В целях дебага TODO delete in release
 	#include "Error.hpp"
 	#include "Camera.hpp"
 	#include "Mouse.hpp"
@@ -15,9 +16,10 @@
 	{
 		extern double WinW; //Ширина окна. Здесь мы говорим что только собираемся обЪявить эти переменные
 		extern double WinH; //Высота окна
-		extern SDL_Window *window;  
-		extern Camera Cam; // Наша камера
+		extern SDL_Window *window;
+		extern Camera camera; // Наша камера
 		extern Mouse mouse;
+		extern double FPS;
 		void init(int *argc, char **argv); //Инициализация всего что нужно для старта 
 		void MainLoop(); //Главный цикл
 		void start(); //собственно запуск окна 

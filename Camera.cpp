@@ -12,6 +12,7 @@ Camera::Camera()
 	height = 0;
 	PlayerSpeed = 0.1;
 }
+
 Camera::Camera(double x1, double y1, double z1, double height1, double PlayerSpeed1, double angleX1, double angleY1)
 {
 	x = x1;
@@ -25,6 +26,11 @@ Camera::Camera(double x1, double y1, double z1, double height1, double PlayerSpe
 	angleY = angleY1;
 	height = height1;
 	PlayerSpeed = PlayerSpeed1;
+}
+
+void Camera::SetFPS(double fps)
+{
+	FPS = fps;
 }
 void Camera::Look()
 {
@@ -40,26 +46,26 @@ void Camera::ChangePlayerSpeed(double speed)
 }
 void Camera::MoveForward()
 {
-	x -= (double)sin(angleX / 180 * PI) * PlayerSpeed;
-	z -= (double)cos(angleX / 180 * PI) * PlayerSpeed;
+	x -= (double)sin(angleX / 180 * PI) * PlayerSpeed*FpsBase/FPS;
+	z -= (double)cos(angleX / 180 * PI) * PlayerSpeed*FpsBase/FPS;
 	return;
 }
 void Camera::MoveBackward()
 {
-	x += (double)sin(angleX / 180 * PI) * PlayerSpeed;
-	z += (double)cos(angleX / 180 * PI) * PlayerSpeed;
+	x += (double)sin(angleX / 180 * PI) * PlayerSpeed*FpsBase/FPS;
+	z += (double)cos(angleX / 180 * PI) * PlayerSpeed*FpsBase/FPS;
 	return;
 }
 void Camera::MoveRight()
 {
-	x += (double)sin((angleX + 90) / 180 * PI) * PlayerSpeed;
-	z += (double)cos((angleX + 90) / 180 * PI) * PlayerSpeed;
+	x += (double)sin((angleX + 90) / 180 * PI) * PlayerSpeed*FpsBase/FPS;
+	z += (double)cos((angleX + 90) / 180 * PI) * PlayerSpeed*FpsBase/FPS;
 	return;
 }
 void Camera::MoveLeft()
 {
-	x += (double)sin((angleX - 90) / 180 * PI) * PlayerSpeed;
-	z += (double)cos((angleX - 90) / 180 * PI) * PlayerSpeed;
+	x += (double)sin((angleX - 90) / 180 * PI) * PlayerSpeed*FpsBase/FPS;
+	z += (double)cos((angleX - 90) / 180 * PI) * PlayerSpeed*FpsBase/FPS;
 	return;
 }
 void Camera::RotaterRightLeft(double DeltaAngel)
@@ -69,7 +75,8 @@ void Camera::RotaterRightLeft(double DeltaAngel)
 }
 void Camera::RotateHighDown(double DeltaAngle)
 {
-	angleY += DeltaAngle;
+	angleY += DeltaAngle*FpsBase/FPS;
+	//std :: cout << angleY << " !! " <<FpsBase/FPS  << " " << FPS<< std ::endl;
 	if (angleY > 89)
 		angleY = 89;
 	if (angleY < -89)

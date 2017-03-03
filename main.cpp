@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "GLfunc.hpp"
-#include "Error.hpp"
 using namespace std;
 
 void DealWithErrror(Error err)
