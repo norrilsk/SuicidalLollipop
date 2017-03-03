@@ -3,7 +3,7 @@
 #include "GLfunc.hpp"
 using namespace std;
 
-void DealWithErrror(Error err)
+void DealWithError(Error err)
 {
 	switch (err.getType())
 	{
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 	}
 	catch (Error err)
 	{
-		DealWithErrror(err);
+		DealWithError(err);
 	}
 	return 0;
 }
