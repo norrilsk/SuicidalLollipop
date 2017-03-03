@@ -114,7 +114,8 @@ void Gl :: MainLoop()
 		//a += 1.0;
 		//b += 1.0;
 		//c += 1.5;
-		unsigned int t0 = SDL_GetTicks(); //текущее время SDL в милисекундах
+		unsigned int time_start = SDL_GetTicks(); //текущее время SDL в милисекундах
+		unsigned int time_finish;
 		display();
 		SDL_Event event;
 		while(SDL_PollEvent(&event))
@@ -134,8 +135,12 @@ void Gl :: MainLoop()
 				break;
 			}
 		}
-		FPS = 1000.0/double(SDL_GetTicks() - t0);
-		std :: cout << FPS << std :: endl;
+		time_finish = (SDL_GetTicks() - time_start);
+		
+		// :: cout << FPS << std :: endl;
+		if (time_finish < 17)
+			SDL_Delay(17 - time_finish );
+		FPS = 1000.0 / (SDL_GetTicks() - time_start);
 	}
 }
 

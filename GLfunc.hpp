@@ -11,7 +11,7 @@
 	#include "Error.hpp"
 	#include "Camera.hpp"
 	#include "Mouse.hpp"
-
+	#include<glm\vec3.hpp>
 	namespace Gl
 	{
 		extern double WinW; //Ширина окна. Здесь мы говорим что только собираемся обЪявить эти переменные

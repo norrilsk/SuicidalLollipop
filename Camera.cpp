@@ -70,7 +70,7 @@ void Camera::MoveLeft()
 }
 void Camera::RotaterRightLeft(double DeltaAngel)
 {
-	angleX += DeltaAngel;
+	angleX += DeltaAngel*FpsBase / FPS;
 	return;
 }
 void Camera::RotateHighDown(double DeltaAngle)
