@@ -1,16 +1,17 @@
 ﻿#ifndef _MOUSE
 #define _MOUSE
-#include "Camera.hpp"
-//#include "GLfunc.hpp"
+#include <utility>
+#include <glm/glm.hpp>
 class Mouse
 {
-private:
-	int X, Y, Sensity; // Координаты положения мыши, чувствительность
+	int X, Y; 
+	double sensity; // Координаты положения мыши, чувствительность
 
 public:
-	void MouseMotion(int x, int y); // движение мыши, передавать абсолютную координату
-	void ChangeSensity(int Sens); // Изменить чувствительность
-	Mouse(int x, int y, int Sens);
+	std :: pair <int, int>  getPosition(); //абсолютные координаты курсора
+	glm :: dvec2 getMovement(); // движение мыши с момента последнего вызова getMovement() или getPosition()
+	void ChangeSensity(double sens); // Изменить чувствительность
+	void centre();  //центрирует курсор
 	Mouse();
 	
 	~Mouse();

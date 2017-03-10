@@ -1,36 +1,39 @@
 ﻿#include "Mouse.hpp"
 #include "GLfunc.hpp"
 
-Mouse::Mouse(int x, int y, int Sens)
-{
-	X = x;
-	Y = y;
-	if ((x < 0) || (y < 0))
-	{
-		x = 320;
-		y = 240;
-	}
-	
-	SDL_WarpMouseInWindow(Gl :: window, x, y); // устанавливает позицию курсора
-}
 Mouse::Mouse()
 {
-	X = 320;
-	Y = 240;
-	Sensity = 20;
-	SDL_WarpMouseInWindow(Gl :: window,320, 240); // устанавливает позицию курсора(X, Y);
+	X = Gl :: WinW/ 2;
+	Y = Gl :: WinH/ 2;
+	sensity = 20;
+	SDL_WarpMouseInWindow(Gl :: window, X , Y); // устанавливает позицию курсора(X, Y);
 }
 
-void Mouse::MouseMotion(int x, int y)
-{
-	Gl::camera.RotaterRightLeft((X - x) / Sensity); // вращает камеру по Х
-	Gl::camera.RotateHighDown((Y - y) / Sensity); // вращает камеру по У
-	SDL_WarpMouseInWindow(Gl :: window,320, 240); // устанавливает позицию курсора(X, Y); // устанавливает позицию курсора
-	return;
+void Mouse :: centre() 
+{ 
+	X = Gl :: WinW/ 2;
+	Y = Gl :: WinH/ 2;
+	SDL_WarpMouseInWindow(Gl :: window, X , Y);
 }
-void Mouse::ChangeSensity(int sense)
+
+std :: pair <int, int>  Mouse :: getPosition()
 {
-	sense < 0 ? Sensity = 20 : Sensity = sense;
+	SDL_PumpEvents();
+	SDL_GetMouseState(&X, &Y);
+	return std :: make_pair(X, Y);
+}
+
+glm :: dvec2  Mouse :: getMovement() 
+{
+	SDL_PumpEvents();
+	int x = X, y = Y;
+	SDL_GetMouseState(&X, &Y);
+	return glm :: dvec2(X - x, Y - y)/sensity;
+}
+void Mouse::ChangeSensity(double sense)
+{
+	if(sense > 0)
+		sensity = sense;
 	return;
 }
 

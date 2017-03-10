@@ -1,11 +1,14 @@
 #include "GLfunc.hpp"
-double Gl :: WinW; //Собственно объявляем переменные
-double Gl :: WinH;
+#include "Game.hpp"
+double Gl :: WinW = 640; //Собственно объявляем переменные
+double Gl :: WinH = 480;
 SDL_Window* Gl :: window; 
 float Gl :: a, Gl :: b,  Gl ::c;
 Camera Gl :: camera = Camera(); // инициализация камеры
 Mouse Gl :: mouse = Mouse();
+Keyboard Gl :: keyboard = Keyboard();
 double Gl :: FPS = 60;
+extern Game game;
 
 void Gl::drawCube(float xrf, float yrf, float zrf){
 	glTranslatef(0.0f, 0.0f, -7.0f);	// Сдвинуть вглубь экрана
@@ -109,14 +112,13 @@ void Gl :: start()
 
 void Gl :: MainLoop()
 {
+	unsigned int time_per_cycle = 0;
 	while(true)
 	{
 		//a += 1.0;
 		//b += 1.0;
 		//c += 1.5;
 		unsigned int time_start = SDL_GetTicks(); //текущее время SDL в милисекундах
-		unsigned int time_finish;
-		display();
 		SDL_Event event;
 		while(SDL_PollEvent(&event))
 		{
@@ -125,22 +127,20 @@ void Gl :: MainLoop()
 			case SDL_QUIT:
 				Quit();
 				break;
-			case SDL_KEYDOWN:
-				keydown(event.key.keysym.scancode);
-				break;
-			case SDL_MOUSEMOTION:
-				Gl::mouse.MouseMotion(event.motion.x, event.motion.y);
-				break;
 			default:
 				break;
 			}
 		}
-		time_finish = (SDL_GetTicks() - time_start);
+		game.next(time_per_cycle);
+		game.setCamera();
+		display();
+		time_per_cycle = (SDL_GetTicks() - time_start);
 		
 		// :: cout << FPS << std :: endl;
-		if (time_finish < 17)
-			SDL_Delay(17 - time_finish );
-		FPS = 1000.0 / (SDL_GetTicks() - time_start);
+		if (time_per_cycle < 17)
+			SDL_Delay(17 - time_per_cycle);
+		time_per_cycle = (SDL_GetTicks() - time_start);
+		FPS = 1000.0 / (time_per_cycle);
 	}
 }
 
@@ -149,35 +149,10 @@ void Gl :: Quit()
 	throw(Error(QUIT));
 }
 
-void Gl :: keydown(SDL_Scancode code)
-{
-	switch(code)
-	{
-	case SDL_SCANCODE_ESCAPE:
-		Quit();
-		break;
-	case SDL_SCANCODE_A:
-		Gl::camera.MoveLeft();
-		break;
-	case SDL_SCANCODE_W:
-		Gl::camera.MoveForward();
-		break;
-	case SDL_SCANCODE_S:
-		Gl::camera.MoveBackward();
-		break;
-	case SDL_SCANCODE_D:
-		Gl::camera.MoveRight();
-		break;
-	default:
-		break;
-	}
-}
-
 void Gl :: display() 
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //очищаем экран и буфер глубины
 	glLoadIdentity();
-	camera.SetFPS(FPS);
 	camera.Look();
 	drawCube(a, b, c);
 	glFlush(); //Отрисовываем

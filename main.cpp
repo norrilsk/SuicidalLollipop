@@ -1,7 +1,9 @@
 #include <iostream>
 
 #include "GLfunc.hpp"
+#include "Game.hpp"
 using namespace std;
+Game game;
 
 void DealWithError(Error err)
 {
