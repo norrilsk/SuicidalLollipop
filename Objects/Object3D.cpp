@@ -15,9 +15,9 @@ void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection, glm :: dve
 	ex = lookdirection;
 	ez = upperdirection;
 	if(glm ::dot(ex, ex) != 1.0)
-		ex /= ex.length();
+		ex /= sqrt(glm:: dot(ex, ex));
 	if(glm ::dot(ex, ex) != 1.0)
-		ez /= ez.length();
+		ez /= sqrt(glm:: dot(ez, ez));
 	ey = ez*ex;
 }
 
@@ -26,7 +26,7 @@ void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection)
 	coord = position;
 	ex = lookdirection;
 	if(glm ::dot(ex, ex) != 1.0)
-		ex /= ex.length();
+		ex /= sqrt(glm:: dot(ex, ex));
 	ey = ez*ex;
 }
 
