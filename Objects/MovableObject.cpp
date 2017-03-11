@@ -28,13 +28,10 @@ void MovableObject:: rotateRelative(glm :: dvec3 omega, double dt)
 {
 	if(glm::dot(omega, omega) == 0)//если нам не нужно крутиться экономим операции
 		return;
-	if(!oneByOne)
-	{
-		glm :: dmat3 Omega(	0, omega.z, -omega.y, //первый столбец
-							-omega.z, 0, omega.x, //второй
-							omega.y, -omega.x, 0);//третий. ЭТО GLM
-		A += A*Omega * dt; 
-	}
+	glm :: dmat3 Omega(	0, omega.z, -omega.y, //первый столбец
+						-omega.z, 0, omega.x, //второй
+						omega.y, -omega.x, 0);//третий. ЭТО GLM
+	A += A*Omega * dt; 
 	ex /= sqrt(glm:: dot(ex, ex));
 	ey /= sqrt(glm:: dot(ey, ey));
 	ez /= sqrt(glm:: dot(ez, ez));
