@@ -104,7 +104,6 @@ void Gl :: start()
 		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 1, 1000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
 	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
 	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
-	SDL_WarpMouseInWindow(Gl :: window,320, 240); // устанавливает позицию курсора
 	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
 		throw(Error(SDL));
 	MainLoop(); //запускаем главный цикл
