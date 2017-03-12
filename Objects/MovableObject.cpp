@@ -4,7 +4,7 @@ MovableObject::MovableObject()
 {
 }
 
-void MovableObject:: moveAbslute(glm :: dvec3 to)
+void MovableObject:: moveAbsolute(glm :: dvec3 to)
 {
 	coord += to;
 }
@@ -14,7 +14,7 @@ void MovableObject:: moveRelative(glm :: dvec3 to)
 	 coord += A * to; 
 }
 
-void MovableObject:: rotateAbslute(glm :: dvec3 omega, double dt)
+void MovableObject:: rotateAbsolute(glm :: dvec3 omega, double dt)
 {
 	if(glm::dot(omega, omega) == 0)//если нам не нужно крутиться экономим операции
 		return;
@@ -22,6 +22,9 @@ void MovableObject:: rotateAbslute(glm :: dvec3 omega, double dt)
 						-omega.z, 0, omega.x, //второй
 						omega.y, -omega.x, 0);//третий. ЭТО GLM
 	A += Omega * A * dt;
+	ex /= sqrt(glm:: dot(ex, ex));
+	ey /= sqrt(glm:: dot(ey, ey));
+	ez /= sqrt(glm:: dot(ez, ez));
 }
 
 void MovableObject:: rotateRelative(glm :: dvec3 omega, double dt)
