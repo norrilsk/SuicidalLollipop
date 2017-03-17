@@ -6,6 +6,7 @@ class NPC :
 {
 public:
 	NPC();
+	NPC(std::string);
 	~NPC();
 };
 #endif

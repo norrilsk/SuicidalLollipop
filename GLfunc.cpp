@@ -71,8 +71,8 @@ void Gl :: init(int *argc, char **argv)
 	WinH = DisMode.h;
 	if((!WinW) || (!WinH))
 	{
-		WinW = 	1280; //если не удалось ставим HD
-		WinH = 720;
+		WinW = 	640; //если не удалось ставим HD
+		WinH = 480;
 	}
 	if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
 		throw(Error(SDL));
@@ -101,12 +101,16 @@ void Gl :: start()
 	glShadeModel(GL_SMOOTH); //Cглаживание 
 	glMatrixMode(GL_PROJECTION); //указывает что мы быдем работь с матрицей проекций
 		glLoadIdentity(); //Использует указанную матрицу
-		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.01, 2000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
+		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 200.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
 	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
 	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
-	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
-		throw(Error(SDL));
-	MainLoop(); //запускаем главный цикл
+/*	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
+		throw(Error(SDL)); */
+	glewInit();// инициализацию Glew , очень важно
+	GLuint VertexArrayID[100]; // создаем VAO   / TODO:: FOR TIME //MOVE TO GAME
+	glGenVertexArrays(1, VertexArrayID);
+	glBindVertexArray(VertexArrayID[0]);
+
 }
 
 void Gl :: MainLoop()

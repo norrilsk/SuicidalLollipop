@@ -26,6 +26,8 @@ int main(int argc, char **argv)
 	{
 		Gl :: init(&argc, argv);
 		Gl :: start();
+		game.start();
+		Gl :: MainLoop(); //запускаем главный цикл
 	}
 	catch (Error err)
 	{

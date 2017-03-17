@@ -55,18 +55,22 @@ void Game :: checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation)
 		playerRotation += omega;
 	}
 }
-
+void Game::start()
+{
+	npc.push_back(NPC("Source/OBJ/snowman.obj"));
+}
 void Game :: next(unsigned int dt)
 {
 	GameTime += dt;
 	glm::dvec3 playerMovement(0, 0, 0);//движение игрока
 	glm::dvec3 playerRotation(0, 0, 0);//угловая скорость игрока
 	checkKeyboard(playerMovement, playerRotation);//проверяем устройства ввода-вывода
-	checkMouse(playerMovement, playerRotation);
-	Gl :: mouse.centre();
+	//checkMouse(playerMovement, playerRotation);
+	//Gl :: mouse.centre();
 	player.moveRelative(playerMovement*(dt/1000.0));//и двигаем игрока
 	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0), (dt/1000.0));
 	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z), (dt/1000.0));
+	npc[0].draw();
 }
 
 void Game :: setCamera()

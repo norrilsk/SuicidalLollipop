@@ -4,9 +4,15 @@
 Object3D::Object3D()
 {
 }
+Object3D::Object3D(std::string path)
+{
+	model = MashObject(path);
+
+}
 void Object3D::draw()
 {
-
+	if (model.isdrawable())
+		model.draw();
 }
 
 void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection, glm :: dvec3 upperdirection)

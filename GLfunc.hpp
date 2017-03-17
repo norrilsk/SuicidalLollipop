@@ -3,8 +3,11 @@
 	#ifdef _WIN32
 	#include <Windows.h>
 	#endif
+	#ifndef _GLEWINCLUDE
+	#define _GLEWINCLUDE
 	#include <GL/glew.h>
 	#include <GL/glu.h>
+	#endif 
 	#include <SDL2/SDL.h>
 	#include <stdlib.h>
 	#include <utility>
@@ -14,6 +17,7 @@
 	#include "Camera.hpp"
 	#include "Mouse.hpp"
 	#include "Keyboard.hpp"
+
 	namespace Gl
 	{
 		extern double WinW; //Ширина окна. Здесь мы говорим что только собираемся обЪявить эти переменные
