@@ -66,7 +66,7 @@ void Game :: next(unsigned int dt)
 	Gl :: mouse.centre();
 	player.moveRelative(playerMovement*(dt/1000.0));//и двигаем игрока
 	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0), (dt/1000.0));
-	player.rotateRelative(glm::dvec3(0, 0,  playerRotation.z), (dt/1000.0));
+	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z), (dt/1000.0));
 }
 
 void Game :: setCamera()

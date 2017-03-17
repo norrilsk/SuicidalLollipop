@@ -3,7 +3,7 @@
 	#ifdef _WIN32
 	#include <Windows.h>
 	#endif
-	#include <GL/gl.h>
+	#include <GL/glew.h>
 	#include <GL/glu.h>
 	#include <SDL2/SDL.h>
 	#include <stdlib.h>
