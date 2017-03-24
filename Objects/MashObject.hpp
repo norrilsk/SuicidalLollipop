@@ -1,4 +1,4 @@
-#ifndef _MASHOBJECT
+п»ї#ifndef _MASHOBJECT
 #define _MASHOBJECT
 #include<vector>
 #include<string>
@@ -14,27 +14,27 @@
 #include <GL/glu.h>
 #endif 
 /* TODO:
-На данном этапе не способен определять тип ошибки, планируется добавление в дальнейшем
+РќР° РґР°РЅРЅРѕРј СЌС‚Р°РїРµ РЅРµ СЃРїРѕСЃРѕР±РµРЅ РѕРїСЂРµРґРµР»СЏС‚СЊ С‚РёРї РѕС€РёР±РєРё, РїР»Р°РЅРёСЂСѓРµС‚СЃСЏ РґРѕР±Р°РІР»РµРЅРёРµ РІ РґР°Р»СЊРЅРµР№С€РµРј
 */
 class MashObject 
 {
 private:
-	std::string path = ""; //Путь объекта
-	std::vector < glm::dvec3 >  vertices; // координаты вершины
-	std::vector < glm::dvec2 >  uvs; //текстурная координата вершины
-	std::vector < glm::dvec3 >  normals;// координаты нормали
-	std::vector <glm::dvec3 > verColor;// цвета вершин, возможно временно
+	std::string path = ""; //РџСѓС‚СЊ РѕР±СЉРµРєС‚Р°
+	std::vector < glm::vec3 >  vertices; // РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+	std::vector < glm::vec2 >  uvs; //С‚РµРєСЃС‚СѓСЂРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° РІРµСЂС€РёРЅС‹
+	std::vector < glm::vec3 >  normals;// РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅРѕСЂРјР°Р»Рё
+	std::vector <glm::vec3 > verColor;// С†РІРµС‚Р° РІРµСЂС€РёРЅ, РІРѕР·РјРѕР¶РЅРѕ РІСЂРµРјРµРЅРЅРѕ
 	std::vector <GLuint> vbo;
 	GLuint vao = 0;
 	bool drawable = false;
 	bool texture = true;
 	bool inormals = true;
 public:
-	bool is_drawable() { return drawable; }//  Рисуем ли я? Ж)
-	bool is_textures() { return drawable && texture; } // есть ли текстуры
-	bool is_normals() { return drawable && inormals; } // есть ли нормали
-	void draw(); // Нарисовать меня
-	void parser(std::string&); // создает объект из obj файла, передать путь к obj файлу
+	bool is_drawable() { return drawable; }//  Р РёСЃСѓРµРј Р»Рё СЏ? Р–)
+	bool is_textures() { return drawable && texture; } // РµСЃС‚СЊ Р»Рё С‚РµРєСЃС‚СѓСЂС‹
+	bool is_normals() { return drawable && inormals; } // РµСЃС‚СЊ Р»Рё РЅРѕСЂРјР°Р»Рё
+	void draw(); // РќР°СЂРёСЃРѕРІР°С‚СЊ РјРµРЅСЏ
+	void parser(std::string&); // СЃРѕР·РґР°РµС‚ РѕР±СЉРµРєС‚ РёР· obj С„Р°Р№Р»Р°, РїРµСЂРµРґР°С‚СЊ РїСѓС‚СЊ Рє obj С„Р°Р№Р»Сѓ
 	MashObject();
 	MashObject(std::string&);
 	~MashObject();

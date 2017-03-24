@@ -9,7 +9,9 @@ Keyboard Gl :: keyboard = Keyboard();
 double Gl :: FPS = 60;
 std::queue <DrawableObject*> Gl::renderingQueue;
 Shaders Gl::shaders;
+glm::mat4 Gl::Projection;
 extern Game game;
+glm::mat4 Gl::View;
 
 
 void Gl :: init(int *argc, char **argv)
@@ -50,15 +52,13 @@ void Gl :: start()
 	glClearColor(0.0f, 0.0f, 0.9f, 1.0f);//цвет по дефолту
 	glClearDepth(1.0); //глубина по дефолту
 	glDepthFunc(GL_LESS); //функция для определения глубу
+	//glEnable(GL_CULL_FACE); //отключение не лицевых граней
 	glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
-	glShadeModel(GL_SMOOTH); //Cглаживание 
-	glMatrixMode(GL_PROJECTION); //указывает что мы быдем работь с матрицей проекций
-		glLoadIdentity(); //Использует указанную матрицу
-		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
-	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
+ //  70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
 	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
 /*	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
 		throw(Error(SDL)); */
+	Projection = glm::perspective(70.0f,float(WinW / WinH), 1.0f, 3000.0f);
 	glewInit();// инициализацию Glew , очень важно
 	std::vector<std::pair<std::string, GLuint> > ShadersPaths;
 	ShadersPaths.push_back(std::make_pair("Shaders/fragmentshader.glsl", GL_FRAGMENT_SHADER));

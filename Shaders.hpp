@@ -1,4 +1,4 @@
-#ifndef _SHADER
+п»ї#ifndef _SHADER
 #define _SHADER
 #include <string>
 #include <fstream>
@@ -16,17 +16,18 @@
 
 class Shaders
 {
-	std::map<GLuint,GLuint> shaderid; // Карта соответствия между типо шейдера в GL и ID шейдера
-	GLuint programid; // ID программы
-	std::vector<GLuint> type; // вектор типов всех существующих щейдеров
+	std::map<GLuint,GLuint> shaderid; // РљР°СЂС‚Р° СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЏ РјРµР¶РґСѓ С‚РёРїРѕ С€РµР№РґРµСЂР° РІ GL Рё ID С€РµР№РґРµСЂР°
+	GLuint programid; // ID РїСЂРѕРіСЂР°РјРјС‹
+	std::vector<GLuint> type; // РІРµРєС‚РѕСЂ С‚РёРїРѕРІ РІСЃРµС… СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… С‰РµР№РґРµСЂРѕРІ
 
 public:
-	/*Загрузка Шейдеров
-	1й элемент пары - путь к программе шейдера
-	2й элемент пары - тип шейдера GL */
+	/*Р—Р°РіСЂСѓР·РєР° РЁРµР№РґРµСЂРѕРІ
+	1Р№ СЌР»РµРјРµРЅС‚ РїР°СЂС‹ - РїСѓС‚СЊ Рє РїСЂРѕРіСЂР°РјРјРµ С€РµР№РґРµСЂР°
+	2Р№ СЌР»РµРјРµРЅС‚ РїР°СЂС‹ - С‚РёРї С€РµР№РґРµСЂР° GL */
 	void Load(std::vector<std::pair<std::string, GLuint> >& ShadersPaths); 
-	GLuint Id(GLuint shaderType) { return shaderid.at(shaderType); } // возвращает ID по указанному типу шейдера
-	Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths); // аналогично LOAD
+	GLuint Id(GLuint shaderType) { return shaderid.at(shaderType); } // РІРѕР·РІСЂР°С‰Р°РµС‚ ID РїРѕ СѓРєР°Р·Р°РЅРЅРѕРјСѓ С‚РёРїСѓ С€РµР№РґРµСЂР°
+	Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths); // Р°РЅР°Р»РѕРіРёС‡РЅРѕ LOAD
+	void store_MVP(void*); // РЎРѕС…СЂР°РЅСЏРµС‚ РјР°С‚СЂРёС†Сѓ MVP
 	void useProgram() { glUseProgram(programid); };
 	Shaders();
 	~Shaders();

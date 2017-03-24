@@ -1,4 +1,4 @@
-#include "Shaders.hpp"
+п»ї#include "Shaders.hpp"
 #include"Error.hpp"
 
 
@@ -15,44 +15,49 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 {
 	for (std::pair<std::string, GLuint> shader : shaderPaths)
 	{
-		std::ifstream in(shader.first); //файл шейдера
+		std::ifstream in(shader.first); //С„Р°Р№Р» С€РµР№РґРµСЂР°
 		if (!in.is_open())
 			throw(Error(SHADER));
-		in.seekg(0, in.end);// перейдем в конец файла
-		unsigned int lenght = (unsigned int)in.tellg();// на какой мы позиции?
+		in.seekg(0, in.end);// РїРµСЂРµР№РґРµРј РІ РєРѕРЅРµС† С„Р°Р№Р»Р°
+		unsigned int lenght = (unsigned int)in.tellg();// РЅР° РєР°РєРѕР№ РјС‹ РїРѕР·РёС†РёРё?
 		in.seekg(0, in.beg);
 		char* fileData = new char[lenght];
-		in.read(fileData, lenght); // считываем файл в 1 строку
+		in.read(fileData, lenght); // СЃС‡РёС‚С‹РІР°РµРј С„Р°Р№Р» РІ 1 СЃС‚СЂРѕРєСѓ
 		in.close();
-		shaderid[shader.second] = glCreateShader(shader.second);//создаем шейдер
+		shaderid[shader.second] = glCreateShader(shader.second);//СЃРѕР·РґР°РµРј С€РµР№РґРµСЂ
 		if (shaderid[shader.second] == 0)
 			throw(Error(SHADER));
-		glShaderSource(shaderid[shader.second], 1, &fileData, nullptr);// 1- количество сток
-		glCompileShader(shaderid[shader.second]);// скомпилируем шейдер
+		glShaderSource(shaderid[shader.second], 1, &fileData, nullptr);// 1- РєРѕР»РёС‡РµСЃС‚РІРѕ СЃС‚РѕРє
+		glCompileShader(shaderid[shader.second]);// СЃРєРѕРјРїРёР»РёСЂСѓРµРј С€РµР№РґРµСЂ
 		GLint status;
-		glGetShaderiv(shaderid[shader.second], GL_COMPILE_STATUS, &status);// проверим компиляцию
+		glGetShaderiv(shaderid[shader.second], GL_COMPILE_STATUS, &status);// РїСЂРѕРІРµСЂРёРј РєРѕРјРїРёР»СЏС†РёСЋ
 		if (status == GL_FALSE)
 			throw(Error(SHADER));
 		type.push_back(shader.second);
 	}
-	programid = glCreateProgram();// связать программу щейдера с ID
+	programid = glCreateProgram();// СЃРІСЏР·Р°С‚СЊ РїСЂРѕРіСЂР°РјРјСѓ С‰РµР№РґРµСЂР° СЃ ID
 	for (GLuint shaderType : type)
 	{
-		glAttachShader(programid, shaderid[shaderType]); // привязываем шейдеры
+		glAttachShader(programid, shaderid[shaderType]); // РїСЂРёРІСЏР·С‹РІР°РµРј С€РµР№РґРµСЂС‹
 	}
-	glLinkProgram(programid);// линкуем программу щейдеров
+	glLinkProgram(programid);// Р»РёРЅРєСѓРµРј РїСЂРѕРіСЂР°РјРјСѓ С‰РµР№РґРµСЂРѕРІ
 	GLint status;
 	glGetProgramiv(programid, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 		throw(Error(SHADER));
-	GLuint colour_loc = glGetUniformLocation(programid, "inputColour");
+	//GLuint colour_loc = glGetUniformLocation(programid, "inputColour");
 	glUseProgram(programid); ////add, CHECK
-	glUniform4f(colour_loc, 1.0f, 0.0f, 0.0f, 1.0f);
+	//glUniform4f(colour_loc, 1.0f, 0.0f, 0.0f, 1.0f);
 
 	for (GLuint shaderType : type)
 	{
-		glDeleteShader(shaderid[shaderType]); // удаляем шйдеры (все легально)
+		glDeleteShader(shaderid[shaderType]); // СѓРґР°Р»СЏРµРј С€Р№РґРµСЂС‹ (РІСЃРµ Р»РµРіР°Р»СЊРЅРѕ)
 	}
+}
+void Shaders::store_MVP(void* src)
+{
+	GLint matrix = glGetUniformLocation(programid, "MVP"); // СЃРѕР·РґР°РµРј ID РґР»СЏ РјР°С‚СЂРёС†С‹
+	glUniformMatrix4fv(matrix, 1, GL_FALSE, (const GLfloat *)src); // РёРЅС„РѕСЂРјРёСЂСѓРµРј С€РµР№РґРµСЂ Рѕ РЅР°С€РµР№ РјР°С‚СЂРёС†Рµ
 }
 Shaders::~Shaders()
 {

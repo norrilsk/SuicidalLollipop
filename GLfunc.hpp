@@ -13,7 +13,7 @@
 	#include <utility>
 	#include <queue>
 	#include <glm/glm.hpp>
-	#include <iostream> //В целях дебага TODO delete in release
+	#include <glm/gtc/matrix_transform.hpp>
 	#include "Error.hpp"
 	#include "Camera.hpp"
 	#include "Mouse.hpp"
@@ -30,6 +30,8 @@
 		extern double FPS;
 		extern std::queue <DrawableObject*> renderingQueue;// очередь отрисовки
 		extern Shaders shaders;
+		extern glm::mat4 Projection; // матрица перспективы
+		extern glm::mat4 View; // матрица вида
 		void init(int *argc, char **argv); //Инициализация всего что нужно для старта 
 		void MainLoop(); //Главный цикл
 		void start(); //собственно запуск окна 

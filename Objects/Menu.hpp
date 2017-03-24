@@ -1,4 +1,4 @@
-#ifndef _MENU
+﻿#ifndef _MENU
 #define _MENU
 #include "Object2D.hpp"
 class Menu :
