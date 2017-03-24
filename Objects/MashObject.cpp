@@ -1,5 +1,7 @@
 #include "MashObject.hpp"
 #include <glm/glm.hpp>
+#include<SDL2/SDL.h>
+#include"../GLfunc.hpp"
 void MashObject :: parser(std::string& file_path)
 {
 	path = file_path; // Открываем obj файл
@@ -93,7 +95,12 @@ void MashObject :: parser(std::string& file_path)
 	{
 		vertexindex = time_vertexIndices[i];
 		glm::dvec3 vertex = time_vertices[vertexindex - 1];
-		vertices.push_back(vertex);
+		glm::dvec3 vcolor;////////time color 
+		vcolor.x = 1.0f;
+		vcolor.y = 1.0f;
+		vcolor.z = 1.0f;
+		verColor.push_back(vcolor);//end time color
+		vertices.push_back(vertex/10000.0);
 		uvindex = time_uvIndices[i];
 		if (uvindex != 0)
 		{
@@ -108,12 +115,32 @@ void MashObject :: parser(std::string& file_path)
 		}
 		
 	}
+	/*vertices[0] = glm::dvec3(-1.0f/10000, -1.0f/10000, 0.0f/10000);
+	vertices[1] = glm::dvec3(1.0f/10000, -1.0f/10000, 0.0f/10000);
+	vertices[2] = glm::dvec3(0.0f/10000, 1.0f/10000, 0.0f/10000);  */
 	// Сначала генерируем OpenGL буфер и сохраняем указатель на него в vertexbuffer
-	glGenBuffers(1, &vertexbuffer);
+	vbo.resize(1); // устанавливаем количество VBO
+	glGenBuffers(1, &vbo[0]);
 	// Биндим буфер
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	// Предоставляем наши вершины в OpenG
-	glBufferData(GL_ARRAY_BUFFER,3*sizeof(glm::dvec3), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(glm::dvec3), &vertices[0], GL_DYNAMIC_DRAW);
+
+   /* glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::dvec3)*verColor.size(),  &verColor[0],GL_DYNAMIC_DRAW); */
+
+	glGenVertexArrays(1, &vao); // создать VAO
+	glBindVertexArray(vao);// Bind VAO
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO
+
+ 	/*glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO */
+	
+	glBindVertexArray(0); // unbind VAO
 	drawable = true;
 	return;
 }
@@ -121,20 +148,12 @@ void MashObject::draw()
 {
 	if (!drawable)
 		return;
+	Gl::shaders.useProgram();
+	glBindVertexArray(vao);
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-	glVertexAttribPointer(
-		0,                  // Атрибут 0. Сакрального смысла в нуле нет, но число должно совпадать с числом в шейдере
-		vertices.size(),                  // количество
-		GL_FLOAT,           // тип
-		GL_FALSE,           // нормализировано ли?
-		0,                  // шаг
-		(void*)0            // смещение в буфере
-		);
-
-	// Рисуем треугольник !
-	
-	glDrawArrays(GL_TRIANGLES, 0, 3); //Начиная с вершины 0 и рисуем N штук. Всего => 1 треугольник
+	//glEnableVertexAttribArray(1);
+	glDrawArrays(GL_TRIANGLES, 0, 3); //Начиная с вершины 0 и рисуем N штук. Всего => 1 треугольник vertices.size()
+	//glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 	return;
 }
@@ -151,4 +170,9 @@ MashObject::MashObject(std::string& file_path)
 
 MashObject::~MashObject()
 {
+	if (vao != 0)
+	{
+		glDeleteVertexArrays(1, &vao);  // Удаляем VAO
+		glDeleteBuffers(vbo.size(), &vbo[0]);// Удаляем массив VBO
+	}
 }

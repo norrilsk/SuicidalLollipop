@@ -11,7 +11,7 @@ Object3D::Object3D(std::string path)
 }
 void Object3D::draw()
 {
-	if (model.isdrawable())
+	if (model.is_drawable())
 		model.draw();
 }
 

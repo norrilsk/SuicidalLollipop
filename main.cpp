@@ -15,6 +15,9 @@ void DealWithError(Error err)
 	case QUIT:
 		cout <<"Sucsessful finish"<<endl;
 		break;
+	case SHADER:
+		cout << "Shaders problems" << endl;
+		break;
 	default:
 		break;
 	}

@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <utility>
 //#include <cstdlib>
 Game :: Game()
 {	
@@ -70,12 +71,12 @@ void Game :: next(unsigned int dt)
 	player.moveRelative(playerMovement*(dt/1000.0));//и двигаем игрока
 	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0), (dt/1000.0));
 	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z), (dt/1000.0));
-	npc[0].draw();
+	Gl::renderingQueue.push(&npc[0]);
 }
 
 void Game :: setCamera()
 {
-	Gl :: camera.set(player.getPosition() + glm :: dvec3(0, 0, -10), player.getLookDirection(), player.getUpperDirection());
+	Gl :: camera.set(player.getPosition() + glm :: dvec3(0, 0, 0), player.getLookDirection(), player.getUpperDirection());
 }
 
 Game :: ~Game()

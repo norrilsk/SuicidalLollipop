@@ -5,7 +5,8 @@
 		NONE,
 		SDL,
 		OTHER,
-		QUIT
+		QUIT,
+		SHADER
 	};
 
 	class Error

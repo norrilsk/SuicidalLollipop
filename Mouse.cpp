@@ -3,16 +3,16 @@
 
 Mouse::Mouse()
 {
-	X = Gl :: WinW/ 2;
-	Y = Gl :: WinH/ 2;
+	X = int(Gl :: WinW)/ 2;
+	Y = int(Gl :: WinH)/ 2;
 	sensity = 20;
 	SDL_WarpMouseInWindow(Gl :: window, X , Y); // устанавливает позицию курсора(X, Y);
 }
 
 void Mouse :: centre() 
 { 
-	X = Gl :: WinW/ 2;
-	Y = Gl :: WinH/ 2;
+	X = int(Gl :: WinW)/ 2;
+	Y = int(Gl :: WinH)/ 2;
 	SDL_WarpMouseInWindow(Gl :: window, X , Y);
 }
 
