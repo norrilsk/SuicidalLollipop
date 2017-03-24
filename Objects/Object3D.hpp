@@ -1,6 +1,7 @@
 #ifndef _OBJECT3D
 #define _OBJECT3D
 #include "DrawableObject.hpp"
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <cmath>
 #include "MashObject.hpp"

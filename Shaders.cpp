@@ -27,7 +27,7 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 		shaderid[shader.second] = glCreateShader(shader.second);//создаем шейдер
 		if (shaderid[shader.second] == 0)
 			throw(Error(SHADER));
-		glShaderSource(shaderid[shader.second], 1, &fileData, nullptr);// 1- количество сток
+		glShaderSource(shaderid[shader.second], 1, (const char **)&fileData, nullptr);// 1- количество сток
 		glCompileShader(shaderid[shader.second]);// скомпилируем шейдер
 		GLint status;
 		glGetShaderiv(shaderid[shader.second], GL_COMPILE_STATUS, &status);// проверим компиляцию
