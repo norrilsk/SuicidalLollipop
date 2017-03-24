@@ -26,8 +26,8 @@ void Gl :: init(int *argc, char **argv)
 	WinH = DisMode.h;
 	if((!WinW) || (!WinH))
 	{
-		WinW = 	640; //если не удалось ставим HD
-		WinH = 480;
+		WinW = 	1280; //если не удалось ставим HD
+		WinH = 720;
 	}
 	if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
 		throw(Error(SDL));
@@ -54,11 +54,10 @@ void Gl :: start()
 	glDepthFunc(GL_LESS); //функция для определения глубу
 	//glEnable(GL_CULL_FACE); //отключение не лицевых граней
 	glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
- //  70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
 	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
-/*	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
-		throw(Error(SDL)); */
-	Projection = glm::perspective(70.0f,float(WinW / WinH), 1.0f, 3000.0f);
+	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
+		throw(Error(SDL));
+	Projection = glm::perspective(1.2217f,float(WinW / WinH), 1.0f, 3000.0f);//70 градусов FOV
 	glewInit();// инициализацию Glew , очень важно
 	std::vector<std::pair<std::string, GLuint> > ShadersPaths;
 	ShadersPaths.push_back(std::make_pair("Shaders/fragmentshader.glsl", GL_FRAGMENT_SHADER));
@@ -80,6 +79,21 @@ void Gl :: MainLoop()
 			case SDL_QUIT:
 				Quit();
 				break;
+			case SDL_WINDOWEVENT:
+ 				switch(event.window.event)
+ 				{
+ 				case SDL_WINDOWEVENT_FOCUS_GAINED:
+ 					mouse.centre();
+					game.goon();
+ 					break;
+ 				case SDL_WINDOWEVENT_FOCUS_LOST:
+ 					mouse.centre();
+ 					game.pause();
+ 					break;
+ 				default:
+ 					break;
+ 				}
+ 				break;
 			default:
 				break;
 			}

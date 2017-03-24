@@ -1,11 +1,11 @@
 CC=g++
 CFLAGS= -c -Wall -std=gnu++11
-LIBS= -lglut -lGL -lGLU -pthread -Wl,--no-as-needed -lSDL2 -lSDL 
+LIBS= -lglut -lGL -lGLU -lSDL2 -lSDL -lGLEW
 
 all: SuicidalLollipop
 
-SuicidalLollipop:  main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o Game.o 
-	$(CC) main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o Game.o -o SuicidalLollipop $(LIBS)
+SuicidalLollipop:  main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o NPC.o MashObject.o Shaders.o Game.o 
+	$(CC) main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o Game.o NPC.o MashObject.o Shaders.o -o SuicidalLollipop $(LIBS)
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
@@ -33,6 +33,15 @@ MovableObject.o: Objects/MovableObject.cpp Objects/MovableObject.hpp
 	
 Player.o: Objects/Player.cpp Objects/Player.hpp
 	$(CC) $(CFLAGS) Objects/Player.cpp
+
+NPC.o: Objects/NPC.cpp Objects/NPC.hpp
+	$(CC) $(CFLAGS) Objects/NPC.cpp
+	
+MashObject.o: Objects/MashObject.cpp Objects/MashObject.hpp
+	$(CC) $(CFLAGS) Objects/MashObject.cpp
+	
+Shaders.o: Shaders.cpp Shaders.hpp
+	$(CC) $(CFLAGS) Shaders.cpp
 
 Game.o: Game.cpp Game.hpp Objects/Objects.hpp
 	$(CC) $(CFLAGS) Game.cpp

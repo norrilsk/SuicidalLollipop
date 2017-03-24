@@ -96,9 +96,9 @@ void MashObject :: parser(std::string& file_path)
 		vertexindex = time_vertexIndices[i];
 		glm::vec3 vertex = time_vertices[vertexindex - 1];
 		glm::vec3 vcolor;////////time color 
-		vcolor.x = 1.0f;
-		vcolor.y = 0.4f;
-		vcolor.z = 1.0f;
+		vcolor.x = 0.95f;
+		vcolor.y = 0.6f;
+		vcolor.z = 0.3f;
 		verColor.push_back(vcolor);//end time color
 		vertices.push_back(vertex);
 		uvindex = time_uvIndices[i];
