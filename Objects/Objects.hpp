@@ -3,3 +3,4 @@
 #include "Player.hpp"
 #include "Object2D.hpp"
 #include "Menu.hpp"
+#include "NPC.hpp"

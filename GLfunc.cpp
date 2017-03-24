@@ -3,61 +3,16 @@
 double Gl :: WinW = 640; //Собственно объявляем переменные
 double Gl :: WinH = 480;
 SDL_Window* Gl :: window; 
-float Gl :: a, Gl :: b,  Gl ::c;
 Camera Gl :: camera = Camera(); // инициализация камеры
 Mouse Gl :: mouse = Mouse();
 Keyboard Gl :: keyboard = Keyboard();
 double Gl :: FPS = 60;
+std::queue <DrawableObject*> Gl::renderingQueue;
+Shaders Gl::shaders;
+glm::mat4 Gl::Projection;
 extern Game game;
+glm::mat4 Gl::View;
 
-void Gl::drawCube(float xrf, float yrf, float zrf){
-	glTranslatef(0.0f, 0.0f, -7.0f);	// Сдвинуть вглубь экрана
-
-	glRotatef(xrf, 1.0f, 0.0f, 0.0f);	// Вращение куба по X, Y, Z
-	glRotatef(yrf, 0.0f, 1.0f, 0.0f);	// Вращение куба по X, Y, Z
-	glRotatef(zrf, 0.0f, 0.0f, 1.0f);	// Вращение куба по X, Y, Z
-
-	glBegin(GL_QUADS);		// Рисуем куб
-
-	glColor3f(0.0f, 1.0f, 0.0f);		// Синяя сторона (Верхняя)
-	glVertex3f( 1.0f, 1.0f, -1.0f);		// Верхний правый угол квадрата
-	glVertex3f(-1.0f, 1.0f, -1.0f);		// Верхний левый
-	glVertex3f(-1.0f, 1.0f,  1.0f);		// Нижний левый
-	glVertex3f( 1.0f, 1.0f,  1.0f);		// Нижний правый
-
-	glColor3f(1.0f, 0.5f, 0.0f);		// Оранжевая сторона (Нижняя)
-	glVertex3f( 1.0f, -1.0f,  1.0f);	// Верхний правый угол квадрата
-	glVertex3f(-1.0f, -1.0f,  1.0f);	// Верхний левый
-	glVertex3f(-1.0f, -1.0f, -1.0f);	// Нижний левый
-	glVertex3f( 1.0f, -1.0f, -1.0f);	// Нижний правый
-
-	glColor3f(1.0f, 0.0f, 0.0f);		// Красная сторона (Передняя)
-	glVertex3f( 1.0f,  1.0f, 1.0f);		// Верхний правый угол квадрата
-	glVertex3f(-1.0f,  1.0f, 1.0f);		// Верхний левый
-	glVertex3f(-1.0f, -1.0f, 1.0f);		// Нижний левый
-	glVertex3f( 1.0f, -1.0f, 1.0f);		// Нижний правый
-
-	glColor3f(1.0f,1.0f,0.0f);			// Желтая сторона (Задняя)
-	glVertex3f( 1.0f, -1.0f, -1.0f);	// Верхний правый угол квадрата
-	glVertex3f(-1.0f, -1.0f, -1.0f);	// Верхний левый
-	glVertex3f(-1.0f,  1.0f, -1.0f);	// Нижний левый
-	glVertex3f( 1.0f,  1.0f, -1.0f);	// Нижний правый
-
-	glColor3f(0.0f,0.0f,1.0f);			// Синяя сторона (Левая)
-	glVertex3f(-1.0f,  1.0f,  1.0f);	// Верхний правый угол квадрата
-	glVertex3f(-1.0f,  1.0f, -1.0f);	// Верхний левый
-	glVertex3f(-1.0f, -1.0f, -1.0f);	// Нижний левый
-	glVertex3f(-1.0f, -1.0f,  1.0f);	// Нижний правый
-
-	glColor3f(1.0f,0.0f,1.0f);			// Фиолетовая сторона (Правая)
-	glVertex3f( 1.0f,  1.0f, -1.0f);	// Верхний правый угол квадрата
-	glVertex3f( 1.0f,  1.0f,  1.0f);	// Верхний левый
-	glVertex3f( 1.0f, -1.0f,  1.0f);	// Нижний левый
-	glVertex3f( 1.0f, -1.0f, -1.0f);	// Нижний правый
-
-	glEnd();	// Закончили квадраты
-
-}
 
 void Gl :: init(int *argc, char **argv)
 {
@@ -71,8 +26,8 @@ void Gl :: init(int *argc, char **argv)
 	WinH = DisMode.h;
 	if((!WinW) || (!WinH))
 	{
-		WinW = 	1280; //если не удалось ставим HD
-		WinH = 720;
+		WinW = 	640; //если не удалось ставим HD
+		WinH = 480;
 	}
 	if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
 		throw(Error(SDL));
@@ -97,16 +52,18 @@ void Gl :: start()
 	glClearColor(0.0f, 0.0f, 0.9f, 1.0f);//цвет по дефолту
 	glClearDepth(1.0); //глубина по дефолту
 	glDepthFunc(GL_LESS); //функция для определения глубу
+	//glEnable(GL_CULL_FACE); //отключение не лицевых граней
 	glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
-	glShadeModel(GL_SMOOTH); //Cглаживание 
-	glMatrixMode(GL_PROJECTION); //указывает что мы быдем работь с матрицей проекций
-		glLoadIdentity(); //Использует указанную матрицу
-		gluPerspective(70.0 * WinH / WinW, WinW / WinH, 0.01, 2000.0); // угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
-	glMatrixMode(GL_MODELVIEW); // переходим в режим работы с 3d
+ //  70.0 * WinH / WinW, WinW / WinH, 0.1, 1000.0угол обзора по y, x/y, плижайшая и дальняя плоскости отсечения
 	SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
-	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
-		throw(Error(SDL));
-	MainLoop(); //запускаем главный цикл
+/*	if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
+		throw(Error(SDL)); */
+	Projection = glm::perspective(70.0f,float(WinW / WinH), 1.0f, 3000.0f);
+	glewInit();// инициализацию Glew , очень важно
+	std::vector<std::pair<std::string, GLuint> > ShadersPaths;
+	ShadersPaths.push_back(std::make_pair("Shaders/fragmentshader.glsl", GL_FRAGMENT_SHADER));
+	ShadersPaths.push_back(std::make_pair("Shaders/vertexshader.glsl", GL_VERTEX_SHADER));
+	shaders = Shaders(ShadersPaths);
 }
 
 void Gl :: MainLoop()
@@ -114,9 +71,6 @@ void Gl :: MainLoop()
 	unsigned int time_per_cycle = 0;
 	while(true)
 	{
-		//a += 1.0;
-		//b += 1.0;
-		//c += 1.5;
 		unsigned int time_start = SDL_GetTicks(); //текущее время SDL в милисекундах
 		SDL_Event event;
 		while(SDL_PollEvent(&event))
@@ -134,8 +88,6 @@ void Gl :: MainLoop()
 		game.setCamera();
 		display();
 		time_per_cycle = (SDL_GetTicks() - time_start);
-		
-		// :: cout << FPS << std :: endl;
 		if (time_per_cycle < 17)
 			SDL_Delay(17 - time_per_cycle);
 		time_per_cycle = (SDL_GetTicks() - time_start);
@@ -153,7 +105,12 @@ void Gl :: display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //очищаем экран и буфер глубины
 	glLoadIdentity();
 	camera.Look();
-	drawCube(a, b, c);
+	while (!renderingQueue.empty())
+	{
+		renderingQueue.front()->draw();
+		renderingQueue.pop();
+	} 
 	glFlush(); //Отрисовываем
 	SDL_GL_SwapWindow(window);
 }
+

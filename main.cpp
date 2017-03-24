@@ -15,6 +15,9 @@ void DealWithError(Error err)
 	case QUIT:
 		cout <<"Sucsessful finish"<<endl;
 		break;
+	case SHADER:
+		cout << "Shaders problems" << endl;
+		break;
 	default:
 		break;
 	}
@@ -26,6 +29,8 @@ int main(int argc, char **argv)
 	{
 		Gl :: init(&argc, argv);
 		Gl :: start();
+		game.start();
+		Gl :: MainLoop(); //запускаем главный цикл
 	}
 	catch (Error err)
 	{

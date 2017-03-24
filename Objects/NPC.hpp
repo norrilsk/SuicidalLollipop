@@ -1,4 +1,4 @@
-#ifndef _NPC
+﻿#ifndef _NPC
 #define _NPC
 #include "MovableObject.hpp"
 class NPC :
@@ -6,6 +6,7 @@ class NPC :
 {
 public:
 	NPC();
+	NPC(std::string);
 	~NPC();
 };
 #endif

@@ -3,6 +3,10 @@
 MovableObject::MovableObject()
 {
 }
+MovableObject::MovableObject(std::string path):Object3D(path)
+{
+	
+}
 
 void MovableObject:: moveAbsolute(glm :: dvec3 to)
 {
