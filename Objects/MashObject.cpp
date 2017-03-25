@@ -1,40 +1,40 @@
-#include "MashObject.hpp"
+п»ї#include "MashObject.hpp"
 #include <glm/glm.hpp>
 #include<SDL2/SDL.h>
 #include"../GLfunc.hpp"
 void MashObject :: parser(std::string& file_path)
 {
-	path = file_path; // Открываем obj файл
+	path = file_path; // РћС‚РєСЂС‹РІР°РµРј obj С„Р°Р№Р»
 	std::ifstream forread;
 	forread.open(file_path);
 	if (!forread.is_open())
 		return;
-	std::vector < glm::vec3 >  time_vertices; // координаты вершины
-	std::vector < glm::vec2 >  time_uvs; //текстурная координата вершины
-	std::vector < glm::vec3 >  time_normals;// координаты нормали
-	std::vector <long int > time_vertexIndices, time_uvIndices, time_normalIndices; // идексы координат, текстур, нормалей
+	std::vector < glm::vec3 >  time_vertices; // РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
+	std::vector < glm::vec2 >  time_uvs; //С‚РµРєСЃС‚СѓСЂРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° РІРµСЂС€РёРЅС‹
+	std::vector < glm::vec3 >  time_normals;// РєРѕРѕСЂРґРёРЅР°С‚С‹ РЅРѕСЂРјР°Р»Рё
+	std::vector <long int > time_vertexIndices, time_uvIndices, time_normalIndices; // РёРґРµРєСЃС‹ РєРѕРѕСЂРґРёРЅР°С‚, С‚РµРєСЃС‚СѓСЂ, РЅРѕСЂРјР°Р»РµР№
 	long int vertexindex, uvindex, normalindex;
-	std::string lineHeader = ""; //строка в которую будем счтьывать	
-	while (!forread.eof())  // парсим файл
+	std::string lineHeader = ""; //СЃС‚СЂРѕРєР° РІ РєРѕС‚РѕСЂСѓСЋ Р±СѓРґРµРј СЃС‡С‚СЊС‹РІР°С‚СЊ	
+	while (!forread.eof())  // РїР°СЂСЃРёРј С„Р°Р№Р»
 	{
 		 forread >>lineHeader;
-		 if (lineHeader == "v") //координаты верщины
+		 if (lineHeader == "v") //РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС‰РёРЅС‹
 		 {
-			 glm::vec3 vertex; // временный вектор координаты вершины
+			 glm::vec3 vertex; // РІСЂРµРјРµРЅРЅС‹Р№ РІРµРєС‚РѕСЂ РєРѕРѕСЂРґРёРЅР°С‚С‹ РІРµСЂС€РёРЅС‹
 			 forread >> vertex.x >> vertex.y >> vertex.z;
 			 time_vertices.push_back(vertex);
 			 continue;
 		 }
-		 if (lineHeader == "vt") // текстурная координата вершины
+		 if (lineHeader == "vt") // С‚РµРєСЃС‚СѓСЂРЅР°СЏ РєРѕРѕСЂРґРёРЅР°С‚Р° РІРµСЂС€РёРЅС‹
 		 {
-			 glm::vec2 uv; // временный вектор текстуры
+			 glm::vec2 uv; // РІСЂРµРјРµРЅРЅС‹Р№ РІРµРєС‚РѕСЂ С‚РµРєСЃС‚СѓСЂС‹
 			 forread >> uv.x >> uv.y;
 			 time_uvs.push_back(uv);
 			 continue;
 		 }
-		 if (lineHeader == "vn") // вектор нормали
+		 if (lineHeader == "vn") // РІРµРєС‚РѕСЂ РЅРѕСЂРјР°Р»Рё
 		 {
-			 glm::vec3 normal;// временный вектор нормали
+			 glm::vec3 normal;// РІСЂРµРјРµРЅРЅС‹Р№ РІРµРєС‚РѕСЂ РЅРѕСЂРјР°Р»Рё
 			 forread >> normal.x >> normal.y >> normal.z;
 			 time_normals.push_back(normal);
 			 continue;
@@ -44,7 +44,7 @@ void MashObject :: parser(std::string& file_path)
 			 int stringsize = lineHeader.length();
 			 for (int s = 0; s < 3; s++)
 			 {
-				 std::string VTN[3];// вершина, текстура , нормаль
+				 std::string VTN[3];// РІРµСЂС€РёРЅР°, С‚РµРєСЃС‚СѓСЂР° , РЅРѕСЂРјР°Р»СЊ
 				 forread >> lineHeader;
 				 stringsize = lineHeader.length();
 				 int i = 0;
@@ -91,14 +91,14 @@ void MashObject :: parser(std::string& file_path)
 
 	forread.close();
 	unsigned int VerSize = time_vertexIndices.size();
-	for (unsigned int i = 0; i < VerSize; i++) // обрабатываем считанные данные
+	for (unsigned int i = 0; i < VerSize; i++) // РѕР±СЂР°Р±Р°С‚С‹РІР°РµРј СЃС‡РёС‚Р°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ
 	{
 		vertexindex = time_vertexIndices[i];
 		glm::vec3 vertex = time_vertices[vertexindex - 1];
 		glm::vec3 vcolor;////////time color 
-		vcolor.x = 0.95f;
-		vcolor.y = 0.6f;
-		vcolor.z = 0.3f;
+		vcolor.x = 1.0f;
+		vcolor.y = 0.4f;
+		vcolor.z = 1.0f;
 		verColor.push_back(vcolor);//end time color
 		vertices.push_back(vertex);
 		uvindex = time_uvIndices[i];
@@ -118,19 +118,19 @@ void MashObject :: parser(std::string& file_path)
 	/*vertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f );
 	vertices[1] = glm::vec3(1.0f , -1.0f , 0.0f );
 	vertices[2] = glm::vec3(0.0f , 1.0f , 0.0f );  */
-	// Сначала генерируем OpenGL буфер и сохраняем указатель на него в vertexbuffer
-	vbo.resize(2); // устанавливаем количество VBO
+	// РЎРЅР°С‡Р°Р»Р° РіРµРЅРµСЂРёСЂСѓРµРј OpenGL Р±СѓС„РµСЂ Рё СЃРѕС…СЂР°РЅСЏРµРј СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅРµРіРѕ РІ vertexbuffer
+	vbo.resize(2); // СѓСЃС‚Р°РЅР°РІР»РёРІР°РµРј РєРѕР»РёС‡РµСЃС‚РІРѕ VBO
 	glGenBuffers(2, &vbo[0]);
-	// Биндим буфер
+	// Р‘РёРЅРґРёРј Р±СѓС„РµСЂ
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	
-	// Предоставляем наши вершины в OpenG
+	// РџСЂРµРґРѕСЃС‚Р°РІР»СЏРµРј РЅР°С€Рё РІРµСЂС€РёРЅС‹ РІ OpenG
 	glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*verColor.size(),  &verColor[0], GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &vao); // создать VAO
+	glGenVertexArrays(1, &vao); // СЃРѕР·РґР°С‚СЊ VAO
 	glBindVertexArray(vao);// Bind VAO
 	//glEnableVertexAttribArray(1);
 
@@ -153,10 +153,8 @@ void MashObject::draw()
 	glBindVertexArray(vao);
 	
 	glEnableVertexAttribArray(0);
-
 	glEnableVertexAttribArray(1);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size()); //Начиная с вершины 0 и рисуем N штук. Всего => 1 треугольник vertices.size()
-
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size()); //РќР°С‡РёРЅР°СЏ СЃ РІРµСЂС€РёРЅС‹ 0 Рё СЂРёСЃСѓРµРј N С€С‚СѓРє. Р’СЃРµРіРѕ => 1 С‚СЂРµСѓРіРѕР»СЊРЅРёРє 
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 	return;
@@ -174,9 +172,5 @@ MashObject::MashObject(std::string& file_path)
 
 MashObject::~MashObject()
 {
-	/*if (vao != 0)
-	{
-		glDeleteVertexArrays(1, &vao);  // Удаляем VAO
-		glDeleteBuffers(vbo.size(), &vbo[0]);// Удаляем массив VBO
-	}*/
+
 }
