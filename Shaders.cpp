@@ -17,7 +17,7 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 	{
 		std::ifstream in(shader.first); //файл шейдера
 		if (!in.is_open())
-			throw(Error(SHADER));
+			throw(newError(SHADER));
 		in.seekg(0, in.end);// перейдем в конец файла
 		unsigned int lenght = (unsigned int)in.tellg();// на какой мы позиции?
 		in.seekg(0, in.beg);
@@ -26,13 +26,13 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 		in.close();
 		shaderid[shader.second] = glCreateShader(shader.second);//создаем шейдер
 		if (shaderid[shader.second] == 0)
-			throw(Error(SHADER));
+			throw(newError(SHADER));
 		glShaderSource(shaderid[shader.second], 1, (const char **)&fileData, nullptr);// 1- количество сток
 		glCompileShader(shaderid[shader.second]);// скомпилируем шейдер
 		GLint status;
 		glGetShaderiv(shaderid[shader.second], GL_COMPILE_STATUS, &status);// проверим компиляцию
 		if (status == GL_FALSE)
-			throw(Error(SHADER));
+			throw(newError(SHADER));
 		type.push_back(shader.second);
 	}
 	programid = glCreateProgram();// связать программу щейдера с ID
@@ -44,7 +44,7 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 	GLint status;
 	glGetProgramiv(programid, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
-		throw(Error(SHADER));
+		throw(newError(SHADER));
 	//GLuint colour_loc = glGetUniformLocation(programid, "inputColour");
 	glUseProgram(programid); ////add, CHECK
 	//glUniform4f(colour_loc, 1.0f, 0.0f, 0.0f, 1.0f);

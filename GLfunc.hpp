@@ -35,9 +35,8 @@
 		extern glm::mat4 View; // матрица вида
 		void init(int *argc, char **argv); //Инициализация всего что нужно для старта 
 		void MainLoop(); //Главный цикл
-		void start(); //собственно запуск окна 
 		void display(); //фуннкция - отрисовщик окна
-		void reshape(); //функция срабатывающая при изменении размера окна
+		void checkGLVersion();//узнаем версию OpenGL и GLSL
 		void Quit(); //закрыть и выйти
 	}
 #endif

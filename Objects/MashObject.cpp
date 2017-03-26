@@ -1,6 +1,5 @@
 ﻿#include "MashObject.hpp"
 #include <glm/glm.hpp>
-#include<SDL2/SDL.h>
 #include"../GLfunc.hpp"
 void MashObject :: parser(std::string& file_path)
 {
@@ -41,7 +40,7 @@ void MashObject :: parser(std::string& file_path)
 		 }
 		 if (lineHeader == "f")
 		 {
-			 int stringsize = lineHeader.length();
+			 size_t stringsize;
 			 for (int s = 0; s < 3; s++)
 			 {
 				 std::string VTN[3];// вершина, текстура , нормаль
@@ -90,15 +89,15 @@ void MashObject :: parser(std::string& file_path)
 	}
 
 	forread.close();
-	unsigned int VerSize = time_vertexIndices.size();
+	size_t VerSize = time_vertexIndices.size();
 	for (unsigned int i = 0; i < VerSize; i++) // обрабатываем считанные данные
 	{
 		vertexindex = time_vertexIndices[i];
 		glm::vec3 vertex = time_vertices[vertexindex - 1];
 		glm::vec3 vcolor;////////time color 
 		vcolor.x = 1.0f;
-		vcolor.y = 0.4f;
-		vcolor.z = 1.0f;
+		vcolor.y = 0.7f;
+		vcolor.z = 0.3f;
 		verColor.push_back(vcolor);//end time color
 		vertices.push_back(vertex);
 		uvindex = time_uvIndices[i];
@@ -154,7 +153,7 @@ void MashObject::draw()
 	
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size()); //Начиная с вершины 0 и рисуем N штук. Всего => 1 треугольник 
+	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size()); //Начиная с вершины 0 и рисуем N штук. Всего => 1 треугольник
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 	return;

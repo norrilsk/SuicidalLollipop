@@ -1,6 +1,6 @@
 #version 330 core
 
-layout(location = 0) in vec3 vertexPos;// номер VAO
+layout(location = 0) in vec3 vertexPos;// РЅРѕРјРµСЂ VAO
 layout(location = 1) in vec3 vertexColor;
 uniform mat4 MVP;
 
