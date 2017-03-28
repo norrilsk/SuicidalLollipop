@@ -1,0 +1,176 @@
+********************LOG STARTED********************
+Date and time:Mon Mar 27 01:05:17 2017
+
+Software checking:
+	OpenGL version and drivers:		3.0 Mesa 10.5.9
+	Name of the GPU: 			Mesa DRI Intel(R) Ivybridge Mobile 
+	Shading language version and drivers:	1.30
+Your OpenGl version is out of date. Version 3.3 or higher is required
+  (call from file /home/anton/programming/inf_mipt/forth_sem/SuicidalLollipop/GLfunc.cpp : 143)
+--------------------LOG FINISHED-------------------
+Date and time:Mon Mar 27 01:05:18 2017
+
+
+********************LOG STARTED********************
+Date and time:Mon Mar 27 01:14:15 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Mon Mar 27 01:14:38 2017
+
+
+********************LOG STARTED********************
+Date and time:Mon Mar 27 01:26:50 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Mon Mar 27 01:26:53 2017
+
+
+********************LOG STARTED********************
+Date and time:Mon Mar 27 01:27:05 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Mon Mar 27 01:27:07 2017
+
+
+********************LOG STARTED********************
+Date and time:Mon Mar 27 01:27:47 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Mon Mar 27 01:28:01 2017
+
+
+********************LOG STARTED********************
+Date and time:Mon Mar 27 01:28:17 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+********************LOG STARTED********************
+Date and time:Mon Mar 27 01:29:52 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Mon Mar 27 01:29:54 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 01:30:54 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 01:31:18 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 01:34:02 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 01:34:10 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 01:35:16 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 01:35:47 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 01:36:17 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 01:36:32 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 01:40:58 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 01:41:07 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 01:41:18 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 01:48:01 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 01:53:51 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 01:54:56 2017
+
+
+********************LOG STARTED********************
+Date and time:Tue Mar 28 17:11:40 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Tue Mar 28 17:12:26 2017
+
+
