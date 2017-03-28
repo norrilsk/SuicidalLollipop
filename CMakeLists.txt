@@ -14,7 +14,6 @@ set(SOURCE_FILES main.cpp GLfunc.hpp Error.cpp Error.hpp Game.cpp Game.hpp GLfun
 
         ./Objects/DrawableObject.hpp ./Objects/MashObject.cpp ./Objects/MashObject.hpp ./Objects/Menu.cpp ./Objects/Menu.hpp ./Objects/MovableObject.cpp ./Objects/MovableObject.hpp ./Objects/NPC.cpp ./Objects/NPC.hpp
         ./Objects/Object2D.cpp ./Objects/Object2D.hpp ./Objects/Object3D.cpp ./Objects/Object3D.hpp ./Objects/Objects.hpp ./Objects/Player.cpp ./Objects/Player.hpp ./Objects/Room.cpp ./Objects/Room.hpp
-        ./Shaders/fragmentshader.glsl ./Shaders/vertexshader.glsl
-        ./Source/OBJ/komnata.obj ./Source/OBJ/snowman.obj)
+        ./Shaders/fragmentshader.glsl ./Shaders/vertexshader.glsl)
 add_executable(SuicidalLollipop ${SOURCE_FILES})
 target_link_libraries(SuicidalLollipop SDL2)
