@@ -97,7 +97,7 @@ void MashObject :: parser(std::string& file_path)
 		glm::vec3 vcolor;////////time color 
 		vcolor.x = 1.0f;
 		vcolor.y = 0.7f;
-		vcolor.z = 0.3f;
+		vcolor.z = (float) (0.3f + (0.4 * rand()) / RAND_MAX);
 		verColor.push_back(vcolor);//end time color
 		vertices.push_back(vertex);
 		uvindex = time_uvIndices[i];

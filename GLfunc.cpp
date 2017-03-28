@@ -57,7 +57,7 @@ void Gl :: init(int *argc, char **argv)
     glEnable(GL_MULTISAMPLE); //Включили мультисемплинг для лучшего сглаживания (правда ценой большей нагрузки на GPU)
     if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
         throw(newError(SDL));
-    Projection = glm::perspective(1.2217f,float(WinW / WinH), 1.0f, 3000.0f);//70 градусов FOV
+    Projection = glm::perspective(1.2217f,float(WinW / WinH), 0.01f, 3000.0f);//70 градусов FOV
     if(glewInit() != GLEW_OK)// инициализацию Glew , очень важно
 	    throw(newError(GL));
 	checkGLVersion();//проверяем что у нас стоит нужная версия OpenGL

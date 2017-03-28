@@ -14,7 +14,7 @@ void MovableObject:: moveAbsolute(glm :: dvec3 to)
 
 void MovableObject:: moveRelative(glm :: dvec3 to)
 {
-	 coord += A * to; 
+	 coord += A * to;
 }
 
 void MovableObject:: rotateAbsolute(glm :: dvec3 omega, double dt)

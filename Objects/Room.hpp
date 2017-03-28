@@ -5,6 +5,9 @@ class Room : public Object3D
 {
 public:
 	Room();
+
+	Room(std::string sorce);
+
 	~Room();
 };
 #endif
