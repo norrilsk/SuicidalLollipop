@@ -13,7 +13,8 @@ enum ErrorType
 		UNKNOWN,
 		QUIT,
 		SHADER,
-		LOGFILE
+		LOGFILE,
+		BINDING_UNLOADED
 	};
 
 	class Error

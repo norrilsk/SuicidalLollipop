@@ -17,13 +17,15 @@ Object3D::Object3D(const Object3D & obj)
     ez = A[2];
 	model = obj.model;
 }
-void Object3D::draw()
+void Object3D::draw(int NUM)
 {
 	if (!model->is_drawable())
 		return;
 	Gl::shaders.useProgram();
 	glm::mat4 MVP = Gl::Projection * Gl::View*Model();
 	Gl::shaders.store_MVP(&MVP[0][0]);
+	Gl::shaders.store_int(model.is_textures(), TEXTURES_ENABLED);
+	Gl::shaders.store_int(NUM, TEXTURE_SAMPLER);
 	model->draw();
 }
 

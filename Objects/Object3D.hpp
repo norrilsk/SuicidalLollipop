@@ -18,7 +18,8 @@ protected:
 	glm :: dvec3  &ez = A[2];
 	MashObject *model;
 public:
-	void draw();
+	void draw(int);
+	void draw() { draw(0); }
 	void set(glm :: dvec3, glm :: dvec3, glm :: dvec3); //установка coord, ex, ez
 	void set(glm :: dvec3, glm :: dvec3); //установка coord, ex
 	void set(glm :: dvec3);//установка coord

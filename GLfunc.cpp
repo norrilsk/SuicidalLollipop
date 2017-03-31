@@ -54,12 +54,25 @@ void Gl :: init(int *argc, char **argv)
     glEnable(GL_MULTISAMPLE);//мультисемплинк обеспечивает лучшее сглаживание
     //glEnable(GL_CULL_FACE); //отключение не лицевых граней
     glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
+	glEnable(GL_TEXTURE_2D);// включаем 2D текстуры
     SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
     glEnable(GL_MULTISAMPLE); //Включили мультисемплинг для лучшего сглаживания (правда ценой большей нагрузки на GPU)
     if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
         throw(newError(SDL));
     Projection = glm::perspective(1.2217f,float(WinW / WinH), 0.01f, 3000.0f);//70 градусов FOV
-    if(glewInit() != GLEW_OK)// инициализацию Glew , очень важно
+	SDL_version compile_version;
+	const SDL_version *link_version = IMG_Linked_Version(); //получаем версию sdl_image с которой компилируем
+	SDL_IMAGE_VERSION(&compile_version); //  получаем версию sdl_image с которой запускаем
+	logfile << "compiled with SDL_image version: " << compile_version.major <<
+	        "." << compile_version.minor << "." << compile_version.patch << "\n" <<
+	        "running with SDL_image version : " << link_version->major << "." << link_version->minor <<
+	        "." << link_version->patch << std::endl; // записываем Версии sdl_image в logfile
+	int flags = IMG_INIT_JPG | IMG_INIT_PNG; // флаги sdl_image
+	int initted = IMG_Init(flags); // инициализация sdl_image
+	if ((initted&flags) != flags)
+		throw (newError2(OTHER, "IMG_Init: Failed to init required jpg and png support!\n" + std::string("IMG_Init: ") + IMG_GetError() + std::string("\n")));
+	atexit(IMG_Quit);
+	if(glewInit() != GLEW_OK)// инициализацию Glew , очень важно
 	    throw(newError(GL));
 	checkGLVersion();//проверяем что у нас стоит нужная версия OpenGL
     std::vector<std::pair<std::string, GLuint> > ShadersPaths;
@@ -68,8 +81,7 @@ void Gl :: init(int *argc, char **argv)
     shaders = Shaders(ShadersPaths);//Подключаем шейдеры
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
+
 void Gl :: MainLoop()
 {
     unsigned int time_per_cycle = 0;
@@ -113,7 +125,6 @@ void Gl :: MainLoop()
         FPS = 1000.0 / (time_per_cycle);
     }
 }
-#pragma clang diagnostic pop
 
 void Gl :: Quit()
 {

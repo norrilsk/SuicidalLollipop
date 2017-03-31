@@ -55,11 +55,31 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 		glDeleteShader(shaderid[shaderType]); // удаляем шйдеры (все легально)
 	}
 }
+
 void Shaders::store_MVP(void* src)
 {
 	GLint matrix = glGetUniformLocation(programid, "MVP"); // создаем ID для матрицы
 	glUniformMatrix4fv(matrix, 1, GL_FALSE, (const GLfloat *)src); // информируем шейдер о нашей матрице
 }
+
+void Shaders::store_int(int num, integerName en)
+{
+	GLint ID;
+	switch (en)
+	{
+		case TEXTURES_ENABLED:
+			ID = glGetUniformLocation(programid, "textures_enabled"); // создаем ID для текстуры
+			break;
+		case NORMALS_ENABLED:
+			ID = glGetUniformLocation(programid, "normals_enabled"); // создаем ID для нормали
+			break;
+		case TEXTURE_SAMPLER:
+			ID = glGetUniformLocation(programid, "textureSampler");
+			break;
+	}
+	glUniform1i(ID, num); // информируем шейдер о наших числах
+}
+
 Shaders::~Shaders()
 {
 }

@@ -9,6 +9,7 @@
 	#include <GL/glu.h>
 	#endif 
 	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_image.h>
 	#include <stdlib.h>
 	#include <utility>
 	#include <queue>

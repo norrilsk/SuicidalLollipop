@@ -45,6 +45,9 @@ std::string Error::getMessage()
 		case UNKNOWN:
 			res ="Unknown error occurred\n" + meta;
 			break;
+		case BINDING_UNLOADED:
+			res = "Trying to bind unloaded textere\n" + meta;
+			break;
 		case NONE:
 			res = meta;
 			break;

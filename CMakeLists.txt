@@ -13,6 +13,6 @@ link_libraries(${GLEW_LIBRARIES})
 set(SOURCE_FILES main.cpp GLfunc.hpp Error.cpp Error.hpp Game.cpp Game.hpp GLfunc.hpp GLfunc.cpp Keyboard.cpp Keyboard.hpp Loger.cpp Loger.hpp Mouse.cpp Mouse.hpp Shaders.cpp Shaders.hpp Camera.cpp Camera.hpp
         ./Objects/DrawableObject.hpp ./Objects/MashObject.cpp ./Objects/MashObject.hpp ./Objects/Menu.cpp ./Objects/Menu.hpp ./Objects/MovableObject.cpp ./Objects/MovableObject.hpp ./Objects/NPC.cpp ./Objects/NPC.hpp
         ./Objects/Object2D.cpp ./Objects/Object2D.hpp ./Objects/Object3D.cpp ./Objects/Object3D.hpp ./Objects/Objects.hpp ./Objects/Player.cpp ./Objects/Player.hpp ./Objects/Room.cpp ./Objects/Room.hpp
-        ./Shaders/fragmentshader.glsl ./Shaders/vertexshader.glsl Storage.cpp Storage.hpp)
+        ./Shaders/fragmentshader.glsl ./Shaders/vertexshader.glsl Storage.cpp Storage.hpp Texture.cpp Texture.hpp)
 add_executable(SuicidalLollipop ${SOURCE_FILES})
-target_link_libraries(SuicidalLollipop SDL2)
+target_link_libraries(SuicidalLollipop SDL2 SDL_Image)
