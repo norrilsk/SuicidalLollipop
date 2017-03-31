@@ -16,7 +16,7 @@ protected:
 	glm :: dvec3  &ex = A[0];
 	glm :: dvec3  &ey = A[1];
 	glm :: dvec3  &ez = A[2];
-	MashObject model;
+	MashObject *model;
 public:
 	void draw();
 	void set(glm :: dvec3, glm :: dvec3, glm :: dvec3); //установка coord, ex, ez
@@ -27,7 +27,7 @@ public:
 	glm :: dvec3 getUpperDirection();
 	Object3D(const Object3D &);
 	Object3D();
-	Object3D(std::string );
+	Object3D(MashObject *);
 	~Object3D();
 };
 #endif

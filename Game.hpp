@@ -12,8 +12,6 @@ class Game
 		PAUSED
 	}game_state = NORMAL;
 	Player player;
-	std::vector<NPC> npc;//
-	std::vector<Room> rooms;
 	unsigned long long GameTime = 0;
 	void checkKeyboard(glm::dvec3& playerMovement, glm::dvec3& playerRotation);//обрабатываем события клавиатурры
 	void checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation);//обрабатываем события мыши

@@ -1,8 +1,6 @@
 #include "MovableObject.hpp"
-MovableObject::MovableObject()
-{
-}
-MovableObject::MovableObject(std::string path):Object3D(path)
+
+MovableObject::MovableObject(MashObject* mash):Object3D(mash)
 {
 	
 }
@@ -45,5 +43,9 @@ void MovableObject:: rotateRelative(glm :: dvec3 omega, double dt)
 
 
 MovableObject::~MovableObject()
+{
+}
+
+MovableObject::MovableObject()
 {
 }

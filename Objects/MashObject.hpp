@@ -34,9 +34,9 @@ public:
 	bool is_textures() { return drawable && texture; } // есть ли текстуры
 	bool is_normals() { return drawable && inormals; } // есть ли нормали
 	void draw(); // Нарисовать меня
-	void parser(std::string&); // создает объект из obj файла, передать путь к obj файлу
+	void parser(const std::string&); // создает объект из obj файла, передать путь к obj файлу
 	MashObject();
-	MashObject(std::string&);
+	MashObject(const std::string&);
 	~MashObject();
 };
 

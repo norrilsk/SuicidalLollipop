@@ -21,8 +21,9 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 		in.seekg(0, in.end);// перейдем в конец файла
 		unsigned int lenght = (unsigned int)in.tellg();// на какой мы позиции?
 		in.seekg(0, in.beg);
-		char* fileData = new char[lenght];
+		char* fileData = new char[lenght + 1];
 		in.read(fileData, lenght); // считываем файл в 1 строку
+		fileData[lenght] = '\0';
 		in.close();
 		shaderid[shader.second] = glCreateShader(shader.second);//создаем шейдер
 		if (shaderid[shader.second] == 0)

@@ -57,8 +57,10 @@ void Game :: checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation)
 }
 void Game::start()
 {
-	npc.push_back(NPC("Source/OBJ/snowman.obj"));
-	rooms.push_back(Room("Source/OBJ/komnata.obj"));
+	StorageIndex room = Gl::storage.addRoom("Source/OBJ/komnata.obj");
+	player.setRoom(room);
+	StorageIndex npc = Gl ::storage.addNPC("Source/OBJ/snowman.obj");
+	Gl::storage.room(room).addNPC(npc);
 }
 void Game :: normal_next(unsigned int dt)
 {
@@ -88,8 +90,11 @@ void Game :: next(unsigned int dt)
 		paused_next(dt);
 		break;
 	}
-	Gl::renderingQueue.push(&npc[0]);
-	Gl::renderingQueue.push(&rooms[0]);
+	std::vector<DrawableObject *> to_render;
+	Gl::storage.room(player.getRoom()).getAllObjects(to_render);
+	for(DrawableObject * obj: to_render)
+		Gl::renderingQueue.push(obj);
+	Gl::renderingQueue.push(&Gl::storage.room(player.getRoom()));
 }
  
 void Game::pause()

@@ -1,7 +1,7 @@
 ﻿#include "MashObject.hpp"
 #include <glm/glm.hpp>
 #include"../GLfunc.hpp"
-void MashObject :: parser(std::string& file_path)
+void MashObject :: parser(const std::string& file_path)
 {
 	path = file_path; // Открываем obj файл
 	std::ifstream forread;
@@ -62,7 +62,7 @@ void MashObject :: parser(std::string& file_path)
 				 }
 				 i++;
 				 j = 0;
-				 while (i < stringsize)
+				 while ((size_t)i < stringsize)
 				 {
 					 VTN[2].push_back(lineHeader[i]);
 					 j++;
@@ -162,10 +162,9 @@ MashObject::MashObject()
 {
 	
 }
-MashObject::MashObject(std::string& file_path)
+MashObject::MashObject(const std::string& file_path)
 {
 	parser(file_path);
-
 }
 
 

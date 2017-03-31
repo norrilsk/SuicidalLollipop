@@ -4,10 +4,9 @@
 Object3D::Object3D()
 {
 }
-Object3D::Object3D(std::string path)
+Object3D::Object3D(MashObject * mash)
 {
-	model = MashObject(path);
-
+	model = mash;
 }
 Object3D::Object3D(const Object3D & obj)
 {
@@ -20,12 +19,12 @@ Object3D::Object3D(const Object3D & obj)
 }
 void Object3D::draw()
 {
-	if (!model.is_drawable())
+	if (!model->is_drawable())
 		return;
 	Gl::shaders.useProgram();
 	glm::mat4 MVP = Gl::Projection * Gl::View*Model();
 	Gl::shaders.store_MVP(&MVP[0][0]);
-	model.draw();
+	model->draw();
 }
 
 void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection, glm :: dvec3 upperdirection)
@@ -33,10 +32,8 @@ void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection, glm :: dve
 	coord = position;
 	ex = lookdirection;
 	ez = upperdirection;
-	if(glm ::dot(ex, ex) != 1.0)
-		ex /= sqrt(glm:: dot(ex, ex));
-	if(glm ::dot(ex, ex) != 1.0)
-		ez /= sqrt(glm:: dot(ez, ez));
+	ex /= glm:: length(ex);
+	ez /= glm:: length(ez);
 	ey = ez*ex;
 }
 
@@ -44,8 +41,7 @@ void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection)
 {
 	coord = position;
 	ex = lookdirection;
-	if(glm ::dot(ex, ex) != 1.0)
-		ex /= sqrt(glm:: dot(ex, ex));
+	ex /= glm::length(ex);
 	ey = ez*ex;
 }
 glm::mat4 Object3D::Model()

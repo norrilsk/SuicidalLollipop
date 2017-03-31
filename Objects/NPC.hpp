@@ -6,7 +6,7 @@ class NPC :
 {
 public:
 	NPC();
-	NPC(std::string);
+	NPC(MashObject* mash);
 	~NPC();
 };
 #endif

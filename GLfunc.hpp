@@ -15,6 +15,7 @@
 	#define GLM_FORCE_RADIANS //для ускорения все в радианах
 	#include <glm/glm.hpp>
 	#include <glm/gtc/matrix_transform.hpp>
+	#include "Storage.hpp"
 	#include "Error.hpp"
 	#include "Camera.hpp"
 	#include "Mouse.hpp"
@@ -31,6 +32,7 @@
 		extern double FPS;
 		extern std::queue <DrawableObject*> renderingQueue;// очередь отрисовки
 		extern Shaders shaders;
+		extern Storage storage;
 		extern glm::mat4 Projection; // матрица перспективы
 		extern glm::mat4 View; // матрица вида
 		void init(int *argc, char **argv); //Инициализация всего что нужно для старта 

@@ -13,6 +13,7 @@ std::queue <DrawableObject*> Gl::renderingQueue;
 Shaders Gl::shaders;
 glm::mat4 Gl::Projection;
 glm::mat4 Gl::View;
+Storage Gl::storage;
 extern Game game;
 extern Loger logfile;
 
