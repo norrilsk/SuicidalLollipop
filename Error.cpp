@@ -48,6 +48,9 @@ std::string Error::getMessage()
 		case BINDING_UNLOADED:
 			res = "Trying to bind unloaded textere\n" + meta;
 			break;
+		case OBJ:
+			res = "Object error\n" +meta;
+			break;
 		case NONE:
 			res = meta;
 			break;

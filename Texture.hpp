@@ -1,10 +1,10 @@
 #ifndef _TEXTURE
 #define _TEXTURE 
-#ifndef _GLEWINCLUDE
-#define _GLEWINCLUDE
-#include <GL/glew.h>
-#include <GL/glu.h>
-#endif 
+	#ifndef _GLEWINCLUDE
+	#define _GLEWINCLUDE
+	#include <GL/glew.h>
+	#include <GL/glu.h>
+	#endif
 #include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
 
@@ -13,15 +13,16 @@ class Texture
 {
 	SDL_Surface *image;
 	bool isloaded = 0;
+	GLuint id;
 public:
 	Texture();
-	Texture(const char * path); // вызывает loadTexture
-	/* пожадуйста до бинда включите нужный вам VBO с помощью   glBindBuffer 
+	Texture(const char * path); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ loadTexture
+	/* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ VBO пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ   glBindBuffer 
 	bind */
-	void bind(); // биндит текстурку 
+	void bind(); // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 
 	~Texture();
-	bool is_loaded() { return isloaded; } // я загружена?
-	void loadTexture(const char * path);// Загрузка Текстуры
-	void freeTexture(); //удаление текстуры
+	bool is_loaded() { return isloaded; } // пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?
+	void loadTexture(const char * path);// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	void freeTexture(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 };
-#endif;
+#endif

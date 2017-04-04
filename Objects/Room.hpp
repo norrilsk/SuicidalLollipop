@@ -11,7 +11,7 @@ class Room : public Object3D
 
 public:
 	Room();
-	Room(MashObject* mash);
+	Room(Model* model);
 	~Room();
 	void getAllObjects(std::vector<DrawableObject *> &);
 	void addObject3D(size_t);

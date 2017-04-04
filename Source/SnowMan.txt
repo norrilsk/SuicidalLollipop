@@ -1,0 +1,2 @@
+./Source/OBJ/snowman.obj
+./Source/Textures/picture.png

@@ -1,6 +1,6 @@
 #include "MovableObject.hpp"
 
-MovableObject::MovableObject(MashObject* mash):Object3D(mash)
+MovableObject::MovableObject(Model* model):Object3D(model)
 {
 	
 }

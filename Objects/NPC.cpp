@@ -10,6 +10,6 @@ NPC::~NPC()
 {
 }
 
-NPC::NPC(MashObject *mash) : MovableObject(mash)
+NPC::NPC(Model *mash) : MovableObject(mash)
 {
 }

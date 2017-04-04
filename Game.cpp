@@ -57,9 +57,9 @@ void Game :: checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation)
 }
 void Game::start()
 {
-	StorageIndex room = Gl::storage.addRoom("Source/OBJ/komnata.obj");
+	StorageIndex room = Gl::storage.addRoom("Source/Room0.txt");
 	player.setRoom(room);
-	StorageIndex npc = Gl ::storage.addNPC("Source/OBJ/snowman.obj");
+	StorageIndex npc = Gl ::storage.addNPC("Source/SnowMan.txt");
 	Gl::storage.room(room).addNPC(npc);
 }
 void Game :: normal_next(unsigned int dt)

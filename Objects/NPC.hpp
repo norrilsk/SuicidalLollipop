@@ -6,7 +6,7 @@ class NPC :
 {
 public:
 	NPC();
-	NPC(MashObject* mash);
+	NPC(Model* mash);
 	~NPC();
 };
 #endif

@@ -22,7 +22,7 @@ void Room::getAllObjects(std::vector<DrawableObject *> & store)
 		store.push_back((DrawableObject *) &(Gl::storage.object3d(ind)));
 }
 
-Room::Room(MashObject *mash) : Object3D(mash)
+Room::Room(Model *model) : Object3D(model)
 {
 
 }

@@ -12,33 +12,41 @@ Texture::Texture(const char* path)
 }
 void Texture::loadTexture(const char* path)
 {
-	image = IMG_Load(path); //  загружаем картинку
+	image = IMG_Load(path); //  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	isloaded = true;
 	if (image== NULL) 
 	{
-		const char* log = IMG_GetError();
 		logfile << "IMG_Load: " << IMG_GetError() << std::endl;
 		isloaded = false;
 	}
+	if (!isloaded)
+		throw(newError(BINDING_UNLOADED));
+
+	glGenTextures(1,&id);
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	GLuint Mode = GL_RGB;
+	if (image->format->BytesPerPixel == 4)  // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+		Mode = GL_RGBA;
+	glTexImage2D(GL_TEXTURE_2D, 0, Mode, image->w, image->h, 0, Mode,
+	             GL_UNSIGNED_BYTE, image->pixels); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+	                GL_LINEAR_MIPMAP_LINEAR);   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 }
 void Texture::bind()
 {
-	if (!isloaded)
-		throw(newError(BINDING_UNLOADED));
-	
-	GLuint Mode = GL_RGB;
-	if (image->format->BytesPerPixel == 4)  // если есть прозрачность, включим ее
-		Mode = GL_RGBA;
-	glTexImage2D(GL_TEXTURE_2D, 0, Mode, image->w, image->h, 0, Mode, 
-		GL_UNSIGNED_BYTE, image->pixels); // загрузим картинку
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // если текстурные координаты выходят за  
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
-		GL_LINEAR_MIPMAP_LINEAR);   // установим обработку близких и далеких изображений
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D); // сгенерируем текстуры меньшего размера
+	glBindTexture(GL_TEXTURE_2D, id);
 }
 
 Texture::~Texture()
 {
+}
+
+void Texture::freeTexture()
+{
+	glDeleteTextures(1, &id);
 }

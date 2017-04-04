@@ -14,7 +14,7 @@ class Storage
 	std::vector <NPC> npcs;
 	std::vector <MovableObject>  movable_objects;
 	std::vector <Object3D>  objects3d;
-	std::map <std::string, MashObject> mash;
+	std::map <std::string, Model> model;
 public:
 	Storage();
 	~Storage();

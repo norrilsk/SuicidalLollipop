@@ -9,6 +9,7 @@ enum ErrorType
 		NONE,
 		SDL,
 		GL,
+		OBJ,
 		OTHER,
 		UNKNOWN,
 		QUIT,

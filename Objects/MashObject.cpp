@@ -9,7 +9,7 @@ void MashObject::parser(const std::string& file_path)
 	std::ifstream forread;
 	forread.open(file_path);
 	if (!forread.is_open())
-		return;
+		throw(newError(OBJ));
 	std::vector < glm::vec3 >  time_vertices; // координаты вершины
 	std::vector < glm::vec2 >  time_uvs; //текстурная координата вершины
 	std::vector < glm::vec3 >  time_normals;// координаты нормали
@@ -121,19 +121,18 @@ void MashObject::parser(const std::string& file_path)
 void MashObject::bind()
 {
 	// Сначала генерируем OpenGL буфер и сохраняем указатель на него в vertexbuffer
-	vbo.resize(2); // устанавливаем количество VBO
-	glGenBuffers(2, &vbo[0]);
+	vbo.resize(3); // устанавливаем количество VBO
+	glGenBuffers(3, &vbo[0]);
 	// Биндим буфер
-	glGenTextures(textureNum, textureArray); // TODO :: (glDeleteTextures(texturesNum, textureArray));
+
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	
 	// Предоставляем наши вершины в OpenG
 	glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	if (!is_textures())
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*verColor.size(), &verColor[0], GL_STATIC_DRAW);
-	else
-		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*uvs.size(), &uvs[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*verColor.size(), &verColor[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*uvs.size(), &uvs[0], GL_STATIC_DRAW);
 	glGenVertexArrays(1, &vao); // создать VAO
 	glBindVertexArray(vao);// Bind VAO
 
@@ -142,40 +141,35 @@ void MashObject::bind()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO
 
-	if ((itexture == false) || (texture ==NULL) || (texture->is_loaded() == false))
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-		glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO */
-	}
-	else
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-		for (int i = 0; i < textureNum; i++)
-		{
-			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, textureArray[i]);
-			texture->bind();// TODO:: texture[i]
-		}
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO */
 
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
-		glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO */
-	}
+	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind VBO */
+
 	glBindVertexArray(0); // unbind VAO
 	drawable = true;
 	return;
 }
-void MashObject::draw()
+void MashObject::draw(Texture* texture)
 {
 	if (!drawable)
 		return;
 	glBindVertexArray(vao);
 	
 	glEnableVertexAttribArray(0);
-	if (!is_textures())
-		glEnableVertexAttribArray(1);
+	if (is_textures())
+		if ((texture!= nullptr)&&(texture->is_loaded()))
+		{
+			texture->bind();
+			glEnableVertexAttribArray(2);
+		}
+		else
+			glEnableVertexAttribArray(1);
 	else
-		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(1);
 	glDrawArrays(GL_TRIANGLES, 0, (GLsizei)vertices.size()); //Начиная с вершины 0 и рисуем N штук. Всего => 1 треугольник
 
 	glDisableVertexAttribArray(2);
@@ -183,21 +177,13 @@ void MashObject::draw()
 	glDisableVertexAttribArray(0);
 	return;
 }
-void MashObject::loadTexture(Texture* texture_src)
-{
-	texture = texture_src;
-}
+
 MashObject::MashObject()
 {
 	
 }
-MashObject::MashObject(std::string& file_path, Texture * texture_src)
-{
-	parser(file_path);
-	loadTexture(texture_src);
-}
 
-MashObject::MashObject(std::string& file_path)
+MashObject::MashObject(const std::string& file_path)
 {
 	parser(file_path);
 }
