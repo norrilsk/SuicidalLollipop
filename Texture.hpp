@@ -11,9 +11,9 @@
 
 class Texture
 {
-	SDL_Surface *image;
 	bool isloaded = 0;
 	GLuint id;
+	bool *deletable;
 public:
 	Texture();
 	Texture(const char * path); // �������� loadTexture
@@ -24,5 +24,6 @@ public:
 	bool is_loaded() { return isloaded; } // � ���������?
 	void loadTexture(const char * path);// �������� ��������
 	void freeTexture(); //�������� ��������
+	Texture (const Texture &);
 };
 #endif

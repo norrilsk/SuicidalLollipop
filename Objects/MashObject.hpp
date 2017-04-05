@@ -20,17 +20,13 @@
 class MashObject 
 {
 private:
-//	Texture *texture = nullptr;
-	std::string path = ""; //Путь объекта
-	std::vector < glm::vec3 >  vertices; // координаты вершины
-	std::vector < glm::vec2 >  uvs; //текстурная координата вершины
-	std::vector < glm::vec3 >  normals;// координаты нормали
-	std::vector <glm::vec3 > verColor;// цвета вершин, возможно временно
 	std::vector <GLuint> vbo;
+	std::vector < glm::vec3 >  vertices; // координаты вершин
 	GLuint vao = 0;
 	bool drawable = false;
 	bool itexture = false;
 	bool inormals = false;
+	bool *deletable;
 public:
 	bool is_drawable() { return drawable; }//  Рисуем ли я? Ж)
 	bool is_textures() { return !((itexture == false) || (!drawable)); } // есть ли текстуры
@@ -40,6 +36,7 @@ public:
 	void parser(const std::string&); // создает объект из obj файла, передать путь к obj файлу
 	MashObject();
 	MashObject(const std::string&);
+	MashObject(const MashObject &);
 
 	~MashObject();
 };

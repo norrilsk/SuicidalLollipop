@@ -64,7 +64,7 @@ void Shaders::store_MVP(void* src)
 
 void Shaders::store_int(int num, integerName en)
 {
-	GLint ID;
+	GLint ID = -1;
 	switch (en)
 	{
 		case TEXTURES_ENABLED:

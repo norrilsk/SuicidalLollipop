@@ -41,5 +41,6 @@
 		void display(); //фуннкция - отрисовщик окна
 		void checkGLVersion();//узнаем версию OpenGL и GLSL
 		void Quit(); //закрыть и выйти
+		void terminate();
 	}
 #endif

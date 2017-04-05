@@ -46,14 +46,14 @@ Model::Model(const std::string &path)
 void Model::setActiveTexture(int ind)
 {
 	activeTexture = ind;
-	if(activeTexture >= textures.size())
+	if(activeTexture >= (int)textures.size())
 		activeTexture = (int)textures.size() - 1;
 }
 
 void Model::setActiveMash(int ind)
 {
 	activeMash = ind;
-	if(activeMash >= mash.size())
+	if(activeMash >= (int)mash.size())
 		activeMash = (int)mash.size() - 1;
 }
 

@@ -1,11 +1,11 @@
 CC=g++
-CFLAGS= -c -Wall -std=gnu++11 -O2
-LIBS= -lglut -lGL -lGLU -lSDL2 -lSDL -lGLEW
+CFLAGS= -c -Wall -std=gnu++11 -g
+LIBS= -lglut -lGL -lGLU -lSDL2 -lSDL -lGLEW -lSDL2_image -g
 
 all: SuicidalLollipop
 
-SuicidalLollipop:  main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o NPC.o MashObject.o Shaders.o Loger.o Room.o Game.o 
-	$(CC) main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o Game.o NPC.o MashObject.o Shaders.o Loger.o Room.o -o SuicidalLollipop $(LIBS)
+SuicidalLollipop:  main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o NPC.o MashObject.o Shaders.o Loger.o Texture.o Model.o Room.o Storage.o Game.o
+	$(CC) main.o GLfunc.o Error.o Mouse.o Keyboard.o Camera.o Object3D.o MovableObject.o Player.o Game.o NPC.o MashObject.o Shaders.o Loger.o Texture.o Model.o Room.o Storage.o -o SuicidalLollipop $(LIBS)
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) main.cpp
@@ -24,6 +24,9 @@ Camera.o: Camera.cpp Camera.hpp
 
 Loger.o: Loger.cpp Loger.hpp
 	$(CC) $(CFLAGS) Loger.cpp
+
+Texture.o: Texture.cpp Texture.hpp
+	$(CC) $(CFLAGS) Texture.cpp
 	
 Keyboard.o: Keyboard.cpp Keyboard.hpp
 	$(CC) $(CFLAGS) Keyboard.cpp
@@ -45,12 +48,18 @@ MashObject.o: Objects/MashObject.cpp Objects/MashObject.hpp
 
 Room.o: Objects/Room.cpp Objects/Room.hpp
 	$(CC) $(CFLAGS) Objects/Room.cpp
-	
+
+Model.o: Objects/Model.cpp Objects/Model.hpp
+	$(CC) $(CFLAGS) Objects/Model.cpp
+
 Shaders.o: Shaders.cpp Shaders.hpp
 	$(CC) $(CFLAGS) Shaders.cpp
 
 Game.o: Game.cpp Game.hpp Objects/Objects.hpp
 	$(CC) $(CFLAGS) Game.cpp
+
+Storage.o: Storage.cpp Storage.hpp
+	$(CC) $(CFLAGS) Storage.cpp
 	
 clean:
 	rm -rf *.o

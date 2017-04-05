@@ -1,3 +1,4 @@
+#include <iostream>
 #include "GLfunc.hpp"
 #include "Game.hpp"
 #include "Loger.hpp"
@@ -44,6 +45,7 @@ void Gl :: init(int *argc, char **argv)
         throw(newError(SDL));
     atexit(SDL_Quit);
     window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)WinW, (int)WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//создание окна
+	atexit(terminate);
     if(window == NULL)
         throw(newError(SDL));
     if(SDL_GL_CreateContext(window) == NULL) //Создали котекст OpenGl 
@@ -60,16 +62,16 @@ void Gl :: init(int *argc, char **argv)
     if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
         throw(newError(SDL));
     Projection = glm::perspective(1.2217f,float(WinW / WinH), 0.01f, 3000.0f);//70 градусов FOV
-	SDL_version compile_version;
+	/*SDL_version compile_version;
 	const SDL_version *link_version = IMG_Linked_Version(); //получаем версию sdl_image с которой компилируем
 	SDL_IMAGE_VERSION(&compile_version); //  получаем версию sdl_image с которой запускаем
 	logfile << "compiled with SDL_image version: " << compile_version.major <<
 	        "." << compile_version.minor << "." << compile_version.patch << "\n" <<
 	        "running with SDL_image version : " << link_version->major << "." << link_version->minor <<
-	        "." << link_version->patch << std::endl; // записываем Версии sdl_image в logfile
+	        "." << link_version->patch << std::endl; // записываем Версии sdl_image в logfile*/
 	int flags = IMG_INIT_JPG | IMG_INIT_PNG; // флаги sdl_image
 	int initted = IMG_Init(flags); // инициализация sdl_image
-	if ((initted&flags) != flags)
+	if ((initted & flags) != flags)
 		throw (newError2(OTHER, "IMG_Init: Failed to init required jpg and png support!\n" + std::string("IMG_Init: ") + IMG_GetError() + std::string("\n")));
 	atexit(IMG_Quit);
 	if(glewInit() != GLEW_OK)// инициализацию Glew , очень важно
@@ -145,7 +147,7 @@ void Gl :: display()
     SDL_GL_SwapWindow(window);
 }
 
-void ::Gl::checkGLVersion()
+void Gl::checkGLVersion()
 {
 	logfile << "Software checking:" << std::endl;
 	logfile << "\tOpenGL version and drivers:\t\t" << glGetString(GL_VERSION) << std::endl;
@@ -153,4 +155,9 @@ void ::Gl::checkGLVersion()
 	logfile << "\tShading language version and drivers:\t"<< glGetString(GL_SHADING_LANGUAGE_VERSION)<< std::endl;
     if(!GLEW_VERSION_3_3)
         throw(newError2(OTHER, "Your OpenGl version is out of date. Version 3.3 or higher is required"));
+}
+
+void Gl::terminate()
+{
+    SDL_DestroyWindow(window);
 }

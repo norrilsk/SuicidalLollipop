@@ -1,15 +1,19 @@
 ﻿#include "MashObject.hpp"
 #include <glm/glm.hpp>
+#include <iostream>
 #include"../GLfunc.hpp"
 void MashObject::parser(const std::string& file_path)
 {
 	itexture = true;
 	inormals = true;
-	path = file_path; // Открываем obj файл
 	std::ifstream forread;
 	forread.open(file_path);
 	if (!forread.is_open())
 		throw(newError(OBJ));
+
+	std::vector < glm::vec2 >  uvs; //текстурная координата вершины
+	std::vector < glm::vec3 >  normals;// координаты нормали
+	std::vector <glm::vec3 > verColor;// цвета вершин, возможно временно
 	std::vector < glm::vec3 >  time_vertices; // координаты вершины
 	std::vector < glm::vec2 >  time_uvs; //текстурная координата вершины
 	std::vector < glm::vec3 >  time_normals;// координаты нормали
@@ -116,10 +120,7 @@ void MashObject::parser(const std::string& file_path)
 		}
 
 	}
-	bind();
-}
-void MashObject::bind()
-{
+
 	// Сначала генерируем OpenGL буфер и сохраняем указатель на него в vertexbuffer
 	vbo.resize(3); // устанавливаем количество VBO
 	glGenBuffers(3, &vbo[0]);
@@ -151,6 +152,7 @@ void MashObject::bind()
 
 	glBindVertexArray(0); // unbind VAO
 	drawable = true;
+	*deletable = true;
 	return;
 }
 void MashObject::draw(Texture* texture)
@@ -180,14 +182,37 @@ void MashObject::draw(Texture* texture)
 
 MashObject::MashObject()
 {
-	
+	deletable = new bool[1];
+	deletable[0] = false;
 }
 
 MashObject::MashObject(const std::string& file_path)
 {
+	deletable = new bool[1];
+	deletable[0] = false;
 	parser(file_path);
 }
 MashObject::~MashObject()
 {
+	if(*deletable)
+	{
+		glDeleteBuffers((int)vbo.size(), &vbo[0]);
+		glDeleteVertexArrays(1, &vao);
+	}
+	delete []deletable;
+}
 
+MashObject::MashObject(const MashObject & from)
+{
+	vbo = from.vbo;
+	vertices = from.vertices;
+	vao = from.vao;
+	drawable = from.drawable;
+	itexture = from.itexture;
+	inormals = from.inormals;
+	deletable = from.deletable;
+	bool tmp = *deletable;
+	*deletable = false;
+	deletable = new bool[1];
+	*deletable = tmp;
 }
