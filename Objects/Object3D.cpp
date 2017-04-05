@@ -1,5 +1,4 @@
 #include "Object3D.hpp"
-#include "../GLfunc.hpp"
 
 Object3D::Object3D()
 {
@@ -21,12 +20,7 @@ void Object3D::draw(int NUM)
 {
 	if (!model->is_drawable())
 		return;
-	Gl::shaders.useProgram();
-	glm::mat4 MVP = Gl::Projection * Gl::View*ModelMat();
-	Gl::shaders.store_MVP(&MVP[0][0]);
-	Gl::shaders.store_int(model->is_textures(), TEXTURES_ENABLED);
-	Gl::shaders.store_int(NUM, TEXTURE_SAMPLER);
-	model->draw();
+	model->draw(ModelMat(), NUM);
 }
 
 void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection, glm :: dvec3 upperdirection)

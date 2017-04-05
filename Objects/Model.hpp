@@ -3,26 +3,29 @@
 
 
 #include <vector>
+#include <glm/glm.hpp>
 #include "../Texture.hpp"
 #include "MashObject.hpp"
 
 class Model
 {
 	std::vector <Texture> textures;
-	MashObject mash;
+	std::vector <MashObject> mash;
+	int activeMash =-1;
 	int activeTexture =-1;
-	void loadMash(const std::string &);
+	void addMash(const std::string &);
 	void addTexture(const std::string &);
+	bool is_textures();
 public:
 	Model(){};
 	~Model(){};
 	Model(const std::string &);
 	void setActiveTexture(int ind);
-	void draw();
 
+	void setActiveMash(int ind);
 	bool is_drawable();
 
-	bool is_textures();
+	void draw(glm::mat4, int);
 };
 
 

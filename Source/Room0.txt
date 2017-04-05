@@ -1,1 +1,1 @@
-./Source/OBJ/komnata.obj
+OBJ ./Source/OBJ/komnata.obj

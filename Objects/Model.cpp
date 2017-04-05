@@ -1,9 +1,11 @@
+#include <iostream>
 #include "Model.hpp"
 #include "../Error.hpp"
+#include "../GLfunc.hpp"
 
-void Model::loadMash(const std::string &path)
+void Model::addMash(const std::string & path)
 {
-	mash.parser(path);
+	mash.push_back(MashObject(path));
 }
 
 void Model::addTexture(const std::string &path)
@@ -17,19 +19,25 @@ Model::Model(const std::string &path)
 	in.open(path);
 	if (!in.is_open())
 		throw(newError(OBJ));
-	std::string file_path;
-	in >> file_path;
-	mash.parser(file_path);
-	file_path.clear();
+	std::string str;
 	while(!in.eof())
 	{
-		in >> file_path;
-		textures.push_back(Texture(file_path.c_str()));
+		in >> str;
+		if(str == "OBJ")
+		{
+			in >> str;
+			addMash(str);
+		}
+		if(str == "TEX")
+		{
+			in >> str;
+			addTexture(str);
+		}
 	}
+	if(mash.size() > 0)
+		activeMash = 0;
 	if(textures.size() > 0)
-	{
 		activeTexture = 0;
-	}
 	in.close();
 }
 
@@ -42,21 +50,37 @@ void Model::setActiveTexture(int ind)
 		activeTexture = (int)textures.size() - 1;
 }
 
-void Model::draw()
+void Model::setActiveMash(int ind)
 {
+	activeMash = ind;
+	if(activeMash >= mash.size())
+		activeMash = (int)mash.size() - 1;
+}
+
+void Model::draw(glm::mat4 ModelMat, int NUM)
+{
+	if(activeMash < 0)
+		throw(newError(OBJ));
+	glm::mat4 MVP = Gl::Projection * Gl::View*ModelMat;
+	Gl::shaders.useProgram();
+	Gl::shaders.store_MVP(&MVP[0][0]);
+	Gl::shaders.store_int(is_textures(), TEXTURES_ENABLED);
+	Gl::shaders.store_int(NUM, TEXTURE_SAMPLER);
 	if(activeTexture < 0)
-		mash.draw();
+		mash[activeMash].draw();
 	else
-		mash.draw(&textures[activeTexture]);
+		mash[activeMash].draw(&textures[activeTexture]);
 }
 
 bool Model::is_drawable()
 {
-	return mash.is_drawable();
+	return (activeMash >=  0) && mash[activeMash].is_drawable();
 }
 
 bool Model::is_textures()
 {
-	return (activeTexture >= 0) && (mash.is_textures());
+	return is_drawable() && (activeTexture >= 0) && (mash[activeMash].is_textures());
 }
+
+
 
