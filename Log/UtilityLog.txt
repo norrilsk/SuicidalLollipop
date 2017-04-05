@@ -1,7 +1,0 @@
-********************LOG STARTED********************
-Date and time:Sun Apr  2 00:35:11 2017
-
---------------------LOG FINISHED-------------------
-Date and time:Sun Apr  2 00:35:11 2017
-
-
