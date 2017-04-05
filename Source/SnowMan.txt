@@ -1,0 +1,2 @@
+OBJ ./Source/OBJ/snowman.obj
+TEX ./Source/Textures/picture.png

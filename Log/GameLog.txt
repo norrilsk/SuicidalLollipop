@@ -1,0 +1,12 @@
+********************LOG STARTED********************
+Date and time:Wed Apr  5 23:06:05 2017
+
+Software checking:
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Wed Apr  5 23:06:09 2017
+
+

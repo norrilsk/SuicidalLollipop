@@ -12,7 +12,14 @@
 #define _GLEWINCLUDE
 #include <GL/glew.h>
 #include <GL/glu.h>
-#endif 
+#endif
+
+enum integerName
+{
+	TEXTURES_ENABLED,
+	NORMALS_ENABLED,
+	TEXTURE_SAMPLER
+};
 
 class Shaders
 {
@@ -28,6 +35,7 @@ public:
 	GLuint Id(GLuint shaderType) { return shaderid.at(shaderType); } // возвращает ID по указанному типу шейдера
 	Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths); // аналогично LOAD
 	void store_MVP(void*); // Сохраняет матрицу MVP
+	void store_int(int,integerName); //сохраняет числа в шейдеры
 	void useProgram() { glUseProgram(programid); };
 	Shaders();
 	~Shaders();

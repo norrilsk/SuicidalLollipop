@@ -9,12 +9,14 @@
 	#include <GL/glu.h>
 	#endif 
 	#include <SDL2/SDL.h>
+	#include <SDL2/SDL_image.h>
 	#include <stdlib.h>
 	#include <utility>
 	#include <queue>
 	#define GLM_FORCE_RADIANS //для ускорения все в радианах
 	#include <glm/glm.hpp>
 	#include <glm/gtc/matrix_transform.hpp>
+	#include "Storage.hpp"
 	#include "Error.hpp"
 	#include "Camera.hpp"
 	#include "Mouse.hpp"
@@ -31,13 +33,14 @@
 		extern double FPS;
 		extern std::queue <DrawableObject*> renderingQueue;// очередь отрисовки
 		extern Shaders shaders;
+		extern Storage storage;
 		extern glm::mat4 Projection; // матрица перспективы
 		extern glm::mat4 View; // матрица вида
 		void init(int *argc, char **argv); //Инициализация всего что нужно для старта 
 		void MainLoop(); //Главный цикл
-		void start(); //собственно запуск окна 
 		void display(); //фуннкция - отрисовщик окна
-		void reshape(); //функция срабатывающая при изменении размера окна
+		void checkGLVersion();//узнаем версию OpenGL и GLSL
 		void Quit(); //закрыть и выйти
+		void terminate();
 	}
 #endif

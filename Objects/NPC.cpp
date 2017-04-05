@@ -5,11 +5,11 @@
 NPC::NPC()
 {
 }
-NPC::NPC(std::string path):MovableObject(path)
+
+NPC::~NPC()
 {
 }
 
-
-NPC::~NPC()
+NPC::NPC(Model *mash) : MovableObject(mash)
 {
 }

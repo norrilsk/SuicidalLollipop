@@ -2,39 +2,35 @@
 
 #include "GLfunc.hpp"
 #include "Game.hpp"
+#include "Loger.hpp"
 using namespace std;
 Game game;
+Loger logfile;
 
 void DealWithError(Error err)
 {
-	switch (err.getType())
-	{
-	case SDL:
-		cout << SDL_GetError() << endl; //Выводим сообщение об ошибке
-		break;
-	case QUIT:
-		cout <<"Sucsessful finish"<<endl;
-		break;
-	case SHADER:
-		cout << "Shaders problems" << endl;
-		break;
-	default:
-		break;
-	}
+	if((err.getType() != NONE) && (err.getType() != QUIT))
+		cerr << err.getMessage()<< endl;
+    if(err.getType() != LOGFILE)
+        logfile << err.getMessage() << endl;
 }
 
 int main(int argc, char **argv)
 {
 	try
 	{
+		logfile.open("Log/GameLog.txt");
 		Gl :: init(&argc, argv);
-		Gl :: start();
 		game.start();
 		Gl :: MainLoop(); //запускаем главный цикл
 	}
 	catch (Error err)
 	{
 		DealWithError(err);
+	}
+	catch (...)
+	{
+		DealWithError(newError(OTHER));
 	}
 	return 0;
 }

@@ -1,6 +1,5 @@
 #include "Game.hpp"
-#include <utility>
-//#include <cstdlib>
+
 Game :: Game()
 {	
 }
@@ -49,7 +48,7 @@ void Game :: checkKeyboard(glm::dvec3& playerMovement, glm::dvec3& playerRotatio
 void Game :: checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation)
 {
 	glm::dvec2 mouseMotion = Gl :: mouse.getMovement();
-	if(glm::dot(mouseMotion, mouseMotion) > 0)//если курсор сместился
+	if(glm::length(mouseMotion) > 1e-9)//если курсор сместился
 	{
 		glm::dvec3 omega(0, mouseMotion.y, -mouseMotion.x); //переход от экранных координат к собственным с поворотом на 90 градусов по часовой
 		omega *= 1.0; //модуль угловой скорости
@@ -58,7 +57,10 @@ void Game :: checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation)
 }
 void Game::start()
 {
-	npc.push_back(NPC("Source/OBJ/snowman.obj"));
+	StorageIndex room = Gl::storage.addRoom("Source/Room0.txt");
+	player.setRoom(room);
+	StorageIndex npc = Gl ::storage.addNPC("Source/SnowMan.txt");
+	Gl::storage.room(room).addNPC(npc);
 }
 void Game :: normal_next(unsigned int dt)
 {
@@ -68,7 +70,7 @@ void Game :: normal_next(unsigned int dt)
 	checkKeyboard(playerMovement, playerRotation);//проверяем устройства ввода-вывода
 	checkMouse(playerMovement, playerRotation);
 	Gl :: mouse.centre();
-	player.moveRelative(playerMovement*(dt/1000.0));//и двигаем игрока
+	player.moveRelative(0.2*playerMovement*(dt/1000.0));//и двигаем игрока
 	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0), (dt/1000.0));
 	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z), (dt/1000.0));
 }
@@ -88,7 +90,11 @@ void Game :: next(unsigned int dt)
 		paused_next(dt);
 		break;
 	}
-	Gl::renderingQueue.push(&npc[0]);
+	std::vector<DrawableObject *> to_render;
+	Gl::storage.room(player.getRoom()).getAllObjects(to_render);
+	for(DrawableObject * obj: to_render)
+		Gl::renderingQueue.push(obj);
+	Gl::renderingQueue.push(&Gl::storage.room(player.getRoom()));
 }
  
 void Game::pause()
