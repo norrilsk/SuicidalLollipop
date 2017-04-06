@@ -2,6 +2,7 @@
 #define _ROOM
 
 #include <set>
+#include "../Storage.hpp"
 #include "NPC.hpp"
 class Room : public Object3D
 {
@@ -14,9 +15,9 @@ public:
 	Room(Model* model);
 	~Room();
 	void getAllObjects(std::vector<DrawableObject *> &);
-	void addObject3D(size_t);
-	void addMovableObject(size_t);
-	void addNPC(size_t);
+	void addObject3D(StorageIndex);
+	void addMovableObject(StorageIndex);
+	void addNPC(StorageIndex);
 };
 #endif
 

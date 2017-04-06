@@ -45,11 +45,11 @@ void Gl :: init(int *argc, char **argv)
         throw(newError(SDL));
     atexit(SDL_Quit);
     window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)WinW, (int)WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//создание окна
-	atexit(terminate);
     if(window == NULL)
         throw(newError(SDL));
     if(SDL_GL_CreateContext(window) == NULL) //Создали котекст OpenGl 
         throw(newError(SDL));
+	atexit(terminate);//В конце удалим окно
     glClearColor(0.0f, 0.0f, 0.9f, 1.0f);//цвет по дефолту
     glClearDepth(1.0); //глубина по дефолту
     glDepthFunc(GL_LESS); //функция для определения глубу
@@ -89,6 +89,8 @@ void Gl :: MainLoop()
     unsigned int time_per_cycle = 0;
     while(true)
     {
+        game.setCamera();
+        display();
         unsigned int time_start = SDL_GetTicks(); //текущее время SDL в милисекундах
         SDL_Event event;
         while(SDL_PollEvent(&event))
@@ -118,8 +120,6 @@ void Gl :: MainLoop()
             }
         }
         game.next(time_per_cycle);
-        game.setCamera();
-        display();
         time_per_cycle = (SDL_GetTicks() - time_start);
         if (time_per_cycle < 17)
             SDL_Delay(17 - time_per_cycle);
@@ -143,8 +143,8 @@ void Gl :: display()
         renderingQueue.front()->draw();
         renderingQueue.pop();
     }
-    glFlush(); //Отрисовываем
-    SDL_GL_SwapWindow(window);
+	glFinish(); //Отрисовываем
+	SDL_GL_SwapWindow(window);
 }
 
 void Gl::checkGLVersion()

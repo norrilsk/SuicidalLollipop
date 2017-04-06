@@ -3,10 +3,17 @@
 
 #include <vector>
 #include <map>
-#include "Objects/Room.hpp"
-#include "Objects/NPC.hpp"
 
 typedef size_t StorageIndex;
+
+class Room;
+class NPC;
+class MovableObject;
+class Object3D;
+class Model;
+class DrawableObject;
+class SDLTexture;
+class SDL_Renderer;
 
 class Storage
 {
@@ -14,19 +21,21 @@ class Storage
 	std::vector <NPC> npcs;
 	std::vector <MovableObject>  movable_objects;
 	std::vector <Object3D>  objects3d;
+	std::vector <SDLTexture> sdl_textures;
 	std::map <std::string, Model> model;
 public:
 	Storage();
 	~Storage();
-	void get_display(Room *, std::vector<DrawableObject *> &);//возвращает все объекты в комнате
 	StorageIndex addNPC(const std::string &);
+	StorageIndex addSDLTexture(SDL_Renderer*, const std::string &);
 	StorageIndex addObject3D  (const std::string &);
 	StorageIndex addMovableObject (const std::string &);
 	StorageIndex addRoom (const std::string &);
-	NPC& npc(StorageIndex ind) { return npcs[ind]; }
-	Object3D& object3d(StorageIndex ind) { return objects3d[ind]; }
-	Room& room (StorageIndex ind) { return rooms[ind]; }
-	MovableObject& movableObject(StorageIndex ind) { return movable_objects[ind]; }
+	NPC& npc(StorageIndex);
+	Object3D& object3d(StorageIndex);
+	Room& room (StorageIndex);
+	MovableObject& movableObject(StorageIndex);
+	SDLTexture& sdlTexture(StorageIndex);
 };
 
 

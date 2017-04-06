@@ -31,7 +31,6 @@ public:
 	bool is_drawable() { return drawable; }//  Рисуем ли я? Ж)
 	bool is_textures() { return !((itexture == false) || (!drawable)); } // есть ли текстуры
 	bool is_normals() { return drawable && inormals; } // есть ли нормали
-	void bind();// биндим мэш обЪект
 	void draw(Texture* = nullptr); // Нарисовать меня
 	void parser(const std::string&); // создает объект из obj файла, передать путь к obj файлу
 	MashObject();

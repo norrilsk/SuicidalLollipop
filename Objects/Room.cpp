@@ -27,17 +27,17 @@ Room::Room(Model *model) : Object3D(model)
 
 }
 
-void Room::addObject3D(size_t ind)
+void Room::addObject3D(StorageIndex ind)
 {
 	objects3d.insert(ind);
 }
 
-void Room::addMovableObject(size_t ind)
+void Room::addMovableObject(StorageIndex ind)
 {
 	movable_objects.insert(ind);
 }
 
-void Room::addNPC(size_t ind)
+void Room::addNPC(StorageIndex ind)
 {
 	npc.insert(ind);
 }

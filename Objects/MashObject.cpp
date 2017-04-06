@@ -129,11 +129,11 @@ void MashObject::parser(const std::string& file_path)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
 	
 	// Предоставляем наши вершины в OpenG
-	glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*verColor.size(), &verColor[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*verColor.size(), verColor.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*uvs.size(), &uvs[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2)*uvs.size(), uvs.data(), GL_STATIC_DRAW);
 	glGenVertexArrays(1, &vao); // создать VAO
 	glBindVertexArray(vao);// Bind VAO
 
