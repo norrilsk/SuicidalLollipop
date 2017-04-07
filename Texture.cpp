@@ -18,7 +18,7 @@ Texture::Texture(const char* path)
 void Texture::loadTexture(const char* path)
 {
 	SDL_Surface *image;
-	image = IMG_Load(path); //  ��������� ��������
+	image = IMG_Load(path); //  загружаем картинку
 	isloaded = true;
 	if (image== NULL) 
 	{
@@ -32,16 +32,16 @@ void Texture::loadTexture(const char* path)
 	glBindTexture(GL_TEXTURE_2D, id);
 
 	GLuint Mode = GL_RGB;
-	if (image->format->BytesPerPixel == 4)  // ���� ���� ������������, ������� ��
+	if (image->format->BytesPerPixel == 4)  // устанавливаем rgb или rgba по возможности
 		Mode = GL_RGBA;
 	glTexImage2D(GL_TEXTURE_2D, 0, Mode, image->w, image->h, 0, Mode,
-	             GL_UNSIGNED_BYTE, image->pixels); // �������� ��������
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // ���� ���������� ���������� ������� ��
+	             GL_UNSIGNED_BYTE, image->pixels); // биндим текстуру 
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // если uv координаты , больше единицыБ то повторить
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-	                GL_LINEAR_MIPMAP_LINEAR);   // ��������� ��������� ������� � ������� �����������
+	                GL_LINEAR_MIPMAP_LINEAR);   // = используем взвешенное среднее четырех ближайших к полученным координатам текселей
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glGenerateMipmap(GL_TEXTURE_2D); // ����������� �������� �������� �������
+	glGenerateMipmap(GL_TEXTURE_2D); // генерирует текстуры худшего качества
 	SDL_FreeSurface(image);
 	*deletable = true;
 }

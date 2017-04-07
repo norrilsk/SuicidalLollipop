@@ -16,14 +16,12 @@ class Texture
 	bool *deletable;
 public:
 	Texture();
-	Texture(const char * path); // �������� loadTexture
-	/* ���������� �� ����� �������� ������ ��� VBO � �������   glBindBuffer 
-	bind */
-	void bind(); // ������ ��������� 
+	Texture(const char * path); // использует  loadTexture
+	void bind(); // bind 
 	~Texture();
-	bool is_loaded() { return isloaded; } // � ���������?
-	void loadTexture(const char * path);// �������� ��������
-	void freeTexture(); //�������� ��������
+	bool is_loaded() { return isloaded; } // я загружена?
+	void loadTexture(const char * path);// загружает текстуру, указать путь на картинку
+	void freeTexture(); //удаляет текстуры
 	Texture (const Texture &);
 };
 #endif
