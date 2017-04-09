@@ -26,6 +26,7 @@ class Storage
 public:
 	Storage();
 	~Storage();
+
 	StorageIndex addNPC(const std::string &);
 	StorageIndex addSDLTexture(SDL_Renderer*, const std::string &);
 	StorageIndex addObject3D  (const std::string &);

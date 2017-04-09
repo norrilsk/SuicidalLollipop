@@ -1,19 +1,27 @@
-﻿#include "Mouse.hpp"
-#include "GLfunc.hpp"
+﻿#include <SDL2/SDL.h>
+#include <iostream>
+#include <GL/glew.h>
+#include "Mouse.hpp"
+#include "Error.hpp"
 
-Mouse::Mouse()
+Mouse::Mouse(SDL_Window * win)
 {
-	X = int(Gl :: WinW)/ 2;
-	Y = int(Gl :: WinH)/ 2;
-	sensity = 20;
-	SDL_WarpMouseInWindow(Gl :: window, X , Y); // устанавливает позицию курсора(X, Y);
+	window = win;
+	if(!window)
+		return;
+	SDL_GetWindowSize(window, &X, &Y);
+	X /= 2;
+	Y /= 2;
+	sensity = 5;
+	SDL_WarpMouseInWindow(window, X , Y); // устанавливает позицию курсора(X, Y);
 }
 
 void Mouse :: centre() 
-{ 
-	X = int(Gl :: WinW)/ 2;
-	Y = int(Gl :: WinH)/ 2;
-	SDL_WarpMouseInWindow(Gl :: window, X , Y);
+{
+	SDL_GetWindowSize(window, &X, &Y);
+	X /= 2;
+	Y /= 2;
+	SDL_WarpMouseInWindow(window, X , Y);
 }
 
 std :: pair <int, int>  Mouse :: getPosition()

@@ -3,9 +3,9 @@
 Object3D::Object3D()
 {
 }
-Object3D::Object3D(Model * mash)
+Object3D::Object3D(Model * modell)
 {
-	model = mash;
+	model = modell;
 }
 Object3D::Object3D(const Object3D & obj)
 {
@@ -16,11 +16,11 @@ Object3D::Object3D(const Object3D & obj)
     ez = A[2];
 	model = obj.model;
 }
-void Object3D::draw(int NUM)
+void Object3D::draw()
 {
 	if (!model->is_drawable())
 		return;
-	model->draw(ModelMat(), NUM);
+	model->draw();
 }
 
 void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection, glm :: dvec3 upperdirection)
@@ -61,6 +61,16 @@ glm :: dvec3 Object3D:: getLookDirection()
 glm :: dvec3 Object3D:: getUpperDirection()
 {
 	return ez;
+}
+
+bool Object3D::is_drawable()
+{
+	return ((model != nullptr) && (model->is_drawable()));
+}
+
+bool Object3D::has_textures()
+{
+	return ((model != nullptr) && (model->is_textures()));
 }
 
 Object3D::~Object3D()

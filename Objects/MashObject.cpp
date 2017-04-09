@@ -1,7 +1,8 @@
 ﻿#include "MashObject.hpp"
 #include <glm/glm.hpp>
 #include <iostream>
-#include"../GLfunc.hpp"
+#include "../Error.hpp"
+
 void MashObject::parser(const std::string& file_path)
 {
 	itexture = true;
@@ -34,6 +35,7 @@ void MashObject::parser(const std::string& file_path)
 		{
 			glm::vec2 uv; // временный вектор текстуры
 			forread >> uv.x >> uv.y;
+			uv.y = 1.0f -uv.y;
 			time_uvs.push_back(uv);
 			continue;
 		}
@@ -127,8 +129,7 @@ void MashObject::parser(const std::string& file_path)
 	// Биндим буфер
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	
-	// Предоставляем наши вершины в OpenG
+	// Предоставляем наши вершины в OpenGl
 	glBufferData(GL_ARRAY_BUFFER,vertices.size()*sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3)*verColor.size(), verColor.data(), GL_STATIC_DRAW);
@@ -158,6 +159,7 @@ void MashObject::parser(const std::string& file_path)
 	*deletable = true;
 	return;
 }
+
 void MashObject::draw(Texture* texture)
 {
 	if (!drawable)

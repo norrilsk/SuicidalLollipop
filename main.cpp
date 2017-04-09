@@ -1,36 +1,15 @@
 #include <iostream>
 
-#include "GLfunc.hpp"
 #include "Game.hpp"
-#include "Loger.hpp"
-using namespace std;
-Game game;
-Loger logfile;
+#include "GameEngine.hpp"
 
-void DealWithError(Error err)
-{
-	if((err.getType() != NONE) && (err.getType() != QUIT))
-		cerr << err.getMessage()<< endl;
-    if(err.getType() != LOGFILE)
-        logfile << err.getMessage() << endl;
-}
+using namespace std;
+
 
 int main(int argc, char **argv)
 {
-	try
-	{
-		logfile.open("Log/GameLog.txt");
-		Gl :: init(&argc, argv);
-		game.start();
-		Gl :: MainLoop(); //запускаем главный цикл
-	}
-	catch (Error err)
-	{
-		DealWithError(err);
-	}
-	catch (...)
-	{
-		DealWithError(newError(OTHER));
-	}
+	GameEngine env(argc, argv); //создаем движек
+	Game game; //создаем нашу игру
+	env.start(&game); //запускаем игру на движке
 	return 0;
 }

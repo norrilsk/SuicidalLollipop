@@ -4,3 +4,4 @@
 #include "Object2D.hpp"
 #include "Menu.hpp"
 #include "NPC.hpp"
+#include "SDLTexture.hpp"

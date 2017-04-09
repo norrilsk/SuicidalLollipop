@@ -1,0 +1,8 @@
+********************LOG STARTED********************
+Date and time:Mon Apr 10 02:50:24 2017
+
+Program ended	
+--------------------LOG FINISHED-------------------
+Date and time:Mon Apr 10 02:50:26 2017
+
+

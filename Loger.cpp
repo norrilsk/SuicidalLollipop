@@ -3,7 +3,7 @@
 
 void Loger::open(const char * path)
 {
-	out.open(path, std::ofstream::out | std::ofstream::app);
+	out.open(path, std::ofstream::out); //| std::ofstream::app);
 	if(!out.is_open())
 	{
 		throw(newError(LOGFILE));

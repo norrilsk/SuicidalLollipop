@@ -1,5 +1,4 @@
 #include "Keyboard.hpp"
-#include "GLfunc.hpp"
 
 Keyboard :: Keyboard()
 {

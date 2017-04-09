@@ -1,8 +1,6 @@
 #include "Texture.hpp"
 #include "Loger.hpp"
 
-extern Loger logfile;
-
 Texture::Texture()
 {
 	deletable = new bool[1];
@@ -20,13 +18,11 @@ void Texture::loadTexture(const char* path)
 	SDL_Surface *image;
 	image = IMG_Load(path); //  загружаем картинку
 	isloaded = true;
-	if (image== NULL) 
+	if (image== NULL)
 	{
-		logfile << "IMG_Load: " << IMG_GetError() << std::endl;
 		isloaded = false;
+		throw(newError2(BINDING_UNLOADED, std::string("IMG_Load: ") + IMG_GetError()));
 	}
-	if (!isloaded)
-		throw(newError(BINDING_UNLOADED));
 
 	glGenTextures(1,&id);
 	glBindTexture(GL_TEXTURE_2D, id);
@@ -35,7 +31,7 @@ void Texture::loadTexture(const char* path)
 	if (image->format->BytesPerPixel == 4)  // устанавливаем rgb или rgba по возможности
 		Mode = GL_RGBA;
 	glTexImage2D(GL_TEXTURE_2D, 0, Mode, image->w, image->h, 0, Mode,
-	             GL_UNSIGNED_BYTE, image->pixels); // биндим текстуру 
+	             GL_UNSIGNED_BYTE, image->pixels); // биндим текстуру
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // если uv координаты , больше единицыБ то повторить
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,

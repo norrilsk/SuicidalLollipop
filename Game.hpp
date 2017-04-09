@@ -1,10 +1,11 @@
 #ifndef _GAME
 #define _GAME
 #include "Objects/Objects.hpp"
-#include "GLfunc.hpp"
-#include "Objects/Room.hpp"
+#include "GameTemplate.hpp"
+#include "GameEngine.hpp"
+#include "Timer.hpp"
 #include <vector>
-class Game
+class Game : public GameTemplate
 {
 	enum GAME_STATE
 	{
@@ -12,16 +13,17 @@ class Game
 		PAUSED
 	}game_state = NORMAL;
 	Player player;
-	unsigned long long GameTime = 0;
+	double GameTime = 0;
+	Timer timer;
 	void checkKeyboard(glm::dvec3& playerMovement, glm::dvec3& playerRotation);//обрабатываем события клавиатурры
 	void checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation);//обрабатываем события мыши
-	void normal_next(unsigned int dt);//в случае если игра идет в нормальном режиме
-	void paused_next(unsigned int dt);//в случае если игра приостановлена
+	void normal_next(double);//в случае если игра идет в нормальном режиме
+	void paused_next(double);//в случае если игра приостановлена
 public:
-	void start();
-	void next(unsigned int dt);// произвести все основные игровые операции. Параметр - время с момента предыдущего запуска
-	void setCamera();//устанавливаем необходимое положение камеры
-	void pause(); //приостановить игру
+	void start() override;
+	void next() override;// произвести все основные игровые операции. Параметр - время с момента предыдущего запуска
+	void focusLost() override; //приостановить игру
+	void focusGained() override; //продолжить игру
 	void goon(); //продолжить игру
 	Game();
 	~Game();

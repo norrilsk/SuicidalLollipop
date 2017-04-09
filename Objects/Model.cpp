@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Model.hpp"
 #include "../Error.hpp"
-#include "../GLfunc.hpp"
 
 void Model::addMash(const std::string & path)
 {
@@ -57,16 +56,11 @@ void Model::setActiveMash(int ind)
 		activeMash = (int)mash.size() - 1;
 }
 
-void Model::draw(glm::mat4 ModelMat, int NUM)
+void Model::draw()
 {
 	if(activeMash < 0)
 		throw(newError(OBJ));
-	glm::mat4 MVP = Gl::Projection * Gl::View*ModelMat;
-	Gl::shaders.useProgram();
-	Gl::shaders.store_MVP(&MVP[0][0]);
-	Gl::shaders.store_int(is_textures(), TEXTURES_ENABLED);
-	Gl::shaders.store_int(NUM, TEXTURE_SAMPLER);
-	if(activeTexture < 0)
+	if(!is_textures())//в зависимости от наличия текстур вызываем разные методы отрисовки
 		mash[activeMash].draw();
 	else
 		mash[activeMash].draw(&textures[activeTexture]);
