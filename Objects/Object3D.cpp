@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Object3D.hpp"
 
 Object3D::Object3D()
@@ -26,11 +27,12 @@ void Object3D::draw()
 void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection, glm :: dvec3 upperdirection)
 {
 	coord = position;
+	//std::cout <<coord.x << " " << coord.y <<" " << coord.z << std::endl;
 	ex = lookdirection;
 	ez = upperdirection;
 	ex /= glm:: length(ex);
 	ez /= glm:: length(ez);
-	ey = ez*ex;
+	ey = glm::cross(ez, ex);
 }
 
 void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection)
@@ -38,9 +40,9 @@ void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection)
 	coord = position;
 	ex = lookdirection;
 	ex /= glm::length(ex);
-	ey = ez*ex;
+	ey = glm::cross(ez, ex);
 	ey /= glm::length(ey);
-	ez = ex*ey;
+	ez = glm::cross(ex, ey);
 }
 glm::mat4 Object3D::ModelMat()
 {
@@ -77,4 +79,14 @@ bool Object3D::has_textures()
 
 Object3D::~Object3D()
 {
+}
+
+void Object3D::setActiveTexture(int ind)
+{
+	model->setActiveTexture(ind);
+}
+
+void Object3D::setActiveMash(int ind)
+{
+	model->setActiveMash(ind);
 }

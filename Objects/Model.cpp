@@ -17,7 +17,7 @@ Model::Model(const std::string &path)
 	std::ifstream in;
 	in.open(path);
 	if (!in.is_open())
-		throw(newError(OBJ));
+		throw(newError(FILE_NOT_OPEN));
 	std::string str;
 	while(!in.eof())
 	{

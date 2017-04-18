@@ -11,7 +11,7 @@ class Object3D : public DrawableObject
 {
 private:
 protected:
-	glm :: dvec3 coord = glm :: dvec3 (-20, 0, 0);//абсолютные координаты 
+	glm :: dvec3 coord = glm :: dvec3 (0, 0, 0);//абсолютные координаты
 	glm :: dmat3 A = glm :: dmat3x3( glm :: dvec3 (1, 0, 0),  glm :: dvec3 (0, 1, 0),  glm :: dvec3 (0, 0, 1)); //направление прямо, направление налево, направление вверх
 	glm :: dvec3  &ex = A[0];
 	glm :: dvec3  &ey = A[1];
@@ -25,6 +25,8 @@ public:
 	void set(glm :: dvec3);//установка coord
 	bool is_drawable(); //может ли быть отображен?
 	bool has_textures(); //есть ли текстуры?
+	void setActiveTexture(int ind);//устанавливаем активную текстуру
+	void setActiveMash(int ind);//устанавлиывем активный меш
 	glm :: dvec3 getPosition();
 	glm :: dvec3 getLookDirection();
 	glm :: dvec3 getUpperDirection();

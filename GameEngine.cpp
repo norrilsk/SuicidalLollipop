@@ -37,9 +37,9 @@ void GameEngine::start(GameTemplate * game)
 		throw (newError2(OTHER, "Game not stated"));
 	this->game = game;
 	game->set_ptr(this, mouse.get(), keyboard.get(), storage.get(), camera.get());
-	game->start();
 	try
 	{
+		game->start();
 		MainLoop();
 	}
 	catch(Error e)

@@ -57,10 +57,9 @@ void Game :: checkMouse(glm::dvec3& playerMovement, glm::dvec3& playerRotation)
 }
 void Game::start()
 {
-	StorageIndex room = storage -> addRoom("Source/Room0.txt");
-	player.setRoom(room);
-	StorageIndex npc = storage -> addNPC("Source/SnowMan.txt");
-	storage -> room(room).addNPC(npc);
+	game_engine ->loadWorld("Source/World.txt");
+	player.setRoom(storage->indexOf("firstRoom"));
+	player.set(glm::dvec3(1.0, -1.0, 1.8), glm::dvec3(1.0, -1.0, 0.0));
 }
 void Game :: normal_next(double dt)
 {
@@ -70,7 +69,7 @@ void Game :: normal_next(double dt)
 	checkKeyboard(playerMovement, playerRotation);//проверяем устройства ввода-вывода
 	checkMouse(playerMovement, playerRotation);
 	mouse -> centre();
-	player.moveRelative(playerMovement*dt);//и двигаем игрока
+	player.moveRelative(0.2*playerMovement*dt);//и двигаем игрока
 	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0), (dt));
 	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z), (dt));
 }
