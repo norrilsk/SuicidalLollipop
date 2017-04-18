@@ -1,1 +1,1 @@
-OBJ ./Source/OBJ/komnata.obj
+OBJ ./Source/OBJ/room_type_2_0.obj

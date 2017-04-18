@@ -39,6 +39,8 @@ void Object3D::set(glm :: dvec3 position, glm :: dvec3 lookdirection)
 	ex = lookdirection;
 	ex /= glm::length(ex);
 	ey = ez*ex;
+	ey /= glm::length(ey);
+	ez = ex*ey;
 }
 glm::mat4 Object3D::ModelMat()
 {

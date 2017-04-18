@@ -15,7 +15,8 @@ enum ErrorType
 		QUIT,
 		SHADER,
 		LOGFILE,
-		BINDING_UNLOADED
+		BINDING_UNLOADED,
+		FILE_NOT_OPEN
 	};
 
 	class Error

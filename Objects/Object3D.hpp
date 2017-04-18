@@ -20,7 +20,7 @@ protected:
 public:
 	void draw();
 	glm::mat4 ModelMat(); // Возвращает матрицу модели
-	void set(glm :: dvec3, glm :: dvec3, glm :: dvec3); //установка coord, ex, ez
+	void set(glm :: dvec3, glm :: dvec3, glm :: dvec3); //установка coord, ex, ez, не стоит указывать ex == ez или ex*ez == 0
 	void set(glm :: dvec3, glm :: dvec3); //установка coord, ex
 	void set(glm :: dvec3);//установка coord
 	bool is_drawable(); //может ли быть отображен?

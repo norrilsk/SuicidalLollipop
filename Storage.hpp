@@ -32,6 +32,7 @@ public:
 	StorageIndex addObject3D  (const std::string &);
 	StorageIndex addMovableObject (const std::string &);
 	StorageIndex addRoom (const std::string &);
+	void loadWorld(const char *);
 	NPC& npc(StorageIndex);
 	Object3D& object3d(StorageIndex);
 	Room& room (StorageIndex);

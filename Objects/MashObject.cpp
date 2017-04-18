@@ -10,7 +10,7 @@ void MashObject::parser(const std::string& file_path)
 	std::ifstream forread;
 	forread.open(file_path);
 	if (!forread.is_open())
-		throw(newError(OBJ));
+		throw(newError2(FILE_NOT_OPEN, file_path));
 
 	std::vector < glm::vec2 >  uvs; //текстурная координата вершины
 	std::vector < glm::vec3 >  normals;// координаты нормали

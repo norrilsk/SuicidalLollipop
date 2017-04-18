@@ -24,6 +24,7 @@ public:
 	GameEngine(int, char **);
 	void start(GameTemplate *); //Запуск игры
 	void renderScene(bool show = true);//Отрисовка трехмерной сцены (Не забудьте установить камеру). Используйте show == false для отложеноой отрисовки
+	void loadWorld(const char * path);//загрузка всей информации о мире
 	void display(); //Выполнить отрисовку (если использовалась отложенная)
 	void Quit(); //выйти из игры
 	~GameEngine();

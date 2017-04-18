@@ -51,6 +51,9 @@ std::string Error::getMessage()
 		case OBJ:
 			res = "Object error\n" +meta;
 			break;
+		case FILE_NOT_OPEN:
+			res = "Can't open file "+ meta;
+			break;
 		case NONE:
 			res = meta;
 			break;

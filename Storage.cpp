@@ -2,6 +2,7 @@
 #include "Objects/NPC.hpp"
 #include "Objects/Room.hpp"
 #include "SDLTexture.hpp"
+#include "Error.hpp"
 
 StorageIndex Storage::addNPC(const std::string & path_to_model)
 {
@@ -74,4 +75,22 @@ MovableObject &Storage::movableObject(StorageIndex ind)
 SDLTexture &Storage::sdlTexture(StorageIndex ind)
 {
 	return sdl_textures[ind];
+}
+
+void Storage::loadWorld(const char * path)
+{
+	std::ifstream in(path);
+	if(!in.is_open())
+		throw(newError2(FILE_NOT_OPEN, path));
+	while(!in.eof())
+	{
+		std::string str;
+		in >> str;
+		if(str == "ROOM")
+		{
+			std::string path;
+			in >> path;
+		}
+
+	}
 }

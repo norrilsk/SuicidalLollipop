@@ -98,3 +98,8 @@ void GameEngine::display()
 	grapher -> display();
 }
 
+void GameEngine::loadWorld(const char *path)
+{
+	storage -> loadWorld(path);
+}
+
