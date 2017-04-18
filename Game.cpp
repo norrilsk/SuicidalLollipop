@@ -64,6 +64,7 @@ void Game::start()
 void Game :: normal_next(double dt)
 {
 	GameTime += dt;
+	storage ->npc("Kolya").moveAbsolute(glm::dvec3(0, 0, 0.01*sin(GameTime)));
 	glm::dvec3 playerMovement(0, 0, 0);//движение игрока
 	glm::dvec3 playerRotation(0, 0, 0);//угловая скорость игрока
 	checkKeyboard(playerMovement, playerRotation);//проверяем устройства ввода-вывода
@@ -97,12 +98,6 @@ void Game :: next()
 	}
 }
 
-void Game::goon()
-{
-	game_state = NORMAL;
-}
-
-
 Game :: ~Game()
 {
 }
@@ -115,4 +110,5 @@ void Game::focusLost()
 void Game::focusGained()
 {
 	game_state = NORMAL;
+	mouse ->centre();
 }

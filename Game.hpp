@@ -24,7 +24,6 @@ public:
 	void next() override;// произвести все основные игровые операции. Параметр - время с момента предыдущего запуска
 	void focusLost() override; //приостановить игру
 	void focusGained() override; //продолжить игру
-	void goon(); //продолжить игру
 	Game();
 	~Game();
 };
