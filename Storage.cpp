@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Storage.hpp"
 #include "Objects/NPC.hpp"
 #include "Objects/Room.hpp"
@@ -134,7 +135,7 @@ void Storage::loadWorld(const char * path)
 			in >>look.x >> look.y >> look.z >> up.x >> up.y >> up.z >>position.x >> position.y >> position.z;
 			object3d(ind).set(position, look, up);
 			in >> objroom;
-			room(objroom).addObject3D(ind);
+			rooms[objroom].addObject3D(ind);
 			in >> mash >> tex;
 			object3d(ind).setActiveMash(mash);
 			object3d(ind).setActiveTexture(mash);
@@ -152,7 +153,7 @@ void Storage::loadWorld(const char * path)
 			in >>look.x >> look.y >> look.z >> up.x >> up.y >> up.z >>position.x >> position.y >> position.z;
 			movableObject(ind).set(position, look, up);
 			in >> objroom;
-			room(objroom).addMovableObject(ind);
+			rooms[objroom].addMovableObject(ind);
 			in >> mash >> tex;
 			movableObject(ind).setActiveMash(mash);
 			movableObject(ind).setActiveTexture(mash);
@@ -170,7 +171,7 @@ void Storage::loadWorld(const char * path)
 			in >>look.x >> look.y >> look.z >> up.x >> up.y >> up.z >>position.x >> position.y >> position.z;
 			npc(ind).set(position, look, up);
 			in >> objroom;
-			room(objroom).addNPC(ind);
+			rooms[objroom].addNPC(ind);
 			in >> mash >> tex;
 			npc(ind).setActiveMash(mash);
 			npc(ind).setActiveTexture(mash);

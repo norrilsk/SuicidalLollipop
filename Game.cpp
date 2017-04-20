@@ -1,4 +1,5 @@
 #include "Game.hpp"
+const double PI = 3.14159265359;
 
 Game :: Game()
 {	
@@ -64,15 +65,20 @@ void Game::start()
 void Game :: normal_next(double dt)
 {
 	GameTime += dt;
-	storage ->npc("Kolya").moveAbsolute(glm::dvec3(0, 0, 0.01*sin(GameTime)));
+	storage ->npc("Kolya").moveAbsolute(glm::dvec3(0, 0, 0.003*sin(2*GameTime)));
+	if(GameTime > temp)
+	{
+		++temp;
+		storage -> movableObject("cube1").rotateAbsolute(glm::dvec3(0, 0, PI/8));
+	}
 	glm::dvec3 playerMovement(0, 0, 0);//движение игрока
 	glm::dvec3 playerRotation(0, 0, 0);//угловая скорость игрока
 	checkKeyboard(playerMovement, playerRotation);//проверяем устройства ввода-вывода
 	checkMouse(playerMovement, playerRotation);
 	mouse -> centre();
 	player.moveRelative(0.2*playerMovement*dt);//и двигаем игрока
-	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0), (dt));
-	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z), (dt));
+	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0)*(dt));
+	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z)*(dt));
 }
 
 void Game :: paused_next(double dt)

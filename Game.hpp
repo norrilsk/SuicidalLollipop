@@ -13,6 +13,7 @@ class Game : public GameTemplate
 		PAUSED
 	}game_state = NORMAL;
 	Player player;
+	int temp = 0;//временная переменная
 	double GameTime = 0;
 	Timer timer;
 	void checkKeyboard(glm::dvec3& playerMovement, glm::dvec3& playerRotation);//обрабатываем события клавиатурры
