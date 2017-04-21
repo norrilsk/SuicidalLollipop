@@ -55,7 +55,7 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 		glClearDepth(1.0); //глубина по дефолту
 		glClearStencil(0);//буфер граней по дефолту
 		glDepthFunc(GL_LESS); //функция для определения глубу
-		//glEnable(GL_CULL_FACE); //отключение не лицевых граней
+		glEnable(GL_CULL_FACE); //отключение не лицевых граней
 		glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
 		glEnable(GL_TEXTURE_2D);// включаем 2D текстуры
 		SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
@@ -106,6 +106,7 @@ void GraphicEngine::display()
 		data.ViewMatrix = cam->View();
 		data.CameraPos = glm::vec4(cam->getPosition(), 1);
 		////
+		data.number_of_lights = 4;
 		glm::vec3 lightpos = glm::vec3(5, -5, 5);
 		glm::vec3 lightcolors = glm::vec3(1, 1, 0.9f);
 		float power = 10.0f;
@@ -121,14 +122,13 @@ void GraphicEngine::display()
 		data.LightPower[3] = power*10 ;
 		data.LightPower[2] = power / 100;
 		data.LightPower[1] = power*0;
-		data.number_of_lights = 4;
 		data.source_type[0] = 0;
 		data.source_type[3] = 0;
 		data.source_type[1] = 1;
 		data.source_type[2] = 2;
 		data.ambient_power = 0.1;
-		data.cos_angle[0] = glm::cos(30 * 3.141592 / 180);
-		data.cos_angle[3] = glm::cos(22 * 3.141592 / 180);
+		data.cos_angle[0] = (float) cos(30 * 3.141592 / 180);
+		data.cos_angle[3] = (float) cos(22 * 3.141592 / 180);
 		data.LightDirection[0] = glm::vec4(-1, -1, -0.5, 1);
 		data.LightDirection[3] = glm::vec4(1, -1, -1, 1);
 		data.LightDirection[2] = glm::vec4(0, 0.5, -1, 1);
@@ -138,7 +138,7 @@ void GraphicEngine::display()
 			Object3D *obj = renderingQueueGl.front();
 			if (obj->is_drawable())
 			{
-				data.textures_enabled = obj->has_textures();
+				data.textures_enabled = (unsigned int) obj->has_textures();
 				shaders.setTextureSampler(0);
 				data.ViewMatrix = cam->View();
 				data.ModelMatrix = obj->ModelMat();

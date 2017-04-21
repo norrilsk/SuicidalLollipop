@@ -43,49 +43,47 @@ void main()
 
 	vec3 MDC = vec3(0.0,0.0,0.0);
 	vec3 MSC = vec3(0.0,0.0,0.0);
-	vec3 e;
+	vec3 e = normalize(EyeDirection); // vector Direction of sight
+	vec3 n = ( Normal ); // ­normal vector in world space
+
 	for (int i = 0; i < number_of_lights; i++)
 	{
-	
+    	vec3 l = ( LightPosition_worldspace[i]).xyz - Position_worldspace; //  ­light direction from vertex to light
+    	vec3 ref, d;
+    	float cosTheta, cosAlpha, dist2;
 	switch (source_type[i])
 		{
 		case 1:
-			vec3 n = ( Normal ); // ­normal vector in world space
-			vec3 l = ( LightPosition_worldspace[i]).xyz - Position_worldspace; //  ­light direction from vertex to light
 			//dot -- scalar product
-			float cosTheta = clamp( dot( n,l )/length(n)/length(l), 0, 1 );	// cos of the angle between normal and direction
-			e = normalize(EyeDirection); // vector Direction of sight
-			vec3 ref = normalize(reflect(-l,n)); //direction of reflection 
-			float cosAlpha = clamp( dot( e,ref ), 0,1 );  // cos of angle between vector Direction of sight and vector of reflection 
+			cosTheta = clamp( dot( n,l )/length(n)/length(l), 0, 1 );	// cos of the angle between normal and direction
+			ref = normalize(reflect(-l,n)); //direction of reflection
+			cosAlpha = clamp( dot( e,ref ), 0,1 );  // cos of angle between vector Direction of sight and vector of reflection
 			if ((cosAlpha == 0) && (cosTheta == 0))
 				break;
-			float dist = length( LightPosition_worldspace[i].xyz - Position_worldspace );// distance from vertex to light source
-			MDC += MaterialDiffuseColor *LightColor[i].xyz * LightPower[i]* cosTheta / (dist*dist) ;
-			MSC += MaterialSpecularColor * LightColor[i].xyz * LightPower[i] * pow(cosAlpha,5) / (dist*dist);
-			
+    	    d = (LightPosition_worldspace[i].xyz - Position_worldspace) * (LightPosition_worldspace[i].xyz - Position_worldspace);
+    	    dist2  = d.x + d.y + d.z;// square of distance from vertex to light source
+			MDC += MaterialDiffuseColor *LightColor[i].xyz * LightPower[i]* cosTheta / dist2 ;
+			MSC += MaterialSpecularColor * LightColor[i].xyz * LightPower[i] * pow(cosAlpha,5) / dist2;
+
 			break;
 		case 0:
-			l = (LightPosition_worldspace[i]).xyz - Position_worldspace; //  ­light direction from light source to vertex
 			float cosFI = dot(LightDirection[i].xyz, -l)/length(l)/length(LightDirection[i].xyz);
 			if (cosFI <= (angle[i]))
 				break;
-			n = ( Normal ); // ­normal vector in world space
 			//dot -- scalar product
 			cosTheta = clamp( dot( n,l )/length(n)/length(l), 0, 1 );	// cos of the angle between normal and direction
-			e = normalize(EyeDirection); // vector Direction of sight
-			ref = normalize(reflect(-l,n)); //direction of reflection 
-			cosAlpha = clamp( dot( e,ref ), 0,1 );  // cos of angle between vector Direction of sight and vector of reflection 
-			dist = length( LightPosition_worldspace[i].xyz - Position_worldspace );// distance from vertex to light source
-			MDC += MaterialDiffuseColor *LightColor[i].rgb * LightPower[i]* cosTheta /(dist*dist)*(cosFI- angle[i]) ;
-			MSC += MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5) / (dist*dist)*(cosFI-angle[i]);
+			ref = normalize(reflect(-l,n)); //direction of reflection
+			cosAlpha = clamp( dot( e,ref ), 0,1 );  // cos of angle between vector Direction of sight and vector of reflection
+    	    d = (LightPosition_worldspace[i].xyz - Position_worldspace) * (LightPosition_worldspace[i].xyz - Position_worldspace);
+    	    dist2  = d.x + d.y + d.z;// square of distance from vertex to light source
+			MDC += MaterialDiffuseColor *LightColor[i].rgb * LightPower[i]* cosTheta /dist2*(cosFI- angle[i]) ;
+			MSC += MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5) / dist2*(cosFI-angle[i]);
 			break;
 		case 2:
-
-			n = ( Normal ); // ­normal vector in world space
 			if (dot(LightDirection[i].xyz, -n) < 0)
 				break;
 			MDC += MaterialDiffuseColor *LightColor[i].rgb * LightPower[i];//
-			MSC += MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5);
+			//MSC += MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5);
 			break;
 		default:
 			break;
