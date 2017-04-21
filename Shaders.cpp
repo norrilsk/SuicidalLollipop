@@ -33,7 +33,11 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 		GLint status;
 		glGetShaderiv(shaderid[shader.second], GL_COMPILE_STATUS, &status);// проверим компиляцию
 		if (status == GL_FALSE)
-			throw(newError(SHADER));
+		{
+			GLchar forlog[2048];
+			glGetShaderInfoLog(shaderid[shader.second], 2048, nullptr, forlog);
+			throw(newError2(SHADER, std::string(forlog) + "\n" + shader.first));
+		}
 		type.push_back(shader.second);
 	}
 	programid = glCreateProgram();// связать программу щейдера с ID

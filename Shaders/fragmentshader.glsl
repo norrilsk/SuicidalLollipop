@@ -1,4 +1,4 @@
-#version 330 core
+﻿#version 330 core
 
 uniform int textures_enabled;
 uniform sampler2D textureSampler;

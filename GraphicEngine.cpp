@@ -1,6 +1,6 @@
 #include <iostream>
 #include "GraphicEngine.hpp"
-
+#include"Objects/Room.hpp"
 
 GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *camera): cam(camera), GlMode(OpenGl)
 {
@@ -47,10 +47,13 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 			throw(newError(SDL));
 		if(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16) < 0)//ставим размер буфера глубины
 			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) < 0)
+			throw(newError(SDL));
 		if (SDL_GL_CreateContext(window) == NULL) //Создали котекст OpenGl
 			throw (newError(SDL));
 		glClearColor(0.0f, 0.0f, 0.9f, 1.0f);//цвет по дефолту
 		glClearDepth(1.0); //глубина по дефолту
+		glClearStencil(0);//буфер граней по дефолту
 		glDepthFunc(GL_LESS); //функция для определения глубу
 		//glEnable(GL_CULL_FACE); //отключение не лицевых граней
 		glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
@@ -94,7 +97,7 @@ void GraphicEngine::check_GL_version(Loger *logfile)
 
 void GraphicEngine::display()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //очищаем экран и буфер глубины
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
 	if(GlMode)
 	{
 		cam->Look();

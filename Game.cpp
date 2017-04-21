@@ -60,7 +60,8 @@ void Game::start()
 {
 	game_engine ->loadWorld("Source/World.txt");
 	player.setRoom(storage->indexOf("firstRoom"));
-	player.set(glm::dvec3(1.0, -1.0, 1.8), glm::dvec3(1.0, -1.0, 0.0));
+	player.set(glm::dvec3(1.0, -1.0, 1.8), glm::dvec3(1.0, -1.0, 0.0),glm::dvec3(0.0,0.0,0.1));
+	timer.restart();
 }
 void Game :: normal_next(double dt)
 {
@@ -90,8 +91,13 @@ void Game :: next()
 	camera -> set(player.getPosition(), player.getLookDirection(), player.getUpperDirection()); //устанавливаем камеру
 	camera -> setRoom(player.getRoom());
 	game_engine -> renderScene(); //и отрисовываем все;
+	
+	double dt;
+	while ((dt = timer.count()) < 0.016667)
+	{
 
-	double dt = timer.count();
+	}
+	std::cout << 1 / dt << std::endl;
 	timer.restart();
 	switch(game_state)
 	{

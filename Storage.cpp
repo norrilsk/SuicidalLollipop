@@ -31,7 +31,7 @@ StorageIndex Storage::addMovableObject (const std::string & path_to_model)
 
 StorageIndex Storage::addRoom(const std::string & path_to_model)
 {
-	if(model.find(path_to_model) == model.end())//Если меш ещё не существует создаем
+if(model.find(path_to_model) == model.end())//Если меш ещё не существует создаем
 		model[path_to_model] = Model(path_to_model);
 	rooms.emplace_back(Room(&model[path_to_model], this));
 	return (rooms.size() - 1) * NumberOfTypes + RoomInd;

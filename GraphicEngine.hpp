@@ -2,7 +2,7 @@
 #define _ENGINE
 
 #include <iostream>
-#include <SDL2/SDL_video.h>
+#include <SDL2/SDL.h>
 #include <queue>
 #include "Objects/Object2D.hpp"
 #include "Camera.hpp"

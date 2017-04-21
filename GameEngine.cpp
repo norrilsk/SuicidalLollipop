@@ -27,6 +27,7 @@ GameEngine::GameEngine(int argc, char **argv)
 	catch(Error e)
 	{
 		logTrouble(e);
+		exit(0);
 	}
 
 }
@@ -53,7 +54,6 @@ void GameEngine::MainLoop()
 	unsigned int time = SDL_GetTicks();
 	while(true)
 	{
-		game->next();
 		SDL_Event event;
 		while(SDL_PollEvent(&event))
 		{
@@ -78,6 +78,7 @@ void GameEngine::MainLoop()
 					break;
 			}
 		}
+		game->next();
 	}
 }
 
