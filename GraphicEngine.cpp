@@ -117,10 +117,10 @@ void GraphicEngine::display()
 		data.LightPosition_worldspace[0] = glm::vec4(lightpos, 1);
 		data.LightPosition_worldspace[2] = glm::vec4(lightpos, 1);
 		data.LightPosition_worldspace[3] = glm::vec4(lightpos, 1);
-		data.LightPower[0] = power*5;
-		data.LightPower[3] = power * 5;
+		data.LightPower[0] = power*10;
+		data.LightPower[3] = power*10 ;
 		data.LightPower[2] = power / 100;
-		data.LightPower[1] = power;
+		data.LightPower[1] = power*0;
 		data.number_of_lights = 4;
 		data.source_type[0] = 0;
 		data.source_type[3] = 0;

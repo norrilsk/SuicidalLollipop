@@ -66,8 +66,8 @@ void main()
 			break;
 		case 0:
 			l = (LightPosition_worldspace[i]).xyz - Position_worldspace; //  ­light direction from light source to vertex
-
-			if (dot(LightDirection[i].xyz, -l) <= (angle[i]* length(l)*length(LightDirection[i].xyz)))
+			float cosFI = dot(LightDirection[i].xyz, -l)/length(l)/length(LightDirection[i].xyz);
+			if (cosFI <= (angle[i]))
 				break;
 			n = ( Normal ); // ­normal vector in world space
 			//dot -- scalar product
@@ -76,8 +76,8 @@ void main()
 			ref = normalize(reflect(-l,n)); //direction of reflection 
 			cosAlpha = clamp( dot( e,ref ), 0,1 );  // cos of angle between vector Direction of sight and vector of reflection 
 			dist = length( LightPosition_worldspace[i].xyz - Position_worldspace );// distance from vertex to light source
-			MDC += MaterialDiffuseColor *LightColor[i].rgb * LightPower[i]* cosTheta / (dist*dist) ;
-			MSC += MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5) / (dist*dist);
+			MDC += MaterialDiffuseColor *LightColor[i].rgb * LightPower[i]* cosTheta /(dist*dist)*(cosFI- angle[i]) ;
+			MSC += MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5) / (dist*dist)*(cosFI-angle[i]);
 			break;
 		case 2:
 
