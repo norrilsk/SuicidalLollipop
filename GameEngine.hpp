@@ -1,7 +1,7 @@
 #ifndef _GAMEENGINE
 #define _GAMEENGINE
 
-#include <bits/unique_ptr.h>
+#include <memory>
 #include "Camera.hpp"
 #include "GraphicEngine.hpp"
 #include "Mouse.hpp"

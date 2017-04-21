@@ -26,21 +26,31 @@ const double &Camera::FOV()
 
 const double &Camera::nearSurface()
 {
-	return near;
+	return zNear;
 }
 
 const double &Camera::farSurface()
 {
-	return far;
+	return zFar;
 }
 
 void Camera::setView(double FOV, double WtoH, double nearSurface, double farSurface)
 {
 	fov  = FOV;
 	wtoh = WtoH;
-	near = nearSurface;
-	far  = farSurface;
-	projection = glm::perspective(fov,wtoh, near, far);
+	zNear = nearSurface;
+	zFar  = farSurface;
+	projection = glm::perspective(fov,wtoh, zNear, zFar);
+}
+
+void Camera::setRoom(StorageIndex ind)
+{
+	current_room = ind;
+}
+
+StorageIndex Camera::getRoom()
+{
+	return current_room;
 }
 
 

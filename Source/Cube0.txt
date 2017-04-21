@@ -1,0 +1,2 @@
+OBJ ./Source/OBJ/cube.obj
+TEX ./Source/Textures/cube.png
