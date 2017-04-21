@@ -1,7 +1,7 @@
 ﻿#include "Shaders.hpp"
 #include"Error.hpp"
-
-
+#include "Loger.hpp"
+extern Loger logfile;
 Shaders::Shaders()
 {
 }
@@ -50,9 +50,13 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 	glGetProgramiv(programid, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
 		throw(newError(SHADER));
-	//GLuint colour_loc = glGetUniformLocation(programid, "inputColour");
+	glGenBuffers(1, &ssbo);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
+	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shader_data), nullptr, GL_STREAM_COPY);
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 	glUseProgram(programid); ////add, CHECK
-	//glUniform4f(colour_loc, 1.0f, 0.0f, 0.0f, 1.0f);
+							 //glUniform4f(colour_loc, 1.0f, 0.0f, 0.0f, 1.0f);
 
 	for (GLuint shaderType : type)
 	{
@@ -60,30 +64,21 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 	}
 }
 
-void Shaders::store_MVP(void* src)
+void Shaders::ssboUpdate(shader_data* data)
 {
-	GLint matrix = glGetUniformLocation(programid, "MVP"); // создаем ID для матрицы
-	glUniformMatrix4fv(matrix, 1, GL_FALSE, (const GLfloat *)src); // информируем шейдер о нашей матрице
+	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+	GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
+
+	memcpy(p, data, sizeof(struct shader_data));
+	//	((shader_data *)p)->LightPosition_worldspace[1] = glm::vec3(1, 1, 1);
+	glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 }
 
-void Shaders::store_int(int num, integerName en)
+void Shaders::setTextureSampler(int sampler)
 {
-	GLint ID = -1;
-	switch (en)
-	{
-		case TEXTURES_ENABLED:
-			ID = glGetUniformLocation(programid, "textures_enabled"); // создаем ID для текстуры
-			break;
-		case NORMALS_ENABLED:
-			ID = glGetUniformLocation(programid, "normals_enabled"); // создаем ID для нормали
-			break;
-		case TEXTURE_SAMPLER:
-			ID = glGetUniformLocation(programid, "textureSampler");
-			break;
-	}
-	glUniform1i(ID, num); // информируем шейдер о наших числах
+	GLuint ID = glGetUniformLocation(programid, "textureSampler");
+	glUniform1i(ID, sampler);
 }
-
 Shaders::~Shaders()
 {
 }

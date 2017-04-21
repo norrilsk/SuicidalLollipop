@@ -4,6 +4,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <string>
 #define _GLheader
 #ifdef _WIN32
 #include <Windows.h>
@@ -13,30 +14,41 @@
 #include <GL/glew.h>
 #include <GL/glu.h>
 #endif
-
-enum integerName
+#include<glm/glm.hpp>
+struct shader_data
 {
-	TEXTURES_ENABLED,
-	NORMALS_ENABLED,
-	TEXTURE_SAMPLER
+public:
+	glm::mat4 ModelMatrix;
+	glm::mat4 ViewMatrix;
+	glm::mat4 MVP;
+	glm::mat4 MV;
+	glm::vec4 CameraPos;
+	glm::vec4 LightPosition_worldspace[100];
+	glm::vec4 LightColor[100];
+	glm::vec4 LightDirection[100];
+	float LightPower[100];
+	float cos_angle[100];
+	float ambient_power;
+	unsigned int number_of_lights;
+	unsigned int textures_enabled; //флаги
+	unsigned int source_type[100];//   0-конус 1 - точечный 2 - плоский
 };
-
 class Shaders
 {
-	std::map<GLuint,GLuint> shaderid; // Карта соответствия между типо шейдера в GL и ID шейдера
+	std::map<GLuint, GLuint> shaderid; // Карта соответствия между типо шейдера в GL и ID шейдера
 	GLuint programid; // ID программы
+	GLuint ssbo;
 	std::vector<GLuint> type; // вектор типов всех существующих щейдеров
-
 public:
 	/*Загрузка Шейдеров
 	1й элемент пары - путь к программе шейдера
 	2й элемент пары - тип шейдера GL */
-	void Load(std::vector<std::pair<std::string, GLuint> >& ShadersPaths); 
+	void Load(std::vector<std::pair<std::string, GLuint> >& ShadersPaths);
 	GLuint Id(GLuint shaderType) { return shaderid.at(shaderType); } // возвращает ID по указанному типу шейдера
 	Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths); // аналогично LOAD
-	void store_MVP(void*); // Сохраняет матрицу MVP
-	void store_int(int,integerName); //сохраняет числа в шейдеры
+	void ssboUpdate(shader_data*);
 	void useProgram() { glUseProgram(programid); };
+	void setTextureSampler(int); //устанавливает текстурный  шаблон
 	Shaders();
 	~Shaders();
 };

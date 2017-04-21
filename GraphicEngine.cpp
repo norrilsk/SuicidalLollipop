@@ -30,8 +30,8 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 	window = SDL_CreateWindow("SuicidalLollipop", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, (int)WinW, (int)WinH, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);//создание окна
 	if(w * h <= 0)
 	{
-		if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
-			throw(newError(SDL));
+		//if(SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) < 0) // True Full screen
+			//throw(newError(SDL));
 	}
 	if(window == NULL)
 		throw(newError(SDL));
@@ -102,16 +102,50 @@ void GraphicEngine::display()
 	{
 		cam->Look();
 		glm::mat4 VP = cam->Projection() * cam->View();
+		shader_data data;
+		data.ViewMatrix = cam->View();
+		data.CameraPos = glm::vec4(cam->getPosition(), 1);
+		////
+		glm::vec3 lightpos = glm::vec3(5, -5, 5);
+		glm::vec3 lightcolors = glm::vec3(1, 1, 0.9f);
+		float power = 10.0f;
+		data.LightPosition_worldspace[1] = glm::vec4(lightpos, 1);
+		data.LightColor[1] = glm::vec4(1, 1, 1, 1);
+		data.LightColor[0] = glm::vec4(lightcolors, 1);
+		data.LightColor[2] = glm::vec4(1, 1, 1, 1);
+		data.LightColor[3] = glm::vec4(lightcolors, 1);
+		data.LightPosition_worldspace[0] = glm::vec4(lightpos, 1);
+		data.LightPosition_worldspace[2] = glm::vec4(lightpos, 1);
+		data.LightPosition_worldspace[3] = glm::vec4(lightpos, 1);
+		data.LightPower[0] = power*5;
+		data.LightPower[3] = power * 5;
+		data.LightPower[2] = power / 100;
+		data.LightPower[1] = power;
+		data.number_of_lights = 4;
+		data.source_type[0] = 0;
+		data.source_type[3] = 0;
+		data.source_type[1] = 1;
+		data.source_type[2] = 2;
+		data.ambient_power = 0.1;
+		data.cos_angle[0] = glm::cos(30 * 3.141592 / 180);
+		data.cos_angle[3] = glm::cos(22 * 3.141592 / 180);
+		data.LightDirection[0] = glm::vec4(-1, -1, -0.5, 1);
+		data.LightDirection[3] = glm::vec4(1, -1, -1, 1);
+		data.LightDirection[2] = glm::vec4(0, 0.5, -1, 1);
+		////
 		while (!renderingQueueGl.empty())
 		{
 			Object3D *obj = renderingQueueGl.front();
 			if (obj->is_drawable())
 			{
-				glm::mat4 MVP = VP * obj->ModelMat(); // Возвращает матрицу модели;
+				data.textures_enabled = obj->has_textures();
+				shaders.setTextureSampler(0);
+				data.ViewMatrix = cam->View();
+				data.ModelMatrix = obj->ModelMat();
+				data.MVP = VP* data.ModelMatrix;
+				data.MV = data.ViewMatrix*data.ModelMatrix;
+				shaders.ssboUpdate(&data);
 				shaders.useProgram();
-				shaders.store_MVP(&MVP[0][0]);
-				shaders.store_int(obj->has_textures(), TEXTURES_ENABLED);
-				shaders.store_int(0, TEXTURE_SAMPLER);
 				obj->draw();
 			}
 			renderingQueueGl.pop();
