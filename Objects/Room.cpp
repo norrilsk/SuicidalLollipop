@@ -1,5 +1,5 @@
 #include "Room.hpp"
-
+#include "Objects/LightSource.hpp"
 
 Room::Room()
 {
@@ -18,6 +18,12 @@ void Room::getAllObjects(std::vector<Object3D *> & store)
 		store.push_back((Object3D *) &(storage->movableObject(ind)));
 	for(StorageIndex ind: objects3d)
 		store.push_back((Object3D *) &(storage->object3d(ind)));
+}
+
+void Room::getAllLights(std::vector<LightSource *> &  store)
+{
+	for(StorageIndex ind: light_sources)
+		store.push_back(&(storage->lightSource(ind)));
 }
 
 Room::Room(Model *model, Storage * str) : Object3D(model)
@@ -39,5 +45,12 @@ void Room::addNPC(StorageIndex ind)
 {
 	npc.insert(ind);
 }
+
+void Room::addLightSource(StorageIndex ind)
+{
+	light_sources.insert(ind);
+}
+
+
 
 

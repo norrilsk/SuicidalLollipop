@@ -20,6 +20,7 @@ class GraphicEngine
 	bool GlMode = false;
 	std::queue <Object3D*> renderingQueueGl;// очередь отрисовки Gl
 	std::queue <Object2D*> renderingQueueSDL;// очередь отрисовки SDL
+	std::queue <LightSource *> lightQueue;//очередь отрисовки света
 	Shaders shaders;
 	void check_GL_version(Loger * logfile);
 	Camera * cam;
@@ -28,6 +29,7 @@ public:
 	void portalRendering(Storage * storage); //общет сцены методом портального рендеринга
 	void addToRender(Object3D *); //добавляем объекты в очередь отрисовки
 	void addToRender(Object2D *);
+	void addToRender(LightSource *);
 	void display(); //запускаем отрисовку
 	SDL_Window * getWindow(){return window;}
 	~GraphicEngine();

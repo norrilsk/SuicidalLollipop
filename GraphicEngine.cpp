@@ -1,6 +1,7 @@
 #include <iostream>
 #include "GraphicEngine.hpp"
 #include"Objects/Room.hpp"
+#include "Objects/LightSource.hpp"
 
 GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *camera): cam(camera), GlMode(OpenGl)
 {
@@ -35,7 +36,7 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 	}
 	if(window == NULL)
 		throw(newError(SDL));
-	//if(OpenGl)
+	if(OpenGl)
 	{
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
 			throw(newError(SDL));
@@ -105,7 +106,16 @@ void GraphicEngine::display()
 		shader_data data;
 		data.ViewMatrix = cam->View();
 		data.CameraPos = glm::vec4(cam->getPosition(), 1);
-		////
+		data.number_of_lights = (unsigned int) lightQueue.size();
+		int i = 0;
+		while(!lightQueue.empty())
+		{
+			lightQueue.front()->moveToStructure(&data , i++);
+			lightQueue.pop();
+		}
+		data.ambient_power = 0.1;
+		//std:: cout << data.cos_angle[0] << " " << data.LightPosition_worldspace[0].x << " " << data.LightPosition_worldspace[0].y << " " << data.LightPosition_worldspace[0].z << std::endl;
+		/*
 		data.number_of_lights = 4;
 		glm::vec3 lightpos = glm::vec3(5, -5, 5);
 		glm::vec3 lightcolors = glm::vec3(1, 1, 0.9f);
@@ -132,7 +142,7 @@ void GraphicEngine::display()
 		data.LightDirection[0] = glm::vec4(-1, -1, -0.5, 1);
 		data.LightDirection[3] = glm::vec4(1, -1, -1, 1);
 		data.LightDirection[2] = glm::vec4(0, 0.5, -1, 1);
-		////
+		*/
 		while (!renderingQueueGl.empty())
 		{
 			Object3D *obj = renderingQueueGl.front();
@@ -164,14 +174,26 @@ void GraphicEngine::addToRender(Object2D * obj)
 	renderingQueueSDL.push(obj);
 }
 
+void GraphicEngine::addToRender(LightSource *obj)
+{
+	lightQueue.push(obj);
+}
+
 void GraphicEngine::portalRendering(Storage * storage)
 {
 	std::vector <Object3D *> vec;
+	std::vector <LightSource *> lights;
 	Room &room = storage->room(cam->getRoom());
 	room.getAllObjects(vec);
+	room.getAllLights(lights);
+	for (LightSource *light : lights)
+	{
+		addToRender(light);
+	}
 	for (Object3D *obj : vec)
 	{
 		addToRender(obj);
 	}
 	addToRender(&room);
 }
+

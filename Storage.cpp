@@ -4,12 +4,14 @@
 #include "Objects/Room.hpp"
 #include "SDLTexture.hpp"
 #include "Error.hpp"
+#include "Objects/LightSource.hpp"
+#include "Objects/Portal.hpp"
 
 StorageIndex Storage::addNPC(const std::string & path_to_model)
 {
 	if(model.find(path_to_model) == model.end()) //Если меш ещё не существует создаем
 		model[path_to_model] = Model(path_to_model);
-	npcs.emplace_back(NPC(&model[path_to_model]));
+	npcs.emplace_back(&model[path_to_model]);
 	return (npcs.size() - 1) * NumberOfTypes + NPCInd;
 }
 
@@ -17,7 +19,7 @@ StorageIndex Storage::addObject3D (const std::string & path_to_model)
 {
 	if(model.find(path_to_model) == model.end())//Если меш ещё не существует создаем
 		model[path_to_model] = Model(path_to_model);
-	objects3d.emplace_back(Object3D(&model[path_to_model]));
+	objects3d.emplace_back(&model[path_to_model]);
 	return (objects3d.size() - 1) * NumberOfTypes + Object3DInd;
 }
 
@@ -25,7 +27,7 @@ StorageIndex Storage::addMovableObject (const std::string & path_to_model)
 {
 	if(model.find(path_to_model) == model.end())//Если меш ещё не существует создаем
 		model[path_to_model] = Model(path_to_model);
-	movable_objects.emplace_back(MovableObject(&model[path_to_model]));
+	movable_objects.emplace_back(&model[path_to_model]);
 	return (movable_objects.size() - 1) * NumberOfTypes + MovableObjectInd;
 }
 
@@ -33,15 +35,31 @@ StorageIndex Storage::addRoom(const std::string & path_to_model)
 {
 if(model.find(path_to_model) == model.end())//Если меш ещё не существует создаем
 		model[path_to_model] = Model(path_to_model);
-	rooms.emplace_back(Room(&model[path_to_model], this));
+	rooms.emplace_back(&model[path_to_model], this);
 	return (rooms.size() - 1) * NumberOfTypes + RoomInd;
 }
 
 StorageIndex Storage::addSDLTexture(SDL_Renderer* renderer,const std::string & path)
 {
-	sdl_textures.emplace_back(SDLTexture(renderer, path.c_str()));
+	sdl_textures.emplace_back(renderer, path.c_str());
 	return (sdl_textures.size() - 1) * NumberOfTypes + SDLTextureInd;
 }
+
+StorageIndex Storage::addLightSource(const SourceType& type)
+{
+	light_sources.emplace_back(type);
+	return (light_sources.size() - 1)*NumberOfTypes + LightSourceInd;
+}
+
+StorageIndex Storage::addPortal(const std::string & path)
+{
+	portals.push_back(Portal());
+	std::vector<glm::dvec3> coord = {glm::dvec3(1.0, 0.0, 0.0), glm::dvec3(0.0, 0.0, 1.0), glm::dvec3(-1, 0.0, -1)}; //TODO написать парсер здесь
+	portals.back().createPottal(3, coord.data(), indexOf("firstRoom"));
+	return (portals.size() - 1)*NumberOfTypes + PortalInd;
+}
+
+
 
 Storage::~Storage()
 {
@@ -103,6 +121,15 @@ SDLTexture &Storage::sdlTexture(const std::string & name)
 	return sdlTexture(nick_names.at(name));
 }
 
+LightSource &Storage::lightSource(StorageIndex ind)
+{
+	return light_sources[ind / NumberOfTypes];
+}
+LightSource &Storage::lightSource(const std::string & name)
+{
+	return lightSource(nick_names.at(name));
+}
+
 void Storage::loadWorld(const char * path)
 {
 	std::ifstream in(path);
@@ -120,7 +147,7 @@ void Storage::loadWorld(const char * path)
 			StorageIndex ind = addRoom(filePath);
 			in >> mash >> tex;
 			room(ind).setActiveMash(mash);
-			room(ind).setActiveTexture(mash);
+			room(ind).setActiveTexture(tex);
 			in >> name;
 			create_nickname(name, ind);
 		}
@@ -138,7 +165,7 @@ void Storage::loadWorld(const char * path)
 			rooms[objroom].addObject3D(ind);
 			in >> mash >> tex;
 			object3d(ind).setActiveMash(mash);
-			object3d(ind).setActiveTexture(mash);
+			object3d(ind).setActiveTexture(tex);
 			in >> name;
 			create_nickname(name, ind);
 		}
@@ -156,7 +183,7 @@ void Storage::loadWorld(const char * path)
 			rooms[objroom].addMovableObject(ind);
 			in >> mash >> tex;
 			movableObject(ind).setActiveMash(mash);
-			movableObject(ind).setActiveTexture(mash);
+			movableObject(ind).setActiveTexture(tex);
 			in >> name;
 			create_nickname(name, ind);
 		}
@@ -174,10 +201,44 @@ void Storage::loadWorld(const char * path)
 			rooms[objroom].addNPC(ind);
 			in >> mash >> tex;
 			npc(ind).setActiveMash(mash);
-			npc(ind).setActiveTexture(mash);
+			npc(ind).setActiveTexture(tex);
 			in >> name;
 			create_nickname(name, ind);
 		}
+		else if (str == "LIGHTSOURCE")
+		{
+			std::string source_type,name;
+			StorageIndex objroom;
+			glm::dvec3 position, look;
+			glm::vec3 color;
+			float power, angle;
+			in >> source_type;
+			SourceType type = SPHERIC;
+			if (source_type == "CONIC")
+			{
+				type = CONIC;
+			}
+			else if (source_type == "SPHERIC")
+			{
+				type = SPHERIC;
+			}
+			else if (source_type == "PARALLEL")
+			{
+				type = PARALLEL;
+			}
+			StorageIndex ind = addLightSource(type);
+			in >> look.x >> look.y >> look.z >> position.x >> position.y >> position.z >> color.x >> color.y >> color.z;
+			lightSource(ind).set(position, look);
+			lightSource(ind).setColor(color);
+			in >> power >> angle;
+			lightSource(ind).setPower(power);
+			lightSource(ind).setAngle(angle);
+			in >> objroom;
+			rooms[objroom].addLightSource(ind);
+			in >> name;
+			create_nickname(name, ind);
+		}
+
 
 	}
 }
@@ -191,5 +252,8 @@ StorageIndex Storage::indexOf(const std::string & name)
 {
 	return nick_names.at(name);
 }
+
+
+
 
 

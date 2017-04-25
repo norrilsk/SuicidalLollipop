@@ -1,3 +1,4 @@
+#include "Objects/Portal.hpp"
 #include "Game.hpp"
 const double PI = 3.14159265359;
 
@@ -61,6 +62,12 @@ void Game::start()
 	game_engine ->loadWorld("Source/World.txt");
 	player.setRoom(storage->indexOf("firstRoom"));
 	player.set(glm::dvec3(1.0, -1.0, 1.8), glm::dvec3(1.0, -1.0, 0.0),glm::dvec3(0.0,0.0,0.1));
+	std::vector<glm::dvec3> coord = {glm::dvec3(1.0, 0.0, 0.0), glm::dvec3(0.0, 0.0, 1.0), glm::dvec3(-1, 0.0, -1)};
+	Portal p1, p2;
+	p1.createPottal(3, coord.data(), storage->indexOf("firstRoom"));
+	coord = {glm::dvec3(0.5*1.4142135, 0.5*1.4142135, 0.0), glm::dvec3(0.0, 0.0, 1.0), glm::dvec3(-0.5*1.4142135, -0.5*1.4142135, -1)};
+	p2.createPottal(3, coord.data(), storage->indexOf("firstRoom"));
+	p1.linkToPortal(p2);
 	timer.restart();
 }
 void Game :: normal_next(double dt)

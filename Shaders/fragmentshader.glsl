@@ -88,8 +88,8 @@ void main()
 		default:
 			break;
 
-		} 
-	}	
+		}
+	}
 	
 	color = MaterialAmbientColor+ MDC + MSC;
 }

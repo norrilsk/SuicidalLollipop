@@ -1,6 +1,8 @@
 ﻿#include "Shaders.hpp"
 #include"Error.hpp"
 #include "Loger.hpp"
+#include <cstring>
+
 extern Loger logfile;
 Shaders::Shaders()
 {
@@ -49,7 +51,11 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 	GLint status;
 	glGetProgramiv(programid, GL_LINK_STATUS, &status);
 	if (status == GL_FALSE)
-		throw(newError(SHADER));
+	{
+		GLchar forlog[2048];
+		glGetProgramInfoLog(programid,2048,nullptr,forlog);
+		throw(newError2(SHADER, std::string(forlog) + "\n"));
+	}
 	glGenBuffers(1, &ssbo);
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
 	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
