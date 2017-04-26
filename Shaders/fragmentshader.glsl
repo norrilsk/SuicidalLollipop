@@ -37,7 +37,7 @@ void main()
 		MaterialDiffuseColor = texture(textureSampler, UV).xyz;
 	else
 		MaterialDiffuseColor = fragmentColor;
-  
+
 	vec3 MaterialAmbientColor = vec3( ambient_power, ambient_power, ambient_power) * MaterialDiffuseColor; // Glow of the object
 	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);//reflected light (Glare)
 
@@ -50,34 +50,36 @@ void main()
 	{
     	vec3 l = ( LightPosition_worldspace[i]).xyz - Position_worldspace; //  ­light direction from vertex to light
     	vec3 ref, d;
-    	float cosTheta, cosAlpha, dist2;
+    	float cosTheta, cosAlpha, dist;
 	switch (source_type[i])
 		{
 		case 1:
 			//dot -- scalar product
-			cosTheta = clamp( dot( n,l )/length(n)/length(l), 0, 1 );	// cos of the angle between normal and direction
+			 dist = length(l);
+			cosTheta = clamp( dot( n,l )/length(n)/dist, 0, 1 );	// cos of the angle between normal and direction
 			ref = normalize(reflect(-l,n)); //direction of reflection
 			cosAlpha = clamp( dot( e,ref ), 0,1 );  // cos of angle between vector Direction of sight and vector of reflection
 			if ((cosAlpha == 0) && (cosTheta == 0))
 				break;
-    	    d = (LightPosition_worldspace[i].xyz - Position_worldspace) * (LightPosition_worldspace[i].xyz - Position_worldspace);
-    	    dist2  = d.x + d.y + d.z;// square of distance from vertex to light source
-			MDC += MaterialDiffuseColor *LightColor[i].xyz * LightPower[i]* cosTheta / dist2 ;
-			MSC += MaterialSpecularColor * LightColor[i].xyz * LightPower[i] * pow(cosAlpha,5) / dist2;
+			MDC += MaterialDiffuseColor *LightColor[i].xyz * LightPower[i]* cosTheta / dist/dist ;
+			MSC += MaterialSpecularColor * LightColor[i].xyz * LightPower[i] * pow(cosAlpha,5) / dist/dist;
 
 			break;
 		case 0:
-			float cosFI = dot(LightDirection[i].xyz, -l)/length(l)/length(LightDirection[i].xyz);
+		    dist = length(l);
+			float cosFI = dot(LightDirection[i].xyz, -l)/dist/length(LightDirection[i].xyz);
 			if (cosFI <= (angle[i]))
 				break;
 			//dot -- scalar product
-			cosTheta = clamp( dot( n,l )/length(n)/length(l), 0, 1 );	// cos of the angle between normal and direction
+			cosTheta = clamp( dot( n,l )/length(n)/dist, 0, 1 );	// cos of the angle between normal and direction
 			ref = normalize(reflect(-l,n)); //direction of reflection
 			cosAlpha = clamp( dot( e,ref ), 0,1 );  // cos of angle between vector Direction of sight and vector of reflection
-    	    d = (LightPosition_worldspace[i].xyz - Position_worldspace) * (LightPosition_worldspace[i].xyz - Position_worldspace);
-    	    dist2  = d.x + d.y + d.z;// square of distance from vertex to light source
-			MDC += MaterialDiffuseColor *LightColor[i].rgb * LightPower[i]* cosTheta /dist2*(cosFI- angle[i]) ;
-			MSC += MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5) / dist2*(cosFI-angle[i]);
+			vec3 addMDC = MaterialDiffuseColor *LightColor[i].rgb * LightPower[i]* cosTheta /dist/dist*(cosFI- angle[i]) ;
+			vec3 addMSC = MaterialSpecularColor * LightColor[i].rgb * LightPower[i] * pow(cosAlpha,5) / dist/dist*(cosFI-angle[i]);
+			if(dot(addMDC, addMDC) > 0.0001)
+			    MDC += addMDC;
+			if(dot(addMSC, addMSC) > 0.0001)
+                MSC += addMSC;
 			break;
 		case 2:
 			if (dot(LightDirection[i].xyz, -n) < 0)
@@ -90,6 +92,6 @@ void main()
 
 		}
 	}
-	
+
 	color = MaterialAmbientColor+ MDC + MSC;
 }
