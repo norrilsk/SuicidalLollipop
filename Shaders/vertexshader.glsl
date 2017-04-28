@@ -22,19 +22,19 @@ layout (std430, binding = 1 ) buffer shader_data
 	uint source_type[100];
 };
 // данные, идущие в следующий шейдер
-out vec3 fragmentColor;
-out vec2 UV;
-out vec3 Position_worldspace;
-out vec3 Normal;
-out vec3 EyeDirection;
-out vec3 time; //TODO :: DELETE
+out VertexData
+{
+   flat vec3 Position_worldspace;
+   vec3 Normal;
+   vec3 fragmentColor;
+   vec2 UV;
+};
+
 void main()
 {
   gl_Position = MVP* vec4(vertexPos_modelspace, 1); // позиция вершины в экранныъ координатах
   Position_worldspace = (ModelMatrix * vec4(vertexPos_modelspace,1)).xyz; // позиция вершины в мировых координатах
-  EyeDirection = (cameraPos.xyz- Position_worldspace); // направление взгляда
   Normal =(ModelMatrix*vec4(vertexNormal_modelspace,0)).xyz; // вектор нормали в мировых координатах
   UV = vertexUV;
   fragmentColor = vertexColor;
-  time  =LightPosition_worldspace[1].xyz; //TODO :: DELETE
 }

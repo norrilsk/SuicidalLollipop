@@ -40,11 +40,11 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 	{
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 32) < 0) //ставим глубину цвета
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 32) < 0) //ставим глубину цвета
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 32) < 0) //ставим глубину цвета
 			throw(newError(SDL));
 		if(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16) < 0)//ставим размер буфера глубины
 			throw(newError(SDL));
@@ -66,6 +66,7 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 		check_GL_version(logfile);//проверяем что у нас стоит нужная версия OpenGL
 		std::vector<std::pair<std::string, GLuint> > ShadersPaths;
 		ShadersPaths.push_back(std::make_pair("Shaders/fragmentshader.glsl", GL_FRAGMENT_SHADER));//файл фрагментного шейдера
+		ShadersPaths.push_back(std::make_pair("Shaders/geometryshader.glsl", GL_GEOMETRY_SHADER));//файл геометрического шейдера
 		ShadersPaths.push_back(std::make_pair("Shaders/vertexshader.glsl", GL_VERTEX_SHADER));//файл вершинного шейдера
 		shaders = Shaders(ShadersPaths);//Подключаем шейдеры
 	}

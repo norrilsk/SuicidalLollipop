@@ -1,5 +1,5 @@
 ********************LOG STARTED********************
-Date and time:Tue Apr 25 23:35:56 2017
+Date and time:Fri Apr 28 16:47:19 2017
 
 Software checking:
 	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
@@ -7,6 +7,6 @@ Software checking:
 	Shading language version and drivers:	4.50 NVIDIA
 Program ended	
 --------------------LOG FINISHED-------------------
-Date and time:Tue Apr 25 23:37:42 2017
+Date and time:Fri Apr 28 16:47:36 2017
 
 
