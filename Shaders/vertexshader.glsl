@@ -1,10 +1,10 @@
-﻿#version 430 core
+#version 430 core
 
-layout(location = 0) in vec3 vertexPos_modelspace;// номер VAO
+layout(location = 0) in vec3 vertexPos_modelspace;// ????? VAO
 layout(location = 1) in vec3 vertexColor;
 layout(location = 2) in vec2 vertexUV;
 layout(location = 3) in vec3 vertexNormal_modelspace;
-layout (std430, binding = 1 ) buffer shader_data
+layout (std430, binding = 1) buffer shader_data
 {
 	mat4 ModelMatrix;
 	mat4 ViewMatrix;
@@ -21,7 +21,7 @@ layout (std430, binding = 1 ) buffer shader_data
 	uint textures_enabled; //flag
 	uint source_type[100];
 };
-// данные, идущие в следующий шейдер
+// ??????, ?????? ? ????????? ??????
 out VertexData
 {
    flat vec3 Position_worldspace;
@@ -32,9 +32,9 @@ out VertexData
 
 void main()
 {
-  gl_Position = MVP* vec4(vertexPos_modelspace, 1); // позиция вершины в экранныъ координатах
-  Position_worldspace = (ModelMatrix * vec4(vertexPos_modelspace,1)).xyz; // позиция вершины в мировых координатах
-  Normal =(ModelMatrix*vec4(vertexNormal_modelspace,0)).xyz; // вектор нормали в мировых координатах
+  gl_Position = MVP* vec4(vertexPos_modelspace, 1); // ??????? ??????? ? ???????? ???????????
+  Position_worldspace = (ModelMatrix * vec4(vertexPos_modelspace,1)).xyz; // ??????? ??????? ? ??????? ???????????
+  Normal =(ModelMatrix*vec4(vertexNormal_modelspace,0)).xyz; // ?????? ??????? ? ??????? ???????????
   UV = vertexUV;
   fragmentColor = vertexColor;
 }

@@ -1,5 +1,5 @@
 #include "Room.hpp"
-#include "Objects/LightSource.hpp"
+#include "LightSource.hpp"
 
 Room::Room()
 {

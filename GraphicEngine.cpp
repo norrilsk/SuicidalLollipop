@@ -68,7 +68,8 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 		ShadersPaths.push_back(std::make_pair("Shaders/fragmentshader.glsl", GL_FRAGMENT_SHADER));//файл фрагментного шейдера
 		ShadersPaths.push_back(std::make_pair("Shaders/geometryshader.glsl", GL_GEOMETRY_SHADER));//файл геометрического шейдера
 		ShadersPaths.push_back(std::make_pair("Shaders/vertexshader.glsl", GL_VERTEX_SHADER));//файл вершинного шейдера
-		shaders = Shaders(ShadersPaths);//Подключаем шейдеры
+		shaders = Shaders(ShadersPaths, 1);//Подключаем шейдеры
+		screenrec = std::unique_ptr<ScreenRec>(new ScreenRec(WinW, WinH, "Shaders/fragmentshaderGAUSS.glsl", "Shaders/vertexshaderGAUSS.glsl"));
 	}
 
 }
@@ -99,9 +100,13 @@ void GraphicEngine::check_GL_version(Loger *logfile)
 
 void GraphicEngine::display()
 {
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
 	if(GlMode)
 	{
+		screenrec->bind();
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
 		cam->Look();
 		glm::mat4 VP = cam->Projection() * cam->View();
 		shader_data data;
@@ -114,36 +119,7 @@ void GraphicEngine::display()
 			lightQueue.front()->moveToStructure(&data , i++);
 			lightQueue.pop();
 		}
-		data.ambient_power = 0.1;
-		//std:: cout << data.cos_angle[0] << " " << data.LightPosition_worldspace[0].x << " " << data.LightPosition_worldspace[0].y << " " << data.LightPosition_worldspace[0].z << std::endl;
-		/*
-		data.number_of_lights = 4;
-		glm::vec3 lightpos = glm::vec3(5, -5, 5);
-		glm::vec3 lightcolors = glm::vec3(1, 1, 0.9f);
-		float power = 10.0f;
-		data.LightPosition_worldspace[1] = glm::vec4(lightpos, 1);
-		data.LightColor[1] = glm::vec4(1, 1, 1, 1);
-		data.LightColor[0] = glm::vec4(lightcolors, 1);
-		data.LightColor[2] = glm::vec4(1, 1, 1, 1);
-		data.LightColor[3] = glm::vec4(lightcolors, 1);
-		data.LightPosition_worldspace[0] = glm::vec4(lightpos, 1);
-		data.LightPosition_worldspace[2] = glm::vec4(lightpos, 1);
-		data.LightPosition_worldspace[3] = glm::vec4(lightpos, 1);
-		data.LightPower[0] = power*10;
-		data.LightPower[3] = power*10 ;
-		data.LightPower[2] = power / 100;
-		data.LightPower[1] = power*0;
-		data.source_type[0] = 0;
-		data.source_type[3] = 0;
-		data.source_type[1] = 1;
-		data.source_type[2] = 2;
-		data.ambient_power = 0.1;
-		data.cos_angle[0] = (float) cos(30 * 3.141592 / 180);
-		data.cos_angle[3] = (float) cos(22 * 3.141592 / 180);
-		data.LightDirection[0] = glm::vec4(-1, -1, -0.5, 1);
-		data.LightDirection[3] = glm::vec4(1, -1, -1, 1);
-		data.LightDirection[2] = glm::vec4(0, 0.5, -1, 1);
-		*/
+		data.ambient_power = 0.1f;
 		while (!renderingQueueGl.empty())
 		{
 			Object3D *obj = renderingQueueGl.front();
@@ -160,7 +136,9 @@ void GraphicEngine::display()
 				obj->draw();
 			}
 			renderingQueueGl.pop();
-		}
+		} 
+		screenrec->unbind();
+		screenrec->draw();
 		SDL_GL_SwapWindow(window);
 	}
 }

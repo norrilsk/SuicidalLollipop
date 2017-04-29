@@ -9,7 +9,8 @@
 #include "Storage.hpp"
 #include "Shaders.hpp"
 #include "Loger.hpp"
-
+#include "ScreenRec.hpp"
+#include<memory>
 class GraphicEngine
 {
 	int WinW; //Ширина окна. Здесь мы говорим что только собираемся обЪявить эти переменные
@@ -22,6 +23,7 @@ class GraphicEngine
 	std::queue <Object2D*> renderingQueueSDL;// очередь отрисовки SDL
 	std::queue <LightSource *> lightQueue;//очередь отрисовки света
 	Shaders shaders;
+	std::unique_ptr<ScreenRec> screenrec;
 	void check_GL_version(Loger * logfile);
 	Camera * cam;
 public:

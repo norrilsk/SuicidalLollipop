@@ -1,7 +1,7 @@
 #ifndef _TRIANGLEPORTAL
 #define _TRIANGLEPORTAL
 
-#include "Storage.hpp"
+#include "../Storage.hpp"
 #include <glm/glm.hpp>
 
 class TrianglePortal

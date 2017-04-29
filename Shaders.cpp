@@ -8,13 +8,14 @@ Shaders::Shaders()
 {
 }
 
-Shaders::Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
+Shaders::Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths, int ssbobindingpoint)
 {
-	Load(shaderPaths);
+	Load(shaderPaths, ssbobindingpoint);
 }
 
-void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
+void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths, int ssbobindingpoint)
 {
+	ssboBindingPoint = ssbobindingpoint;
 	for (std::pair<std::string, GLuint> shader : shaderPaths)
 	{
 		std::ifstream in(shader.first); //файл шейдера
@@ -56,11 +57,15 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 		glGetProgramInfoLog(programid,2048,nullptr,forlog);
 		throw(newError2(SHADER, std::string(forlog) + "\n"));
 	}
-	glGenBuffers(1, &ssbo);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-	glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
-	glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shader_data), nullptr, GL_STREAM_COPY);
-	glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+	if (ssbobindingpoint > -1)
+	{
+		glGenBuffers(1, &ssbo);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, ssbobindingpoint, ssbo);
+		glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shader_data), nullptr, GL_STREAM_COPY);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+	}
+	
 	glUseProgram(programid); ////add, CHECK
 							 //glUniform4f(colour_loc, 1.0f, 0.0f, 0.0f, 1.0f);
 
@@ -72,6 +77,8 @@ void Shaders::Load(std::vector<std::pair<std::string, GLuint> >& shaderPaths)
 
 void Shaders::ssboUpdate(shader_data* data)
 {
+	if (ssboBindingPoint < 0)
+		return;
 	glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
 	GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
 
@@ -87,4 +94,23 @@ void Shaders::setTextureSampler(int sampler)
 }
 Shaders::~Shaders()
 {
+}
+void Shaders::store(int num, const char *name)
+{
+	GLint ID = glGetUniformLocation(programid, name);
+	glUniform1i(ID, num); // информируем шейдер о нашем числе
+}
+
+
+void Shaders::store(glm::vec3 vec, const char *name)
+{
+	GLint ID = glGetUniformLocation(programid, name);
+	glUniform3f(ID, vec.x, vec.y, vec.z); // информируем шейдер о нашем векторе
+}
+
+void Shaders::store(float num, const char *name)
+{
+	GLint ID = glGetUniformLocation(programid, name);
+
+	glUniform1f(ID, num); // информируем шейдер о нашем числе
 }

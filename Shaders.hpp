@@ -39,16 +39,20 @@ class Shaders
 	GLuint programid; // ID программы
 	GLuint ssbo;
 	std::vector<GLuint> type; // вектор типов всех существующих щейдеров
+	 int ssboBindingPoint = -1;
 public:
 	/*Загрузка Шейдеров
 	1й элемент пары - путь к программе шейдера
 	2й элемент пары - тип шейдера GL */
-	void Load(std::vector<std::pair<std::string, GLuint> >& ShadersPaths);
+	void Load(std::vector<std::pair<std::string, GLuint> >& ShadersPaths, int =-1);
 	GLuint Id(GLuint shaderType) { return shaderid.at(shaderType); } // возвращает ID по указанному типу шейдера
-	Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths); // аналогично LOAD
+	Shaders(std::vector<std::pair<std::string, GLuint> >& shaderPaths, int   = -1); // аналогично LOAD
 	void ssboUpdate(shader_data*);
 	void useProgram() { glUseProgram(programid); };
 	void setTextureSampler(int); //устанавливает текстурный  шаблон
+	void store(int num, const char *name);
+	void store(float num, const char *name);
+	void store(glm::vec3 vec, const char *name);
 	Shaders();
 	~Shaders();
 };

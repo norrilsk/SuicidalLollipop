@@ -1,4 +1,4 @@
-﻿#version 430 core
+#version 430 core
 
 layout (std430, binding = 1 ) buffer shader_data
 {
@@ -31,7 +31,7 @@ out vec3 color;
 
 void main()
 {
-    vec3 EyeDirection = (cameraPos.xyz- Position_worldspace - delta); // направление взгляда
+    vec3 EyeDirection = (cameraPos.xyz- Position_worldspace - delta); // ??????????? ???????
 	vec3 MaterialDiffuseColor = vec3(0,0,0);
 	if (textures_enabled != 0)
 		MaterialDiffuseColor = texture(textureSampler, UV).xyz;
@@ -43,11 +43,11 @@ void main()
 	vec3 MDC = vec3(0.0,0.0,0.0);
 	vec3 MSC = vec3(0.0,0.0,0.0);
 	vec3 e = normalize(EyeDirection); // vector Direction of sight
-	vec3 n = ( Normal ); // ­normal vector in world space
+	vec3 n = ( Normal ); // �normal vector in world space
 
 	for (int i = 0; i < number_of_lights; i++)
 	{
-    	vec3 l = ( LightPosition_worldspace[i]).xyz - vec3(Position_worldspace) - delta; //  ­light direction from vertex to light
+    	vec3 l = ( LightPosition_worldspace[i]).xyz - vec3(Position_worldspace) - delta; //  �light direction from vertex to light
     	vec3 ref, d;
     	float cosTheta, cosAlpha, dist;
 	switch (source_type[i])
