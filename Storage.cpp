@@ -51,11 +51,25 @@ StorageIndex Storage::addLightSource(const SourceType& type)
 	return (light_sources.size() - 1)*NumberOfTypes + LightSourceInd;
 }
 
-StorageIndex Storage::addPortal(const std::string & path)
+StorageIndex Storage::addPortal(const std::string & path, StorageIndex room)
 {
-	portals.push_back(Portal());
-	std::vector<glm::dvec3> coord = {glm::dvec3(1.0, 0.0, 0.0), glm::dvec3(0.0, 0.0, 1.0), glm::dvec3(-1, 0.0, -1)}; //TODO написать парсер здесь
-	portals.back().createPottal(3, coord.data(), indexOf("firstRoom"));
+	std::ifstream in(path);
+	if(!in.is_open())
+		throw(newError2(FILE_NOT_OPEN, path));
+	unsigned long N;
+	in >> N;
+	std::vector <double> coord(N * 9);
+	std::vector <double> num(N);
+	for(unsigned long i = 0; i < N; ++i)
+	{
+		for(int j = 0; j < 9; ++j)
+		{
+			in >> coord[i *9 + j];
+		}
+		in >> num[i];
+	}
+	portals.emplace_back(N, coord.data(), room, num.data());
+	in.close();
 	return (portals.size() - 1)*NumberOfTypes + PortalInd;
 }
 
@@ -128,6 +142,16 @@ LightSource &Storage::lightSource(StorageIndex ind)
 LightSource &Storage::lightSource(const std::string & name)
 {
 	return lightSource(nick_names.at(name));
+}
+
+Portal &Storage::portal(StorageIndex ind)
+{
+	return portals[ind / NumberOfTypes];
+}
+
+Portal &Storage::portal(const std::string & name)
+{
+	return portal(nick_names.at(name));
 }
 
 void Storage::loadWorld(const char * path)
@@ -238,9 +262,25 @@ void Storage::loadWorld(const char * path)
 			in >> name;
 			create_nickname(name, ind);
 		}
-
+		else if(str == "PORTAL")
+		{
+			std::string filePath, name;
+			StorageIndex objroom;
+			in >> filePath >> objroom;
+			StorageIndex ind = addPortal(filePath, objroom);
+			rooms[objroom].addPortal(ind);
+			in >> name;
+			create_nickname(name, ind);
+		}
+		else if(str == "PORTALPAIR")
+		{
+			StorageIndex from, to;
+			in >> from >> to;
+			portals[from].linkToPortal(portals[to]);
+		}
 
 	}
+	in.close();
 }
 
 void Storage::create_nickname(const std::string & name, StorageIndex ind)
@@ -252,6 +292,9 @@ StorageIndex Storage::indexOf(const std::string & name)
 {
 	return nick_names.at(name);
 }
+
+
+
 
 
 

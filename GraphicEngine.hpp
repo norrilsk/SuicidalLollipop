@@ -19,9 +19,9 @@ class GraphicEngine
 	bool SDL_inited = false;
 	bool SDLimage_inited = false;
 	bool GlMode = false;
+	shader_data shaderData;//структура для шейдеров
 	std::queue <Object3D*> renderingQueueGl;// очередь отрисовки Gl
 	std::queue <Object2D*> renderingQueueSDL;// очередь отрисовки SDL
-	std::queue <LightSource *> lightQueue;//очередь отрисовки света
 	Shaders shaders;
 	std::unique_ptr<ScreenRec> screenrec;
 	void check_GL_version(Loger * logfile);
@@ -31,8 +31,9 @@ public:
 	void portalRendering(Storage * storage); //общет сцены методом портального рендеринга
 	void addToRender(Object3D *); //добавляем объекты в очередь отрисовки
 	void addToRender(Object2D *);
-	void addToRender(LightSource *);
+	void swap();
 	void display(); //запускаем отрисовку
+	void renderToScreen();
 	SDL_Window * getWindow(){return window;}
 	~GraphicEngine();
 

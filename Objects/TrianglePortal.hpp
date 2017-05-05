@@ -16,6 +16,7 @@ public:
 	TrianglePortal(glm::dvec3, glm::dvec3, glm::dvec3);//треугольник по 3 точкам
 	void setRoom(StorageIndex);//какая комната?
 	void setPortalCoef(double);
+	glm::dvec3 operator [] (int) const;
 	StorageIndex getRoom();
 	void linckTo(TrianglePortal &);
 };

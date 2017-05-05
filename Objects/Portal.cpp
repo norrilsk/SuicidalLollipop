@@ -70,4 +70,12 @@ Portal::Portal(int N, glm::dvec3 * data, StorageIndex room, double* portal_coef)
 	createPottal(N, data, room, portal_coef);
 }
 
+size_t Portal::numberOfSubportals()
+{
+	return sub_portals.size();
+}
 
+TrianglePortal &Portal::operator[](int i)
+{
+	return sub_portals[i];
+}

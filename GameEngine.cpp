@@ -79,6 +79,7 @@ void GameEngine::MainLoop()
 			}
 		}
 		game->next();
+		grapher->swap();
 	}
 }
 
@@ -87,11 +88,9 @@ void GameEngine::Quit()
 	throw(newError(QUIT));
 }
 
-void GameEngine::renderScene(bool show)
+void GameEngine::renderScene()
 {
-	grapher -> portalRendering(storage.get());
-	if(show)
-		grapher ->display();
+	grapher->portalRendering(storage.get());
 }
 
 void GameEngine::display()

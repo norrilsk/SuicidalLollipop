@@ -20,5 +20,6 @@ void main()
         }
    }
    res /= 3.14159265 * 2.0 * k* k;*/
-   color = texture(textureSampler,uv).xyz;//*vec3(1,0,0);
+   color += texture(textureSampler,uv ).xyz;
+   color *= vec3(1, 1, 1);
 }

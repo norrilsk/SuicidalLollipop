@@ -20,6 +20,8 @@ public:
 	Portal(int, double *, StorageIndex, double * = NULL);
 	Portal(int, glm::vec3 *, StorageIndex, double * = NULL);
 	Portal(int, glm::dvec3 *, StorageIndex,double * = NULL);
+	size_t numberOfSubportals();                                //число суброрталов
+	TrianglePortal& operator [](int);                           //доступ к порталам
 	void linkToPortal(Portal &); //присоединяем к другому порталу
 };
 

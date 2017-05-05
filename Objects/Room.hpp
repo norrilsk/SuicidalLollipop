@@ -3,7 +3,8 @@
 
 #include <set>
 #include "../Storage.hpp"
-#include "NPC.hpp"
+#include "Object3D.hpp"
+
 
 class Room : public Object3D
 {
@@ -11,17 +12,23 @@ class Room : public Object3D
 	std::set <StorageIndex> movable_objects;
 	std::set <StorageIndex> npc;
 	std::set <StorageIndex> light_sources;
+	std::set <StorageIndex> portals;
 	Storage * storage;
 public:
 	Room();
 	Room(Model* model, Storage *);
 	~Room();
-	void getAllObjects(std::vector<Object3D *> &); //В аргумент будут ДОПИСАНЫ все указатели на обЪекты в комнате
-	void getAllLights(std::vector<LightSource *> &); //В аргумент будут ДОПИСАНЫ все указатели на обЪекты в комнате
+	size_t numberOfObjects();//число объектов
+	size_t numberOfLights();//число источников света
+	size_t numberOfPortals();//число источников порталов
+	void getAllObjects(Object3D **); //по указаному адресу будут записаны все указатели на объекты в комнате
+	void getAllLights(LightSource **); //по указаному адресу будут записаны все указатели на источники света в комнате
+	void getAllPortals(Portal **); //по указаному адресу будут записаны все указатели на порталы в комнате
 	void addObject3D(StorageIndex);
 	void addMovableObject(StorageIndex);
 	void addNPC(StorageIndex);
 	void addLightSource(StorageIndex);
+	void addPortal(StorageIndex);
 };
 #endif
 

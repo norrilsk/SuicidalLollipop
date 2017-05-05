@@ -1,5 +1,6 @@
 #include <iostream>
 #include "TrianglePortal.hpp"
+#include "../Error.hpp"
 
 TrianglePortal::TrianglePortal(glm::dvec3 a, glm::dvec3 b, glm::dvec3 c) : A(a), B(b), C(c)
 {
@@ -21,7 +22,7 @@ void TrianglePortal::linckTo(TrianglePortal & target)
 
 	M = glm::dmat4(glm::dvec4(M0[0], 0), glm::dvec4(M0[1], 0), glm::dvec4(M0[2], 0), glm::dvec4(target.O - O, 1));
 
-	std::cout <<e1.x << " " << e1.y << " " << e1.z << "\n";
+	/*std::cout <<e1.x << " " << e1.y << " " << e1.z << "\n";
 	std::cout <<e2.x << " " << e2.y << " " << e2.z << "\n";
 	std::cout <<e3.x << " " << e3.y << " " << e3.z << "\n";
 	std ::cout <<"\n";
@@ -33,7 +34,7 @@ void TrianglePortal::linckTo(TrianglePortal & target)
 
 	std::cout << M[0][0] << "\t" << M[1][0] <<"\t"<<M[2][0] << "\n";
 	std::cout << M[0][1] << "\t" << M[1][1] <<"\t"<<M[2][1] << "\n";
-	std::cout << M[0][2] << "\t" << M[1][2] <<"\t"<<M[2][2] << "\n";
+	std::cout << M[0][2] << "\t" << M[1][2] <<"\t"<<M[2][2] << "\n";*/
 
 
 }
@@ -51,6 +52,17 @@ StorageIndex TrianglePortal::getRoom()
 void TrianglePortal::setPortalCoef(double value)
 {
 	coef = value;
+}
+
+glm::dvec3 TrianglePortal::operator[](int i) const
+{
+	if(i == 0)
+		return A;
+	if(i == 1)
+		return B;
+	if(i == 2)
+		return C;
+	throw(newError(OUT_OF_RANGE));
 }
 
 

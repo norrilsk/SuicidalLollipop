@@ -11,11 +11,10 @@ in VertexData
     vec2 UV;
 } VertexIn[3];
 
-flat out vec3 Position_worldspace;
+out vec3 Position_worldspace;
 out vec3 Normal;
 out vec3 fragmentColor;
 out vec2 UV;
-smooth out vec3 delta;
 
  void main()
 {
@@ -23,11 +22,10 @@ smooth out vec3 delta;
   {
      // copy attributes
     gl_Position = gl_in[i].gl_Position;
-    Position_worldspace = VertexIn[0].Position_worldspace;
+    Position_worldspace = VertexIn[i].Position_worldspace ;
     Normal = VertexIn[i].Normal;
     UV = VertexIn[i].UV;
     fragmentColor = VertexIn[i].fragmentColor;
-    delta = VertexIn[i].Position_worldspace - VertexIn[0].Position_worldspace;
     // done with the vertex
     EmitVertex();
   }

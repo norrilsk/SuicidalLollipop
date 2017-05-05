@@ -89,7 +89,7 @@ void Shaders::ssboUpdate(shader_data* data)
 
 void Shaders::setTextureSampler(int sampler)
 {
-	GLuint ID = glGetUniformLocation(programid, "textureSampler");
+	GLuint ID = (GLuint) glGetUniformLocation(programid, "textureSampler");
 	glUniform1i(ID, sampler);
 }
 Shaders::~Shaders()

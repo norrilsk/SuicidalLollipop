@@ -1,12 +1,12 @@
 ********************LOG STARTED********************
-Date and time:Sun Apr 30 01:58:58 2017
+Date and time:Fri May  5 23:46:27 2017
 
 Software checking:
-	OpenGL version and drivers:		4.2.0 - Build 10.18.10.3574
-	Name of the GPU: 			Intel(R) HD Graphics 4600
-	Shading language version and drivers:	4.20 - Build 10.18.10.3574
+	OpenGL version and drivers:		4.5.0 NVIDIA 375.39
+	Name of the GPU: 			GeForce GT 740M/PCIe/SSE2
+	Shading language version and drivers:	4.50 NVIDIA
 Program ended	
 --------------------LOG FINISHED-------------------
-Date and time:Sun Apr 30 01:59:25 2017
+Date and time:Fri May  5 23:47:00 2017
 
 

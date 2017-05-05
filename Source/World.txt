@@ -7,3 +7,6 @@ NPC 	./Source/SnowMan.txt 	1.0 0.0 0.0 	0.0 -1.0 0.0 	5.0 -4.5 2.5 			0	0 0 	Kol
 LIGHTSOURCE	CONIC		0.0 -2.0 -1.5	5.0 0.0 9.0	0.3 1.0 1.0	100.0 0.7	0		lamp1
 LIGHTSOURCE	CONIC		1.0 1.0 2.0	0.9 -9.0 0.5	1.0 1.0 0.0	70.0 0.7	0		lamp2
 LIGHTSOURCE	CONIC		-1.0 1.0 1.7	9.0 -9.0 0.5	1.0 1.0 0.0	70.0 0.7	0		lamp3
+PORTAL	./Source/Portals/portal1.txt								0		portal1
+PORTAL	./Source/Portals/portal2.txt								1		portal2
+PORTALPAIR	0 1

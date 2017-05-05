@@ -16,7 +16,8 @@ enum ErrorType
 		SHADER,
 		LOGFILE,
 		BINDING_UNLOADED,
-		FILE_NOT_OPEN
+		FILE_NOT_OPEN,
+		OUT_OF_RANGE
 	};
 
 	class Error

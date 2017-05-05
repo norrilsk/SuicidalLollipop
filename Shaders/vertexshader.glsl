@@ -14,9 +14,13 @@ layout (std430, binding = 1) buffer shader_data
 	vec4 LightPosition_worldspace[100];
 	vec4 LightColor[100];
 	vec4 LightDirection[100];
+	vec4 external_portals[300];
+    vec4 internal_portals[300];
 	float LightPower[100];
 	float angle[100];
 	float ambient_power;
+	uint number_of_external_portals;
+    uint number_of_internal_portals;
 	uint number_of_lights;
 	uint textures_enabled; //flag
 	uint source_type[100];

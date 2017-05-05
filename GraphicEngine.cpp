@@ -1,5 +1,6 @@
 #include <iostream>
 #include "GraphicEngine.hpp"
+#include "Objects/Portal.hpp"
 #include"Objects/Room.hpp"
 #include "Objects/LightSource.hpp"
 
@@ -40,11 +41,11 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 	{
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 32) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //ставим глубину цвета
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 32) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //ставим глубину цвета
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 32) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //ставим глубину цвета
 			throw(newError(SDL));
 		if(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16) < 0)//ставим размер буфера глубины
 			throw(newError(SDL));
@@ -109,39 +110,36 @@ void GraphicEngine::display()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
 		cam->Look();
 		glm::mat4 VP = cam->Projection() * cam->View();
-		shader_data data;
-		data.ViewMatrix = cam->View();
-		data.CameraPos = glm::vec4(cam->getPosition(), 1);
-		data.number_of_lights = (unsigned int) lightQueue.size();
-		int i = 0;
-		while(!lightQueue.empty())
-		{
-			lightQueue.front()->moveToStructure(&data , i++);
-			lightQueue.pop();
-		}
-		data.ambient_power = 0.1f;
+		shaderData.ViewMatrix = cam->View();
+		shaderData.CameraPos = glm::vec4(cam->getPosition(), 1);
+		shaderData.ambient_power = 0.1f;
 		while (!renderingQueueGl.empty())
 		{
 			Object3D *obj = renderingQueueGl.front();
 			if (obj->is_drawable())
 			{
-				data.textures_enabled = (unsigned int) obj->has_textures();
+				shaderData.textures_enabled = (unsigned int) obj->has_textures();
 				shaders.setTextureSampler(0);
-				data.ViewMatrix = cam->View();
-				data.ModelMatrix = obj->ModelMat();
-				data.MVP = VP* data.ModelMatrix;
-				data.MV = data.ViewMatrix*data.ModelMatrix;
-				shaders.ssboUpdate(&data);
+				shaderData.ViewMatrix = cam->View();
+				shaderData.ModelMatrix = obj->ModelMat();
+				shaderData.MVP = VP* shaderData.ModelMatrix;
+				shaderData.MV = shaderData.ViewMatrix*shaderData.ModelMatrix;
+				shaders.ssboUpdate(&shaderData);
 				shaders.useProgram();
 				obj->draw();
 			}
 			renderingQueueGl.pop();
-		} 
-		screenrec->unbind();
-		screenrec->draw();
-		SDL_GL_SwapWindow(window);
+		}
 	}
 }
+
+
+void GraphicEngine::renderToScreen()
+{
+	screenrec->unbind();
+	screenrec->draw();
+}
+
 
 void GraphicEngine::addToRender(Object3D * obj)
 {
@@ -153,26 +151,46 @@ void GraphicEngine::addToRender(Object2D * obj)
 	renderingQueueSDL.push(obj);
 }
 
-void GraphicEngine::addToRender(LightSource *obj)
-{
-	lightQueue.push(obj);
-}
 
 void GraphicEngine::portalRendering(Storage * storage)
 {
-	std::vector <Object3D *> vec;
-	std::vector <LightSource *> lights;
 	Room &room = storage->room(cam->getRoom());
-	room.getAllObjects(vec);
-	room.getAllLights(lights);
-	for (LightSource *light : lights)
+	std::vector <Object3D *> vec(room.numberOfObjects());
+	std::vector <LightSource *> lights(room.numberOfLights());
+	std::vector <Portal *> inportals(room.numberOfPortals());
+	room.getAllObjects(vec.data());
+	room.getAllLights(lights.data());
+	room.getAllPortals(inportals.data());
+	shaderData.number_of_lights = (unsigned int) room.numberOfLights();
+	int portnum = (int) room.numberOfPortals();
+	for (int i = 0; i < shaderData.number_of_lights; ++i)
 	{
-		addToRender(light);
+		lights[i]->moveToStructure(&shaderData, i);
+	}
+
+	shaderData.number_of_internal_portals = 0;
+	for (int i = 0; i < portnum; ++i)
+	{
+		for(int j = 0; j < inportals[i]->numberOfSubportals(); ++j)
+		{
+			shaderData.internal_portals[shaderData.number_of_internal_portals*3] = glm::vec4((*inportals[i])[j][0], 1);
+			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 1] = glm::vec4((*inportals[i])[j][1], 1);
+			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 2] = glm::vec4((*inportals[i])[j][2], 1);
+			shaderData.number_of_internal_portals ++;
+		}
 	}
 	for (Object3D *obj : vec)
 	{
 		addToRender(obj);
 	}
 	addToRender(&room);
+	display();
+
+	renderToScreen();
+}
+
+void GraphicEngine::swap()
+{
+	SDL_GL_SwapWindow(window);
 }
 

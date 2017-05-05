@@ -1,5 +1,7 @@
 #include "Room.hpp"
 #include "LightSource.hpp"
+#include "NPC.hpp"
+#include "Portal.hpp"
 
 Room::Room()
 {
@@ -10,21 +12,31 @@ Room::~Room()
 {
 }
 
-void Room::getAllObjects(std::vector<Object3D *> & store)
+void Room::getAllObjects(Object3D ** store)
 {
+	int i = 0;
 	for(StorageIndex ind : npc)
-		store.push_back((Object3D *) &(storage->npc(ind)));
+		store[i++] = &(storage->npc(ind));
 	for(StorageIndex ind: movable_objects)
-		store.push_back((Object3D *) &(storage->movableObject(ind)));
+		store[i++] = &(storage->movableObject(ind));
 	for(StorageIndex ind: objects3d)
-		store.push_back((Object3D *) &(storage->object3d(ind)));
+		store[i++] = &(storage->object3d(ind));
 }
 
-void Room::getAllLights(std::vector<LightSource *> &  store)
+void Room::getAllLights(LightSource **  store)
 {
+	int i = 0;
 	for(StorageIndex ind: light_sources)
-		store.push_back(&(storage->lightSource(ind)));
+		store[i++] = &(storage->lightSource(ind));
 }
+
+void Room::getAllPortals(Portal ** store)
+{
+	int i = 0;
+	for(StorageIndex ind: portals)
+		store[i++] = &(storage->portal(ind));
+}
+
 
 Room::Room(Model *model, Storage * str) : Object3D(model)
 {
@@ -50,6 +62,27 @@ void Room::addLightSource(StorageIndex ind)
 {
 	light_sources.insert(ind);
 }
+
+void Room::addPortal(StorageIndex ind)
+{
+	portals.insert(ind);
+}
+
+size_t Room::numberOfPortals()
+{
+	return portals.size();
+}
+
+size_t Room::numberOfLights()
+{
+	return light_sources.size();
+}
+
+size_t Room::numberOfObjects()
+{
+	return objects3d.size() + movable_objects.size() + npc.size();
+}
+
 
 
 
