@@ -173,8 +173,20 @@ void GraphicEngine::portalRendering(Storage * storage)
 	{
 		for(int j = 0; j < inportals[i]->numberOfSubportals(); ++j)
 		{
-			shaderData.internal_portals[shaderData.number_of_internal_portals*3] = glm::vec4((*inportals[i])[j][0], 1);
-			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 1] = glm::vec4((*inportals[i])[j][1], 1);
+			if((*inportals[i])[j].zCoef() > 0)
+			{
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::vec4(
+						(*inportals[i])[j][0], 1);
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::vec4(
+						(*inportals[i])[j][1], 1);
+			}
+			else
+			{
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::vec4(
+						(*inportals[i])[j][0], 1);
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::vec4(
+						(*inportals[i])[j][1], 1);
+			}
 			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 2] = glm::vec4((*inportals[i])[j][2], 1);
 			shaderData.number_of_internal_portals ++;
 		}

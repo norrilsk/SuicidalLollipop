@@ -7,7 +7,6 @@ class Portal
 {
 
 	std::vector <TrianglePortal> sub_portals;
-	std::vector <double> portal_number;
 public:
 	Portal(){}
 	~Portal(){}

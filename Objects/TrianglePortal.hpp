@@ -17,6 +17,7 @@ public:
 	void setRoom(StorageIndex);//какая комната?
 	void setPortalCoef(double);
 	glm::dvec3 operator [] (int) const;
+	double zCoef();
 	StorageIndex getRoom();
 	void linckTo(TrianglePortal &);
 };

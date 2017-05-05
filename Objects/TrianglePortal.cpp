@@ -65,4 +65,9 @@ glm::dvec3 TrianglePortal::operator[](int i) const
 	throw(newError(OUT_OF_RANGE));
 }
 
+double TrianglePortal::zCoef()
+{
+	return coef;
+}
+
 
