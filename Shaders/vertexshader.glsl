@@ -11,6 +11,7 @@ layout (std430, binding = 1) buffer shader_data
 	mat4 MVP;
 	mat4 MV;
 	vec4 cameraPos;
+    vec4 cameraLook;
 	vec4 LightPosition_worldspace[100];
 	vec4 LightColor[100];
 	vec4 LightDirection[100];

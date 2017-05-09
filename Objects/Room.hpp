@@ -13,6 +13,7 @@ class Room : public Object3D
 	std::set <StorageIndex> npc;
 	std::set <StorageIndex> light_sources;
 	std::set <StorageIndex> portals;
+	float ambient_power = 0.1f;
 	Storage * storage;
 public:
 	Room();
@@ -29,6 +30,7 @@ public:
 	void addNPC(StorageIndex);
 	void addLightSource(StorageIndex);
 	void addPortal(StorageIndex);
+	float &ambientPower(){ return ambient_power;}//дефолтный уровень освещенности
 };
 #endif
 
