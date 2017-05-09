@@ -74,7 +74,7 @@ void ScreenRec::unbind()
 void ScreenRec::draw(vector<pair<string, int>>* data_int, vector<pair<string, float>>* data_float, vector<pair<string, glm::vec3>>* data_vec, GLuint texture)
 {
 //	glClearColor(1.0f, 0.0f, 1.0f,1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 //	
 	glBindVertexArray(vao);
 	glEnableVertexAttribArray(0);

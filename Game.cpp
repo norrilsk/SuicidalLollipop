@@ -94,7 +94,7 @@ void Game :: next()
 	game_engine -> renderScene(); //и отрисовываем все;
 	
 	double dt;
-	while ((dt = timer.count()) < 0.0166666)
+	while ((dt = timer.count()) < 0.00166666)
 	{
 
 	}

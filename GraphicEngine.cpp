@@ -6,6 +6,7 @@
 
 GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *camera): cam(camera), GlMode(OpenGl)
 {
+	Matrix = glm::dmat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1);
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)//начальная инициализация SDL
 	{
 		throw(newError(SDL));
@@ -25,7 +26,7 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 		WinH = 720;
 	}
 	int flags = IMG_INIT_JPG | IMG_INIT_PNG; // флаги sdl_image
-	int initted = IMG_Init(flags); // инициализация sdl_image
+	auto initted = IMG_Init(flags); // инициализация sdl_image
 	if ((initted & flags) != flags)
 		throw (newError2(OTHER, "IMG_Init: Failed to init required jpg and png support!\n" + std::string("IMG_Init: ") + IMG_GetError() + std::string("\n")));
 	SDLimage_inited = true;
@@ -57,7 +58,7 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 		glClearDepth(1.0); //глубина по дефолту
 		glClearStencil(0);//буфер граней по дефолту
 		glDepthFunc(GL_LESS); //функция для определения глубу
-		glEnable(GL_CULL_FACE); //отключение не лицевых граней
+		//glEnable(GL_CULL_FACE); //отключение не лицевых граней
 		glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
 		glEnable(GL_TEXTURE_2D);// включаем 2D текстуры
 		SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
@@ -101,18 +102,22 @@ void GraphicEngine::check_GL_version(Loger *logfile)
 
 void GraphicEngine::display()
 {
-	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
+	glm::mat4 matrix(Matrix);
 	if(GlMode)
 	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//очищаем буферы
 		screenrec->bind();
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
+		if(firstCall)
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//очищаем буферы
+			firstCall = false;
+		}
+		//std::cout << shaderData.number_of_external_portals << " ";
 		cam->Look();
 		glm::mat4 VP = cam->Projection() * cam->View();
 		shaderData.ViewMatrix = cam->View();
 		shaderData.CameraPos = glm::vec4(cam->getPosition(), 1);
-		shaderData.ambient_power = 0.1f;
+		shaderData.CameraLook = glm::vec4(cam->getLookDirection(), 1);
 		while (!renderingQueueGl.empty())
 		{
 			Object3D *obj = renderingQueueGl.front();
@@ -120,9 +125,8 @@ void GraphicEngine::display()
 			{
 				shaderData.textures_enabled = (unsigned int) obj->has_textures();
 				shaders.setTextureSampler(0);
-				shaderData.ViewMatrix = cam->View();
-				shaderData.ModelMatrix = obj->ModelMat();
-				shaderData.MVP = VP* shaderData.ModelMatrix;
+				shaderData.ModelMatrix = matrix*obj->ModelMat();
+				shaderData.MVP = VP*shaderData.ModelMatrix;
 				shaderData.MV = shaderData.ViewMatrix*shaderData.ModelMatrix;
 				shaders.ssboUpdate(&shaderData);
 				shaders.useProgram();
@@ -138,6 +142,7 @@ void GraphicEngine::renderToScreen()
 {
 	screenrec->unbind();
 	screenrec->draw();
+	firstCall = true;
 }
 
 
@@ -152,53 +157,93 @@ void GraphicEngine::addToRender(Object2D * obj)
 }
 
 
-void GraphicEngine::portalRendering(Storage * storage)
+void GraphicEngine::portalRendering(Storage * storage, Portal * via)
 {
-	Room &room = storage->room(cam->getRoom());
-	std::vector <Object3D *> vec(room.numberOfObjects());
-	std::vector <LightSource *> lights(room.numberOfLights());
-	std::vector <Portal *> inportals(room.numberOfPortals());
-	room.getAllObjects(vec.data());
-	room.getAllLights(lights.data());
-	room.getAllPortals(inportals.data());
-	shaderData.number_of_lights = (unsigned int) room.numberOfLights();
-	int portnum = (int) room.numberOfPortals();
-	for (int i = 0; i < shaderData.number_of_lights; ++i)
-	{
-		lights[i]->moveToStructure(&shaderData, i);
-	}
-
+	Room *room = &storage->room(cam->getRoom());
+	std::vector <Object3D *> vec(room->numberOfObjects());
+	std::vector <LightSource *> lights(room->numberOfLights());
+	std::vector <Portal *> inportals(room->numberOfPortals());
+	glm::dmat4 CurrentMatrix;
+	uint exnum;
+	uint innum;
+	shaderData.number_of_external_portals = 0;
 	shaderData.number_of_internal_portals = 0;
+	if(via)
+	{
+		room = & storage->room(via-> getTarget());
+		glm::dmat4 dM(0);
+		for(int j = 0; j < via->numberOfSubportals(); ++j)
+		{
+			if((*via)[j].zCoef() > 0)
+			{
+				shaderData.external_portals[shaderData.number_of_external_portals * 3] = glm::mat4(Matrix)*glm::vec4((*via)[j][0], 1);
+				shaderData.external_portals[shaderData.number_of_external_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*via)[j][1], 1);
+			}
+			else
+			{
+				shaderData.external_portals[shaderData.number_of_external_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*via)[j][0], 1);
+				shaderData.external_portals[shaderData.number_of_external_portals * 3] = glm::mat4(Matrix)*glm::vec4((*via)[j][1], 1);
+			}
+			shaderData.external_portals[shaderData.number_of_external_portals*3 + 2] = glm::mat4(Matrix)*glm::vec4((*via)[j][2], 1);
+			shaderData.number_of_external_portals ++;
+			dM += (*via)[j].Matrix();
+		}
+		dM /= shaderData .number_of_external_portals;
+		Matrix *= dM;
+	} 
+	else
+		Matrix = glm::dmat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1);
+
+	room->getAllObjects(vec.data());
+	room->getAllLights(lights.data());
+	room->getAllPortals(inportals.data());
+	int portnum = (int) room->numberOfPortals();
+	CurrentMatrix = Matrix;//сохраняем переменные чтоб не потерять
+	exnum = shaderData.number_of_external_portals;
 	for (int i = 0; i < portnum; ++i)
 	{
+		if(!inportals[i] -> is_linked())
+			continue;
+		innum = shaderData.number_of_internal_portals;
+		portalRendering(storage, inportals[i]);
+		shaderData.number_of_internal_portals= innum;
 		for(int j = 0; j < inportals[i]->numberOfSubportals(); ++j)
 		{
 			if((*inportals[i])[j].zCoef() > 0)
 			{
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::vec4(
-						(*inportals[i])[j][0], 1);
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::vec4(
-						(*inportals[i])[j][1], 1);
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][0], 1);
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][1], 1);
 			}
 			else
 			{
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::vec4(
-						(*inportals[i])[j][0], 1);
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::vec4(
-						(*inportals[i])[j][1], 1);
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][0], 1);
+				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][1], 1);
 			}
-			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 2] = glm::vec4((*inportals[i])[j][2], 1);
+			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 2] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][2], 1);
 			shaderData.number_of_internal_portals ++;
 		}
+	}
+
+	shaderData.number_of_external_portals = exnum;
+	Matrix = CurrentMatrix;
+	shaderData.ambient_power = room->ambientPower();
+	shaderData.number_of_lights = (unsigned int) room->numberOfLights();
+	for (int i = 0; i < shaderData.number_of_lights; ++i)
+	{
+		lights[i]->moveToStructure(&shaderData, i, glm::mat4(Matrix));
 	}
 	for (Object3D *obj : vec)
 	{
 		addToRender(obj);
 	}
-	addToRender(&room);
-	display();
-
-	renderToScreen();
+	addToRender(room);
+	if(via == nullptr)
+	{
+		display();
+		renderToScreen();
+	}
+	else
+		display();
 }
 
 void GraphicEngine::swap()

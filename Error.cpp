@@ -55,7 +55,7 @@ std::string Error::getMessage()
 			res = "Can't open file "+ meta;
 			break;
 		case OUT_OF_RANGE:
-			res = "Out of rang\n"+ meta;
+			res = "Out of range\n"+ meta;
 			break;
 		case NONE:
 			res = meta;

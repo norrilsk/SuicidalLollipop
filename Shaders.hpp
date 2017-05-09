@@ -23,6 +23,7 @@ public:
 	glm::mat4 MVP;
 	glm::mat4 MV;
 	glm::vec4 CameraPos;
+	glm::vec4 CameraLook;
 	glm::vec4 LightPosition_worldspace[100];
 	glm::vec4 LightColor[100];
 	glm::vec4 LightDirection[100];

@@ -53,4 +53,3 @@ StorageIndex Camera::getRoom()
 	return current_room;
 }
 
-
