@@ -12,30 +12,27 @@
 #include "ScreenRec.hpp"
 #include<memory>
 class GraphicEngine
-{\
+{
 	int WinW; //Ширина окна. Здесь мы говорим что только собираемся обЪявить эти переменные
 	int WinH; //Высота окна
 	SDL_Window *window = nullptr;
 	bool SDL_inited = false;
 	bool SDLimage_inited = false;
 	bool GlMode = false;
-	bool firstCall = true; //первый вызов ф-и display
-	shader_data shaderData;//структура для шейдеров
 	std::queue <Object3D*> renderingQueueGl;// очередь отрисовки Gl
 	std::queue <Object2D*> renderingQueueSDL;// очередь отрисовки SDL
+	std::queue <LightSource *> lightQueue;//очередь отрисовки света
 	Shaders shaders;
 	std::unique_ptr<ScreenRec> screenrec;
-	glm::dmat4 Matrix;//матрица поворота
 	void check_GL_version(Loger * logfile);
 	Camera * cam;
 public:
 	GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *camera);//передаем камеру, параметры окна (если 0 - Fullscrean)
-	void portalRendering(Storage * storage, Portal * via = nullptr); //общет сцены методом портального рендеринга
+	void portalRendering(Storage * storage); //общет сцены методом портального рендеринга
 	void addToRender(Object3D *); //добавляем объекты в очередь отрисовки
 	void addToRender(Object2D *);
-	void swap();
+	void addToRender(LightSource *);
 	void display(); //запускаем отрисовку
-	void renderToScreen();
 	SDL_Window * getWindow(){return window;}
 	~GraphicEngine();
 

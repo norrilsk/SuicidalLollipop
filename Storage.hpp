@@ -48,7 +48,7 @@ public:
 	StorageIndex addMovableObject (const std::string &);
 	StorageIndex addRoom (const std::string &);
 	StorageIndex addLightSource(const SourceType&);
-	StorageIndex addPortal(const std::string &, StorageIndex);
+	StorageIndex addPortal(const std::string &);
 	StorageIndex indexOf(const std::string &);//получение индекса по псевдониму
 	void create_nickname(const std::string &, StorageIndex);//создать псевдоним ВНИМАНИЕ при повторном создании псевдонима перезапись
 	void loadWorld(const char *);//загрузить мир из файла (аргумент - путь)

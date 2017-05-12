@@ -11,9 +11,9 @@ ScreenRec::ScreenRec(int w, int h, const std::string& frShName, const std::strin
 {
 	glBindVertexArray(0);
 	std::vector<std::pair<std::string, GLuint> > ShadersPaths;
-	ShadersPaths.push_back(std::make_pair(frShName, GL_FRAGMENT_SHADER));//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
-	ShadersPaths.push_back(std::make_pair(verShName, GL_VERTEX_SHADER));//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ					
-	shaders.Load(ShadersPaths); 		//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	ShadersPaths.push_back(std::make_pair(frShName, GL_FRAGMENT_SHADER));//файл фрагментного шейдера
+	ShadersPaths.push_back(std::make_pair(verShName, GL_VERTEX_SHADER));//файл вершинного шейдера					
+	shaders.Load(ShadersPaths); 		//Подключаем шейдеры
 	GLuint vbo[2];
 	glGenBuffers(2, vbo);
 	glm::vec3 ver[6] = { glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(-1.0f, -1.0f, 0.0f),
@@ -42,11 +42,9 @@ ScreenRec::ScreenRec(int w, int h, const std::string& frShName, const std::strin
 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 	glGenTextures(1, &tex);
 	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
@@ -74,7 +72,7 @@ void ScreenRec::unbind()
 void ScreenRec::draw(vector<pair<string, int>>* data_int, vector<pair<string, float>>* data_float, vector<pair<string, glm::vec3>>* data_vec, GLuint texture)
 {
 //	glClearColor(1.0f, 0.0f, 1.0f,1.0f);
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 //	
 	glBindVertexArray(vao);
 	glEnableVertexAttribArray(0);

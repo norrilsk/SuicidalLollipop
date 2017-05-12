@@ -62,6 +62,13 @@ void Game::start()
 	game_engine ->loadWorld("Source/World.txt");
 	player.setRoom(storage->indexOf("firstRoom"));
 	player.set(glm::dvec3(1.0, -1.0, 1.8), glm::dvec3(1.0, -1.0, 0.0),glm::dvec3(0.0,0.0,0.1));
+	//storage->movableObject("Soccer_ball").set(glm::dvec3(3.0, 2.0, 1.7), glm::dvec3(1.0, -1.0, 0.0), glm::dvec3(0.0, 0.0, 0.1));
+	std::vector<glm::dvec3> coord = {glm::dvec3(1.0, 0.0, 0.0), glm::dvec3(0.0, 0.0, 1.0), glm::dvec3(-1, 0.0, -1)};
+	Portal p1, p2;
+	p1.createPottal(3, coord.data(), storage->indexOf("firstRoom"));
+	coord = {glm::dvec3(0.5*1.4142135, 0.5*1.4142135, 0.0), glm::dvec3(0.0, 0.0, 1.0), glm::dvec3(-0.5*1.4142135, -0.5*1.4142135, -1)};
+	p2.createPottal(3, coord.data(), storage->indexOf("firstRoom"));
+	p1.linkToPortal(p2);
 	timer.restart();
 }
 void Game :: normal_next(double dt)
@@ -81,6 +88,16 @@ void Game :: normal_next(double dt)
 	player.moveRelative(0.2*playerMovement*dt);//и двигаем игрока
 	player.rotateRelative(glm::dvec3(0, playerRotation.y, 0)*(dt));
 	player.rotateAbsolute(glm::dvec3(0, 0,  playerRotation.z)*(dt));
+	glm::dvec3 crd = player.getPosition() - glm::dvec3(0.001, 0.003, 0.003);
+	/*storage->movableObject("Soccer_ball").moveRelative(0.2*playerMovement*dt);
+	storage->movableObject("Soccer_ball").rotateRelative(glm::dvec3(0, playerRotation.y, 0)*(dt));
+	storage->movableObject("Soccer_ball").rotateAbsolute(glm::dvec3(0, 0, playerRotation.z)*(dt));*/
+	storage->movableObject("Soccer_ball").set(player.getPosition() + player.getLookDirection()*4.0 + glm::cross(player.getLookDirection(), player.getUpperDirection()));
+	Room &room = storage->room("firstRoom");
+	room.setPhysics(true, 9.2);
+	room.ApplyPhysics(dt);
+	
+
 }
 
 void Game :: paused_next(double dt)
@@ -94,7 +111,7 @@ void Game :: next()
 	game_engine -> renderScene(); //и отрисовываем все;
 	
 	double dt;
-	while ((dt = timer.count()) < 0.00166666)
+	while ((dt = timer.count()) < 0.016667)
 	{
 
 	}

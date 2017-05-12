@@ -52,14 +52,13 @@ std::string Error::getMessage()
 			res = "Object error\n" +meta;
 			break;
 		case FILE_NOT_OPEN:
-			res = "Can't open file "+ meta;
-			break;
-		case OUT_OF_RANGE:
-			res = "Out of range\n"+ meta;
+			res = "Can't open file \n"+ meta;
 			break;
 		case NONE:
 			res = meta;
 			break;
+		case OUT_OF_RANGE:
+			res = "Out of range\n"+ meta;
 		case OTHER:
 			res = meta;
 			break;

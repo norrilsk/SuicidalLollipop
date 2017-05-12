@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "GameEngine.hpp"
 #include "Game.hpp"
+#include "GameEngine.hpp"
 
 using namespace std;
 

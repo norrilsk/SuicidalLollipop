@@ -12,7 +12,7 @@ Mouse::Mouse(SDL_Window * win)
 	SDL_GetWindowSize(window, &X, &Y);
 	X /= 2;
 	Y /= 2;
-	sensity = 20;
+	sensity = 5;
 	SDL_WarpMouseInWindow(window, X , Y); // устанавливает позицию курсора(X, Y);
 }
 

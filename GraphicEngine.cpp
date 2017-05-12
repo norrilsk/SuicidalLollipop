@@ -1,12 +1,10 @@
 #include <iostream>
 #include "GraphicEngine.hpp"
-#include "Objects/Portal.hpp"
 #include"Objects/Room.hpp"
 #include "Objects/LightSource.hpp"
 
 GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *camera): cam(camera), GlMode(OpenGl)
 {
-	Matrix = glm::dmat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1);
 	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) < 0)//начальная инициализация SDL
 	{
 		throw(newError(SDL));
@@ -26,7 +24,7 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 		WinH = 720;
 	}
 	int flags = IMG_INIT_JPG | IMG_INIT_PNG; // флаги sdl_image
-	auto initted = IMG_Init(flags); // инициализация sdl_image
+	int initted = IMG_Init(flags); // инициализация sdl_image
 	if ((initted & flags) != flags)
 		throw (newError2(OTHER, "IMG_Init: Failed to init required jpg and png support!\n" + std::string("IMG_Init: ") + IMG_GetError() + std::string("\n")));
 	SDLimage_inited = true;
@@ -42,25 +40,45 @@ GraphicEngine::GraphicEngine(int w, int h, bool OpenGl, Loger *logfile, Camera *
 	{
 		if(SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1) < 0) //создали двойноой буфер
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 32) < 0) //ставим глубину цвета
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 32) < 0) //ставим глубину цвета
 			throw(newError(SDL));
-		if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8) < 0) //ставим глубину цвета
+		if(SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 32) < 0) //ставим глубину цвета
 			throw(newError(SDL));
 		if(SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16) < 0)//ставим размер буфера глубины
 			throw(newError(SDL));
 		if (SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8) < 0)
 			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8) < 0)
+			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32) < 0)
+			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_FRAMEBUFFER_SRGB_CAPABLE, 1) < 0) //ставим глубину цвета
+			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 32) < 0) //ставим глубину цвета
+			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 32) < 0) //ставим глубину цвета
+			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 5) < 0) //ставим глубину цвета
+			throw(newError(SDL));
+		if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 5) < 0) //ставим глубину цвета
+			throw(newError(SDL));
+
 		if (SDL_GL_CreateContext(window) == NULL) //Создали котекст OpenGl
 			throw (newError(SDL));
 		glClearColor(0.0f, 0.0f, 0.9f, 1.0f);//цвет по дефолту
 		glClearDepth(1.0); //глубина по дефолту
 		glClearStencil(0);//буфер граней по дефолту
 		glDepthFunc(GL_LESS); //функция для определения глубу
-		//glEnable(GL_CULL_FACE); //отключение не лицевых граней
+		glEnable(GL_CULL_FACE); //отключение не лицевых граней
 		glEnable(GL_DEPTH_TEST); //разрешаем тест глубины
 		glEnable(GL_TEXTURE_2D);// включаем 2D текстуры
+		glEnable(GL_ALPHA_TEST);
+		glEnable(GL_BLEND);
+		//glEnable(GL_DITHER);
+		glEnable(GL_STENCIL_TEST);
+
 		SDL_ShowCursor(SDL_DISABLE); //отключаем курсор
 		glEnable(GL_MULTISAMPLE); //Включили мультисемплинг для лучшего сглаживания (правда ценой большей нагрузки на GPU)
 		if(glewInit() != GLEW_OK)// инициализацию Glew , очень важно
@@ -102,49 +120,55 @@ void GraphicEngine::check_GL_version(Loger *logfile)
 
 void GraphicEngine::display()
 {
-	glm::mat4 matrix(Matrix);
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
 	if(GlMode)
 	{
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//очищаем буферы
 		screenrec->bind();
-		if(firstCall)
-		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);//очищаем буферы
-			firstCall = false;
-		}
-		//std::cout << shaderData.number_of_external_portals << " ";
+
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //очищаем экран и буфер глубины
 		cam->Look();
 		glm::mat4 VP = cam->Projection() * cam->View();
-		shaderData.ViewMatrix = cam->View();
-		shaderData.CameraPos = glm::vec4(cam->getPosition(), 1);
-		shaderData.CameraLook = glm::vec4(cam->getLookDirection(), 1);
+		shader_data data;
+		data.ViewMatrix = cam->View();
+		data.CameraPos = glm::vec4(cam->getPosition(), 1);
+		data.number_of_lights = (unsigned int) lightQueue.size();
+		int i = 0;
+		while(!lightQueue.empty())
+		{
+			lightQueue.front()->moveToStructure(&data , i++);
+			lightQueue.pop();
+		}
+
+		
 		while (!renderingQueueGl.empty())
 		{
 			Object3D *obj = renderingQueueGl.front();
 			if (obj->is_drawable())
 			{
-				shaderData.textures_enabled = (unsigned int) obj->has_textures();
+				data.textures_enabled = (unsigned int) obj->has_textures();
 				shaders.setTextureSampler(0);
-				shaderData.ModelMatrix = matrix*obj->ModelMat();
-				shaderData.MVP = VP*shaderData.ModelMatrix;
-				shaderData.MV = shaderData.ViewMatrix*shaderData.ModelMatrix;
-				shaders.ssboUpdate(&shaderData);
+				data.ViewMatrix = cam->View();
+				data.ModelMatrix = obj->ModelMat();
+				data.MVP = VP* data.ModelMatrix;
+				data.MV = data.ViewMatrix*data.ModelMatrix;
+				PhysicalProperties pr = obj->physicalProperties();
+				data.ambient_power = (float)obj->physicalProperties().ambient_power;
+				shaders.ssboUpdate(&data);
 				shaders.useProgram();
 				obj->draw();
 			}
 			renderingQueueGl.pop();
-		}
+		} 
+		screenrec->unbind();
+		std::vector<std::pair<std::string, float>> arg;
+		arg.push_back({ "StepX",1 / (float)WinW });
+		arg.push_back({ "StepY",1 / (float)WinH });
+		screenrec->draw(nullptr,&arg);
+		SDL_GL_SwapWindow(window);
 	}
 }
-
-
-void GraphicEngine::renderToScreen()
-{
-	screenrec->unbind();
-	screenrec->draw();
-	firstCall = true;
-}
-
 
 void GraphicEngine::addToRender(Object3D * obj)
 {
@@ -156,98 +180,28 @@ void GraphicEngine::addToRender(Object2D * obj)
 	renderingQueueSDL.push(obj);
 }
 
-
-void GraphicEngine::portalRendering(Storage * storage, Portal * via)
+void GraphicEngine::addToRender(LightSource *obj)
 {
-	Room *room = &storage->room(cam->getRoom());
-	std::vector <Object3D *> vec(room->numberOfObjects());
-	std::vector <LightSource *> lights(room->numberOfLights());
-	std::vector <Portal *> inportals(room->numberOfPortals());
-	glm::dmat4 CurrentMatrix;
-	uint exnum;
-	uint innum;
-	shaderData.number_of_external_portals = 0;
-	shaderData.number_of_internal_portals = 0;
-	if(via)
-	{
-		room = & storage->room(via-> getTarget());
-		glm::dmat4 dM(0);
-		for(int j = 0; j < via->numberOfSubportals(); ++j)
-		{
-			if((*via)[j].zCoef() > 0)
-			{
-				shaderData.external_portals[shaderData.number_of_external_portals * 3] = glm::mat4(Matrix)*glm::vec4((*via)[j][0], 1);
-				shaderData.external_portals[shaderData.number_of_external_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*via)[j][1], 1);
-			}
-			else
-			{
-				shaderData.external_portals[shaderData.number_of_external_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*via)[j][0], 1);
-				shaderData.external_portals[shaderData.number_of_external_portals * 3] = glm::mat4(Matrix)*glm::vec4((*via)[j][1], 1);
-			}
-			shaderData.external_portals[shaderData.number_of_external_portals*3 + 2] = glm::mat4(Matrix)*glm::vec4((*via)[j][2], 1);
-			shaderData.number_of_external_portals ++;
-			dM += (*via)[j].Matrix();
-		}
-		dM /= shaderData .number_of_external_portals;
-		Matrix *= dM;
-	} 
-	else
-		Matrix = glm::dmat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1);
+	lightQueue.push(obj);
+}
 
-	room->getAllObjects(vec.data());
-	room->getAllLights(lights.data());
-	room->getAllPortals(inportals.data());
-	int portnum = (int) room->numberOfPortals();
-	CurrentMatrix = Matrix;//сохраняем переменные чтоб не потерять
-	exnum = shaderData.number_of_external_portals;
-	for (int i = 0; i < portnum; ++i)
+void GraphicEngine::portalRendering(Storage * storage)
+{
+	std::vector <Object3D *> vec;
+	std::vector <LightSource *> lights;
+	Room &room = storage->room(cam->getRoom());
+	vec.resize(room.numberOfObjects());
+	lights.resize(room.numberOfLights());
+	room.getAllObjects(vec.data());
+	room.getAllLights(lights.data());
+	for (LightSource *light : lights)
 	{
-		if(!inportals[i] -> is_linked())
-			continue;
-		innum = shaderData.number_of_internal_portals;
-		portalRendering(storage, inportals[i]);
-		shaderData.number_of_internal_portals= innum;
-		for(int j = 0; j < inportals[i]->numberOfSubportals(); ++j)
-		{
-			if((*inportals[i])[j].zCoef() > 0)
-			{
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][0], 1);
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][1], 1);
-			}
-			else
-			{
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][0], 1);
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][1], 1);
-			}
-			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 2] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][2], 1);
-			shaderData.number_of_internal_portals ++;
-		}
-	}
-
-	shaderData.number_of_external_portals = exnum;
-	Matrix = CurrentMatrix;
-	shaderData.ambient_power = room->ambientPower();
-	shaderData.number_of_lights = (unsigned int) room->numberOfLights();
-	for (int i = 0; i < shaderData.number_of_lights; ++i)
-	{
-		lights[i]->moveToStructure(&shaderData, i, glm::mat4(Matrix));
+		addToRender(light);
 	}
 	for (Object3D *obj : vec)
 	{
 		addToRender(obj);
 	}
-	addToRender(room);
-	if(via == nullptr)
-	{
-		display();
-		renderToScreen();
-	}
-	else
-		display();
-}
-
-void GraphicEngine::swap()
-{
-	SDL_GL_SwapWindow(window);
+	addToRender(&room);
 }
 

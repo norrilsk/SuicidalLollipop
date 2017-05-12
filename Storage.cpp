@@ -51,25 +51,11 @@ StorageIndex Storage::addLightSource(const SourceType& type)
 	return (light_sources.size() - 1)*NumberOfTypes + LightSourceInd;
 }
 
-StorageIndex Storage::addPortal(const std::string & path, StorageIndex room)
+StorageIndex Storage::addPortal(const std::string & path)
 {
-	std::ifstream in(path);
-	if(!in.is_open())
-		throw(newError2(FILE_NOT_OPEN, path));
-	unsigned long N;
-	in >> N;
-	std::vector <double> coord(N * 9);
-	std::vector <double> num(N);
-	for(unsigned long i = 0; i < N; ++i)
-	{
-		for(int j = 0; j < 9; ++j)
-		{
-			in >> coord[i *9 + j];
-		}
-		in >> num[i];
-	}
-	portals.emplace_back(N, coord.data(), room, num.data());
-	in.close();
+	portals.push_back(Portal());
+	std::vector<glm::dvec3> coord = {glm::dvec3(1.0, 0.0, 0.0), glm::dvec3(0.0, 0.0, 1.0), glm::dvec3(-1, 0.0, -1)}; //TODO написать парсер здесь
+	portals.back().createPottal(3, coord.data(), indexOf("firstRoom"));
 	return (portals.size() - 1)*NumberOfTypes + PortalInd;
 }
 
@@ -87,8 +73,6 @@ Storage::Storage()
 
 NPC &Storage::npc(StorageIndex ind)
 {
-	if(ind % NumberOfTypes != NPCInd)
-		throw(newError(OUT_OF_RANGE));
 	return npcs[ind/NumberOfTypes];
 }
 
@@ -99,8 +83,6 @@ NPC &Storage::npc(const std::string & name)
 
 Object3D &Storage::object3d(StorageIndex ind)
 {
-	if(ind % NumberOfTypes != Object3DInd)
-		throw(newError(OUT_OF_RANGE));
 	return objects3d[ind/NumberOfTypes];
 }
 
@@ -111,9 +93,6 @@ Object3D &Storage::object3d(const std::string & name)
 
 Room &Storage::room(StorageIndex ind)
 {
-
-	if(ind % NumberOfTypes != RoomInd)
-		throw(newError(OUT_OF_RANGE));
 	return rooms[ind/NumberOfTypes];
 }
 
@@ -124,9 +103,6 @@ Room &Storage::room(const std::string & name)
 
 MovableObject &Storage::movableObject(StorageIndex ind)
 {
-
-	if(ind % NumberOfTypes != MovableObjectInd)
-		throw(newError(OUT_OF_RANGE));
 	return movable_objects[ind/NumberOfTypes];
 }
 
@@ -137,9 +113,6 @@ MovableObject &Storage::movableObject(const std::string & name)
 
 SDLTexture &Storage::sdlTexture(StorageIndex ind)
 {
-
-	if(ind % NumberOfTypes != SDLTextureInd)
-		throw(newError(OUT_OF_RANGE));
 	return sdl_textures[ind/NumberOfTypes];
 }
 
@@ -150,27 +123,11 @@ SDLTexture &Storage::sdlTexture(const std::string & name)
 
 LightSource &Storage::lightSource(StorageIndex ind)
 {
-
-	if(ind % NumberOfTypes != LightSourceInd)
-		throw(newError(OUT_OF_RANGE));
 	return light_sources[ind / NumberOfTypes];
 }
 LightSource &Storage::lightSource(const std::string & name)
 {
 	return lightSource(nick_names.at(name));
-}
-
-Portal &Storage::portal(StorageIndex ind)
-{
-
-	if(ind % NumberOfTypes != PortalInd)
-		throw(newError(OUT_OF_RANGE));
-	return portals[ind / NumberOfTypes];
-}
-
-Portal &Storage::portal(const std::string & name)
-{
-	return portal(nick_names.at(name));
 }
 
 void Storage::loadWorld(const char * path)
@@ -188,6 +145,9 @@ void Storage::loadWorld(const char * path)
 			int mash, tex;
 			in >> filePath;
 			StorageIndex ind = addRoom(filePath);
+			double g;
+			in >> g;
+			room(ind).setPhysics((g != 0), g);
 			in >> mash >> tex;
 			room(ind).setActiveMash(mash);
 			room(ind).setActiveTexture(tex);
@@ -281,25 +241,9 @@ void Storage::loadWorld(const char * path)
 			in >> name;
 			create_nickname(name, ind);
 		}
-		else if(str == "PORTAL")
-		{
-			std::string filePath, name;
-			StorageIndex objroom;
-			in >> filePath >> objroom;
-			StorageIndex ind = addPortal(filePath, objroom*NumberOfTypes);
-			rooms[objroom].addPortal(ind);
-			in >> name;
-			create_nickname(name, ind);
-		}
-		else if(str == "PORTALPAIR")
-		{
-			StorageIndex from, to;
-			in >> from >> to;
-			portals[from].linkToPortal(portals[to]);
-		}
+
 
 	}
-	in.close();
 }
 
 void Storage::create_nickname(const std::string & name, StorageIndex ind)
@@ -311,9 +255,6 @@ StorageIndex Storage::indexOf(const std::string & name)
 {
 	return nick_names.at(name);
 }
-
-
-
 
 
 

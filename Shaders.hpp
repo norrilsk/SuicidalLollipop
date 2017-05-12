@@ -23,17 +23,12 @@ public:
 	glm::mat4 MVP;
 	glm::mat4 MV;
 	glm::vec4 CameraPos;
-	glm::vec4 CameraLook;
 	glm::vec4 LightPosition_worldspace[100];
 	glm::vec4 LightColor[100];
 	glm::vec4 LightDirection[100];
-	glm::vec4 external_portals[300];//координаты + нормаль к порталам в другие комнаты
-	glm::vec4 internal_portals[300];//координаты + нормаль к своим порталам
 	float LightPower[100];
 	float cos_angle[100];
 	float ambient_power;
-	unsigned int number_of_external_portals;
-	unsigned int number_of_internal_portals;
 	unsigned int number_of_lights;
 	unsigned int textures_enabled; //флаги
 	unsigned int source_type[100];//   0-конус 1 - точечный 2 - плоский

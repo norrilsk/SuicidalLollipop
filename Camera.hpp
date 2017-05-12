@@ -16,7 +16,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include"Objects/MovableObject.hpp"
-#include "Shaders.hpp"
 
 class Camera : public MovableObject
 {
@@ -33,11 +32,12 @@ public:
 	glm::mat4 View() {return view;}
 	void setRoom(StorageIndex);
 	StorageIndex getRoom();
-	const double & FOV();
+	const double & FOV();//воз
 	const double & WtoH();
 	const double & nearSurface();
 	const double & farSurface();
 	void setView(double, double, double, double);//устанавливаем конус зрения в формате fov, x/y, zNear, zFar
+
 	Camera();
 	~Camera();
 };

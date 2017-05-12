@@ -27,10 +27,10 @@ void Texture::loadTexture(const char* path)
 	glGenTextures(1,&id);
 	glBindTexture(GL_TEXTURE_2D, id);
 
-	GLuint Mode = GL_RGB;
+	GLuint Mode = GL_RGB16;
 	if (image->format->BytesPerPixel == 4)  // устанавливаем rgb или rgba по возможности
-		Mode = GL_RGBA;
-	glTexImage2D(GL_TEXTURE_2D, 0, Mode, image->w, image->h, 0, Mode,
+		Mode = GL_RGBA16;
+	glTexImage2D(GL_TEXTURE_2D, 0, Mode, image->w, image->h, 0, GL_RGBA,
 	             GL_UNSIGNED_BYTE, image->pixels); // биндим текстуру
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // если uv координаты , больше единицыБ то повторить
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
