@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include "../Error.hpp"
+#include<climits>
 void MashObject::parser(const std::string& file_path)
 {
 	itexture = true;
@@ -10,9 +11,8 @@ void MashObject::parser(const std::string& file_path)
 	forread.open(file_path);
 	if (!forread.is_open())
 		throw(newError2(FILE_NOT_OPEN, file_path));
-
-	std::vector < glm::vec2 >  uvs; //текстурная координата вершины
 	std::vector < glm::vec3 >  normals;// координаты нормали
+	std::vector < glm::vec2 >  uvs; //текстурная координата вершины
 	std::vector <glm::vec3 > verColor;// цвета вершин, возможно временно
 	std::vector < glm::vec3 >  time_vertices; // координаты вершины
 	std::vector < glm::vec2 >  time_uvs; //текстурная координата вершины
@@ -27,6 +27,18 @@ void MashObject::parser(const std::string& file_path)
 		{
 			glm::vec3 vertex; // временный вектор координаты вершины
 			forread >> vertex.x >> vertex.y >> vertex.z;
+			if (vertex.x > maxCoord.x) // Ищем окружающую коробку
+				maxCoord.x = vertex.x;
+			if (vertex.y > maxCoord.y)
+				maxCoord.y = vertex.y;
+			if (vertex.z > maxCoord.z)
+				maxCoord.z = vertex.z;
+			if (vertex.x < minCoord.x)
+				minCoord.x = vertex.x;
+			if (vertex.y< minCoord.y)
+				minCoord.y = vertex.y;
+			if (vertex.z < minCoord.z)
+				minCoord.z = vertex.z;
 			time_vertices.push_back(vertex);
 			continue;
 		}
@@ -96,6 +108,41 @@ void MashObject::parser(const std::string& file_path)
 	}
 
 	forread.close();
+
+	if (time_vertices.size()<3)
+		throw(newError2(OBJ, "too little vertices in ypur object "+ file_path));
+	glm::vec3 fstV= time_vertices[0];
+	glm::vec3 scdV = time_vertices[1];
+	double D;
+	D = glm::length(fstV - scdV);
+
+	for (unsigned int i = 0; i < time_vertices.size(); i++)
+	{
+		glm::vec3 fstV1 = time_vertices[i];
+		for (unsigned int j = i + 1; j < time_vertices.size(); j++)
+		{
+			glm::vec3 scdV1 = time_vertices[j];
+			double tmD = glm::length(scdV1 - fstV1);
+			if (tmD  > D)
+			{
+				D = tmD;
+				fstV = fstV1;
+				scdV = scdV1;
+			}
+		}
+	}
+
+	Center = glm::dvec3(fstV + scdV) / 2.0; // найдем центр описаной сферы
+	R = D / 2; // найдем радиус сферы 
+	box[0] = glm::dvec4(minCoord,1);
+	box[1]  = glm::dvec4(maxCoord, 1);
+	box[2] = glm::dvec4(minCoord.x, minCoord.y, maxCoord.z,1);
+	box[3] = glm::dvec4(minCoord.x, maxCoord.y, minCoord.z, 1);
+	box[4] = glm::dvec4(minCoord.x, maxCoord.y, maxCoord.z, 1);
+	box[5] = glm::dvec4(maxCoord.x, minCoord.y, minCoord.z, 1);
+	box[6] = glm::dvec4(maxCoord.x, minCoord.y, maxCoord.z, 1);
+	box[7] = glm::dvec4(maxCoord.x, maxCoord.y, minCoord.z, 1);
+
 	size_t VerSize = time_vertexIndices.size();
 	for (unsigned int i = 0; i < VerSize; i++) // обрабатываем считанные данные
 	{
@@ -234,8 +281,21 @@ MashObject::MashObject(const MashObject & from)
 	itexture = from.itexture;
 	inormals = from.inormals;
 	deletable = from.deletable;
+	Center = from.Center;
+	R = from.R;
+	for (int i = 0; i < 8; i++)
+	{
+		box[i] = from.box[i];
+	}
+	maxCoord = from.maxCoord;
+	minCoord = from.minCoord;
 	bool tmp = *deletable;
 	*deletable = false;
 	deletable = new bool[1];
 	*deletable = tmp;
+}
+
+glm::dvec3 MashObject::getSphereCenter()
+{
+	return Center;
 }

@@ -2,10 +2,11 @@
 #define _MOVABLEOBJECT
 #include "Object3D.hpp"
 
+
 class MovableObject : public Object3D
 {
 	glm::dmat3 RotationMatrix(double fi, glm::dvec3 e); //Вычисление точной матрицы поворота (для вращения на большие углы)
-
+	
 public:
 	void moveAbsolute(glm :: dvec3);//относительный переход в абсолютных координатах
 	void moveRelative(glm :: dvec3);//относительный переход в собственных координатах

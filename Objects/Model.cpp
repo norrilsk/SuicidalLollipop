@@ -56,10 +56,38 @@ void Model::setActiveMash(int ind)
 		activeMash = (int)mash.size() - 1;
 }
 
+double Model::getR()
+{
+	if (activeMash < 0)
+		throw(newError(OUT_OF_RANGE));
+	return mash[activeMash].getR();
+}
+
+glm::dvec4 Model::getMaxBoxVertex()
+{
+	if (activeMash < 0)
+		throw(newError(OUT_OF_RANGE));
+	return mash[activeMash].getMaxBoxVertex();
+}
+
+glm::dvec4 Model::getMinBoxVertex()
+{
+	if (activeMash < 0)
+		throw(newError(OUT_OF_RANGE));
+	return mash[activeMash].getMinBoxVertex();
+}
+
+glm::dvec3 Model::getSphereCenter()
+{
+	if (activeMash < 0)
+		throw(newError(OUT_OF_RANGE));
+	return mash[activeMash].getSphereCenter();
+}
+
 void Model::draw()
 {
 	if(activeMash < 0)
-		throw(newError(OBJ));
+		throw(newError(OUT_OF_RANGE));
 	if(!is_textures())//в зависимости от наличия текстур вызываем разные методы отрисовки
 		mash[activeMash].draw();
 	else

@@ -3,7 +3,7 @@
 
 MovableObject::MovableObject(Model* model):Object3D(model)
 {
-	
+	physical_properties.m = 25;
 }
 
 void MovableObject:: moveAbsolute(glm :: dvec3 to)
@@ -61,6 +61,7 @@ MovableObject::~MovableObject()
 
 MovableObject::MovableObject()
 {
+	physical_properties.m = 25;
 }
 
 glm::dmat3 MovableObject::RotationMatrix(double fi, glm::dvec3 e)

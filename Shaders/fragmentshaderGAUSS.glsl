@@ -1,25 +1,26 @@
 #version 430
 uniform sampler2D textureSampler;
-uniform float Step;
-uniform float WtoH;
+uniform float StepX;
+uniform float StepY;
 
-out vec3 color;
+out vec4 color;
 in vec2 uv;
 in vec2 colorV;
+float[5][5] GaussCf =float[5][5]( float[5](0.0029150244650281935, 0.013064233284684921, 0.021539279301848634, 0.013064233284684921 , 0.0029150244650281935 ),
+						float[5](0.013064233284684921, 0.05854983152431917  , 0.09653235263005391, 0.05854983152431917 , 0.013064233284684921 ),
+						float[5](0.021539279301848634, 0.09653235263005391 , 0.15915494309189535 , 0.09653235263005391 , 0.021539279301848634 ),
+							float[5](0.013064233284684921, 0.05854983152431917  , 0.09653235263005391, 0.05854983152431917 , 0.013064233284684921 ),
+						float[5](0.0029150244650281935, 0.013064233284684921, 0.021539279301848634, 0.013064233284684921 , 0.0029150244650281935 ));
 
 void main()
 {
-  /* const float k = 15.0;
-   float step = radius / k;
-   vec3 res =  vec3(0, 0, 0);
-   for(int i = -int(3 * k); i < int(3 * k); ++i)
+   vec3 sum = vec3(0,0,0);
+   for (int i = -2;i < 3; i++)
    {
-        for(int j = -int(3 * k); j < int(3 * k); ++j)
-        {
-            res += exp(-(i * i + j*j)/(2*k*k))*texture(sampler, uv + vec2(i * step* Xcoef, j *step)).rgb;
-        }
+	   for (int j = -2; j<3 ; j++)
+	   {
+			sum+=GaussCf[i+2][j+2]*texture(textureSampler,uv+vec2(i*StepX,j*StepY)).xyz;
+	   }
    }
-   res /= 3.14159265 * 2.0 * k* k;*/
-   color += texture(textureSampler,uv ).xyz;
-   color *= vec3(1, 1, 1);
+   color = vec4(sum,0.1);
 }

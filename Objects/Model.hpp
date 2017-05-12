@@ -21,7 +21,12 @@ public:
 	Model(const std::string &); //парсерим файл, из которого получаем текстуры и меши
 	void setActiveTexture(int ind); //возвкащаем индексы
 	void setActiveMash(int ind);
-
+	double getR(); // Возвращает радиус описаной сферы
+	glm::dvec4 getMaxBoxVertex();// возвращает координаты угла Коробки
+	glm::dvec4 getMinBoxVertex();// возвращает координаты второго угла коробки
+	glm::dvec3 getSphereCenter();// возвращает координаты 
+	std::vector< glm::vec3 >& get_vertices() { return mash[activeMash].get_vertices(); }
+	glm::dvec4* getBox() { return mash[activeMash].getBox(); }
 	bool is_drawable();//рисуемо ли?
 	bool is_textures();//есть ли текстуры?
 

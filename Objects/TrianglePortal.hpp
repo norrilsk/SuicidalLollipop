@@ -6,16 +6,17 @@
 
 class TrianglePortal
 {
+	StorageIndex current_room = 0;
+	StorageIndex target_room = 0;
 	double coef = 1.0; //портальное число
 	glm :: dvec3  O, e1, e2, A, B, C;
 	glm :: dmat4 M;
 public:
 	TrianglePortal(){}
 	TrianglePortal(glm::dvec3, glm::dvec3, glm::dvec3);//треугольник по 3 точкам
+	void setRoom(StorageIndex);//какая комната?
 	void setPortalCoef(double);
-	glm::dvec3 operator [] (int) const;//возвращяем вершину
-	const glm::dmat4 &Matrix(){ return M;}//возвращяем матрицу
-	double zCoef();
+	StorageIndex getRoom();
 	void linckTo(TrianglePortal &);
 };
 

@@ -1,13 +1,10 @@
-ROOM 	./Source/Room0.txt 										0 -1 	firstRoom
-ROOM 	./Source/Room0.txt 										0 -1 	secondRoom
+ROOM 	./Source/Room0.txt 	9.8									0 -1 	firstRoom
+ROOM 	./Source/Room0.txt 	0									0 -1 	secondRoom
 MOVOBJ	./Source/Cube0.txt 	1.0 0.0 0.0 	0.0 -1.0 0.0 	5.0 -5.0 1.0 			0	0 0 	cube1
-OBJ3D	./Source/Cube0.txt 	-0.707 0.707 0.0 	0.0 0.0 1.0 	8.0 -8.0 3.0 			1	0 0 	cube2
-OBJ3D	./Source/Cube0.txt 	1.0 0.0 0.0 	0.0 0.0 1.0 	8.0 -8.0 1.0 			1	0 0 	cube3
-NPC 	./Source/SnowMan.txt 	1.0 0.0 0.0 	0.0 -1.0 0.0 	5.0 -4.5 2.5 			0	0 0 	Kolya
+MOVOBJ 	./Source/Soccer_ball.txt 1.0 0.0 0.0 	0.0 -1.0 0.0 	3.0 -3.5 2.5 	0	0 0		Soccer_ball 	
+OBJ3D	./Source/Cube0.txt 	0.0 1.0 0.0 	0.0 0.0 1.0 	2.0 -2.0 3.0 			1	0 0 	cube2
+OBJ3D	./Source/Cube0.txt 	1.0 0.0 0.0 	0.0 0.0 1.0 	2.0 -2.0 1.0 			1	0 0 	cube3
+NPC 	./Source/SnowMan.txt 	1.0 0.0 0.0 	0.0 -1.0 0.0 	5.0 -4.5 5.5 			0	0 0 	Kolya
 LIGHTSOURCE	CONIC		0.0 -2.0 -1.5	5.0 0.0 9.0	0.3 1.0 1.0	100.0 0.7	0		lamp1
 LIGHTSOURCE	CONIC		1.0 1.0 2.0	0.9 -9.0 0.5	1.0 1.0 0.0	70.0 0.7	0		lamp2
 LIGHTSOURCE	CONIC		-1.0 1.0 1.7	9.0 -9.0 0.5	1.0 1.0 0.0	70.0 0.7	0		lamp3
-LIGHTSOURCE	SPHERIC		-1.0 1.0 1.7	5.0 -5.0 5.5	1.0 0.3 0.0	200.0 0.7	1		lamp3
-PORTAL	./Source/Portals/portal1.txt								0		portal1
-PORTAL	./Source/Portals/portal2.txt								1		portal2
-PORTALPAIR	0 1

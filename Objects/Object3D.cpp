@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Object3D.hpp"
+#include "../Error.hpp"
 
 Object3D::Object3D()
 {
@@ -10,6 +11,7 @@ Object3D::Object3D(Model * modell)
 }
 Object3D::Object3D(const Object3D & obj)
 {
+	physical_properties = obj.physical_properties;
 	coord = obj.coord;
 	A = obj.A;
 	ex = A[0];
@@ -89,4 +91,43 @@ void Object3D::setActiveTexture(int ind)
 void Object3D::setActiveMash(int ind)
 {
 	model->setActiveMash(ind);
+}
+
+double Object3D::getR()
+{
+	if (!model)
+		throw(newError(OBJ));
+	return model->getR();
+}
+
+glm::dvec4 Object3D::getMaxBoxVertex()
+{
+	if (!model)
+		throw(newError(OBJ));
+	return model->getMaxBoxVertex();
+}
+
+glm::dvec4 Object3D::getMinBoxVertex()
+{
+	if (!model)
+		throw(newError(OBJ));
+	return model->getMinBoxVertex();
+}
+
+glm::dvec3 Object3D::getSphereCenter()
+{
+
+	if (!model)
+		throw(newError(OBJ));
+	return model->getSphereCenter();
+}
+PhysicalProperties::PhysicalProperties()
+{
+	m = 25.0;
+	conservedEnergy = 0.8;
+	ambient_power = 0.07;
+	velocity = glm::dvec3(0.0, 0.0, 0.0);
+	J = glm::dmat3(1, 0, 0, 0, 1, 0, 0, 0, 1);
+	MassCenter = glm::dvec3(0, 0, 1);
+	omega = glm::dvec3(0, 0, 0);
 }

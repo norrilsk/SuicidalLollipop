@@ -20,7 +20,7 @@ public:
 	void setPower(float _power) { power = _power; } //���������� ��������
 	void setColor(glm::vec3 color) { LightColor = color; }// ���������� ����
 	void setType(const SourceType& type);// ���������� ��� ���������
-	void moveToStructure(shader_data* data, int index, glm::mat4);// �������� �������� � ��������� � ��������� ������
+	void moveToStructure(shader_data* data, int index);// �������� �������� � ��������� � ��������� ������
 	LightSource(const SourceType& type);//
 	LightSource();
 	~LightSource();

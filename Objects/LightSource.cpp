@@ -26,9 +26,9 @@ void LightSource::setType(const SourceType& type)
 		break;
 	}
 }
-void LightSource::moveToStructure(shader_data* data, int index, glm::mat4 M)
+void LightSource::moveToStructure(shader_data* data, int index)
 {
-	data->LightPosition_worldspace[index] = M *glm::vec4(this->getPosition(),1);
+	data->LightPosition_worldspace[index] = glm::vec4(this->getPosition(),1);
 	data->LightColor[index] = glm::vec4(LightColor, 1);
 	data->LightDirection[index] = glm::vec4(this->getLookDirection(), 1);
 	data->LightPower[index] = power;
