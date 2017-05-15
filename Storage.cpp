@@ -56,19 +56,20 @@ StorageIndex Storage::addPortal(const std::string & path, StorageIndex room)
 	std::ifstream in(path);
 	if(!in.is_open())
 		throw(newError2(FILE_NOT_OPEN, path));
+	glm::dvec3 v1, v2;
+	in>> v1.x >>v1.y >> v1.z >> v2.x >> v2.y >> v2.z;
 	unsigned long N;
 	in >> N;
 	std::vector <double> coord(N * 9);
-	std::vector <double> num(N);
 	for(unsigned long i = 0; i < N; ++i)
 	{
 		for(int j = 0; j < 9; ++j)
 		{
 			in >> coord[i *9 + j];
 		}
-		in >> num[i];
 	}
-	portals.emplace_back(N, coord.data(), room, num.data());
+	portals.emplace_back(N, coord.data(), room);
+	portals.back().setVectors(v1, v2);
 	in.close();
 	return (portals.size() - 1)*NumberOfTypes + PortalInd;
 }

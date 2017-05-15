@@ -4,7 +4,8 @@
 
 class MovableObject : public Object3D
 {
-	glm::dmat3 RotationMatrix(double fi, glm::dvec3 e); //Вычисление точной матрицы поворота (для вращения на большие углы)
+	glm::dmat3 RotationMatrix(double fi, glm::dvec3 e); //Вычисление точной матрицы поворота (для вращения на большие углы// )
+	glm::dvec3 dPoos; 
 
 public:
 	void moveAbsolute(glm :: dvec3);//относительный переход в абсолютных координатах

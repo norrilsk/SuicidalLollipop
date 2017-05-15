@@ -92,7 +92,6 @@ void Game :: next()
 	camera -> set(player.getPosition(), player.getLookDirection(), player.getUpperDirection()); //устанавливаем камеру
 	camera -> setRoom(player.getRoom());
 	game_engine -> renderScene(); //и отрисовываем все;
-	
 	double dt;
 	while ((dt = timer.count()) < 0.00166666)
 	{

@@ -174,23 +174,13 @@ void GraphicEngine::portalRendering(Storage * storage, Portal * via)
 		glm::dmat4 dM(0);
 		for(int j = 0; j < via->numberOfSubportals(); ++j)
 		{
-			if((*via)[j].zCoef() > 0)
-			{
-				shaderData.external_portals[shaderData.number_of_external_portals * 3] = glm::mat4(Matrix)*glm::vec4((*via)[j][0], 1);
-				shaderData.external_portals[shaderData.number_of_external_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*via)[j][1], 1);
-			}
-			else
-			{
-				shaderData.external_portals[shaderData.number_of_external_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*via)[j][0], 1);
-				shaderData.external_portals[shaderData.number_of_external_portals * 3] = glm::mat4(Matrix)*glm::vec4((*via)[j][1], 1);
-			}
+			shaderData.external_portals[shaderData.number_of_external_portals * 3] = glm::mat4(Matrix)*glm::vec4((*via)[j][0], 1);
+			shaderData.external_portals[shaderData.number_of_external_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*via)[j][1], 1);
 			shaderData.external_portals[shaderData.number_of_external_portals*3 + 2] = glm::mat4(Matrix)*glm::vec4((*via)[j][2], 1);
 			shaderData.number_of_external_portals ++;
-			dM += (*via)[j].Matrix();
 		}
-		dM /= shaderData .number_of_external_portals;
-		Matrix *= dM;
-	} 
+		Matrix *= via->Matrix();
+	}
 	else
 		Matrix = glm::dmat4(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1);
 
@@ -209,16 +199,8 @@ void GraphicEngine::portalRendering(Storage * storage, Portal * via)
 		shaderData.number_of_internal_portals= innum;
 		for(int j = 0; j < inportals[i]->numberOfSubportals(); ++j)
 		{
-			if((*inportals[i])[j].zCoef() > 0)
-			{
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][0], 1);
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][1], 1);
-			}
-			else
-			{
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][0], 1);
-				shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][1], 1);
-			}
+			shaderData.internal_portals[shaderData.number_of_internal_portals * 3] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][0], 1);
+			shaderData.internal_portals[shaderData.number_of_internal_portals * 3 + 1] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][1], 1);
 			shaderData.internal_portals[shaderData.number_of_internal_portals*3 + 2] = glm::mat4(Matrix)*glm::vec4((*inportals[i])[j][2], 1);
 			shaderData.number_of_internal_portals ++;
 		}

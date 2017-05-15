@@ -54,7 +54,7 @@ bool OneSidefromPortals()
         vec3 T2 = VertexIn[2].Position_worldspace;   //current point
         vec4 eq = vec4(cross(B - A, C - A), 0); //portal plane equasion
         eq = vec4(eq.xyz, -dot(eq.xyz, A));
-        if(dot(eq.xyz, (T0 - O)) < 0 && dot(eq.xyz, (T1 - O)) < 0 && dot(eq.xyz, (T2 - O)) < 0)
+        if(dot(eq.xyz, (T0 - O)) > 0 && dot(eq.xyz, (T1 - O)) > 0 && dot(eq.xyz, (T2 - O)) > 0)
             continue;
         float  f1 = dot(eq, vec4(O, 1)), f20 = dot(eq, vec4(T0, 1));
         float  f21 = dot(eq, vec4(T1, 1));

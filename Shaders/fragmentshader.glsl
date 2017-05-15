@@ -138,7 +138,7 @@ bool notViaPortal()
         vec3 T = Position_worldspace;   //current point
         vec4 eq = vec4(cross(B - A, C - A), 0); //portal plane equasion
         eq = vec4(eq.xyz, -dot(eq.xyz, A));
-        if(dot(eq.xyz, (T - O)) < 0)
+        if(dot(eq.xyz, (T - O)) > 0)
             continue;
         float  f1 = dot(eq, vec4(O, 1)), f2 = dot(eq, vec4(T, 1));
         if((f1 < 0 && f2 < 0) || (f1 > 0 && f2 > 0))

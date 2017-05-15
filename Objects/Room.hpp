@@ -13,7 +13,7 @@ class Room : public Object3D
 	std::set <StorageIndex> npc;
 	std::set <StorageIndex> light_sources;
 	std::set <StorageIndex> portals;
-	float ambient_power = 0.1f;
+	float ambient_power = 0.15f;
 	Storage * storage;
 public:
 	Room();
